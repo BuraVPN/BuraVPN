@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes fade {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  background: #0d0d0d;
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Better focus states for accessibility */
+button:focus,
+a:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.bg-dual-radial {
+  background-image: radial-gradient(
+      circle at bottom,
+      #040404 80%,
+      #636363 85%,
+      #c0c0c0 95%,
+      #e6e6e6 100%
+    ),
+    radial-gradient(
+      circle at top,
+      #040404 80%,
+      #636363 85%,
+      #c0c0c0 95%,
+      #e6e6e6 100%
+    );
+}
+
+.anchors_hero {
+  color: #e6e6e6;
+  font-weight: bold;
+}
+
+.anchors_hero:hover {
+  text-decoration: underline;
+}
+
+.custom-list-style li {
+  list-style: none;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.custom-list-style-dark li {
+  list-style: none;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.custom-list-style li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  width: 0.8em;
+  height: 0.8em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D1D5DB'%3E%3Cpath d='M12 2L2 12l10 10 10-10L12 2z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.custom-list-style-dark li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  width: 0.8em;
+  height: 0.8em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23474747'%3E%3Cpath d='M12 2L2 12l10 10 10-10L12 2z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.custom-hr-product-card {
+  height: 0.5px;
+  color: #63636368;
+}
