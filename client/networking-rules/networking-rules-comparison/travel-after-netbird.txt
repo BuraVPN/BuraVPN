@@ -1,0 +1,148 @@
+=== CAPTURE TIME: Mon Dec  8 11:34:59 CET 2025 ===\
+=== STATUS: AFTER netbird up ===\
+\
+=== IP ROUTES (main) ===\
+0.0.0.0/1 dev wt0\
+default via 10.223.9.208 dev wlan-sta0 proto static src 10.223.9.211 metric 20\
+10.223.9.0/24 dev wlan-sta0 proto static scope link metric 20\
+46.224.26.28 via 10.223.9.208 dev wlan-sta0\
+100.77.0.0/16 dev wt0 proto kernel scope link src 100.77.6.87\
+128.0.0.0/1 dev wt0\
+192.168.1.9 via 10.223.9.208 dev wlan-sta0\
+192.168.8.0/24 dev br-lan proto kernel scope link src 192.168.8.1\
+\
+=== IP ROUTES (table all) ===\
+0.0.0.0/1 dev wt0 table 2 scope link\
+default via 10.223.9.208 dev wlan-sta0 table 2 metric 20\
+10.223.9.0/24 dev wlan-sta0 table 2 proto static scope link metric 20\
+46.224.26.28 via 10.223.9.208 dev wlan-sta0 table 2\
+100.77.0.0/16 dev wt0 table 2 proto kernel scope link src 100.77.6.87\
+128.0.0.0/1 dev wt0 table 2 scope link\
+192.168.8.0/24 dev br-lan table 2 proto kernel scope link src 192.168.8.1\
+0.0.0.0/1 dev wt0\
+default via 10.223.9.208 dev wlan-sta0 proto static src 10.223.9.211 metric 20\
+10.223.9.0/24 dev wlan-sta0 proto static scope link metric 20\
+46.224.26.28 via 10.223.9.208 dev wlan-sta0\
+100.77.0.0/16 dev wt0 proto kernel scope link src 100.77.6.87\
+128.0.0.0/1 dev wt0\
+192.168.1.9 via 10.223.9.208 dev wlan-sta0\
+192.168.8.0/24 dev br-lan proto kernel scope link src 192.168.8.1\
+broadcast 10.223.9.0 dev wlan-sta0 table local proto kernel scope link src 10.223.9.211\
+local 10.223.9.211 dev wlan-sta0 table local proto kernel scope host src 10.223.9.211\
+broadcast 10.223.9.255 dev wlan-sta0 table local proto kernel scope link src 10.223.9.211\
+broadcast 100.77.0.0 dev wt0 table local proto kernel scope link src 100.77.6.87\
+local 100.77.6.87 dev wt0 table local proto kernel scope host src 100.77.6.87\
+broadcast 100.77.255.255 dev wt0 table local proto kernel scope link src 100.77.6.87\
+broadcast 127.0.0.0 dev lo table local proto kernel scope link src 127.0.0.1\
+local 127.0.0.0/8 dev lo table local proto kernel scope host src 127.0.0.1\
+local 127.0.0.1 dev lo table local proto kernel scope host src 127.0.0.1\
+broadcast 127.255.255.255 dev lo table local proto kernel scope link src 127.0.0.1\
+broadcast 192.168.8.0 dev br-lan table local proto kernel scope link src 192.168.8.1\
+local 192.168.8.1 dev br-lan table local proto kernel scope host src 192.168.8.1\
+broadcast 192.168.8.255 dev br-lan table local proto kernel scope link src 192.168.8.1\
+::/1 dev wt0 metric 1024 pref medium\
+unreachable fde4:21fb:c40c::/48 dev lo proto static metric 2147483647 error -148 pref medium\
+fe80::/64 dev eth0 proto kernel metric 256 pref medium\
+8000::/1 dev wt0 metric 1024 pref medium\
+local ::1 dev lo table local proto kernel metric 0 pref medium\
+anycast fe80:: dev eth0 table local proto kernel metric 0 pref medium\
+local fe80::9683:c4ff:fe65:9126 dev eth0 table local proto kernel metric 0 pref medium\
+ff00::/8 dev eth0 table local metric 256 pref medium\
+\
+=== IP RULES ===\
+0:      from all lookup local\
+1:      from all iif lo lookup 16800\
+1002:   from all iif wlan-sta0 lookup 2\
+1099:   from all fwmark 0x80000/0xc0000 lookup main\
+1100:   from all lookup main suppress_prefixlength 0\
+1101:   not from all fwmark 0x8000/0xc000 lookup 8000\
+2002:   from all fwmark 0x200/0x3f00 lookup 2\
+2061:   from all fwmark 0x3d00/0x3f00 blackhole\
+2062:   from all fwmark 0x3e00/0x3f00 unreachable\
+32766:  from all lookup main\
+32767:  from all lookup default\
+\
+=== ROUTING TABLE 8000 ===\
+\
+=== IPTABLES FILTER FORWARD ===\
+Chain FORWARD (policy DROP 0 packets, 0 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+  409  147K NETBIRD-RT-FWD-IN  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            mark match 0x1bd20\
+  511  188K NETBIRD-RT-FWD-OUT  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0\
+    0     0 DROP       all  --  wt0    *       0.0.0.0/0            0.0.0.0/0\
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            match-set GL_MAC_BLOCK src\
+22930   12M forwarding_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom forwarding rule chain */\
+22777   12M FLOWOFFLOAD  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Traffic offloading */ ctstate NEW,RELATED,ESTABLISHED FLOWOFFLOAD hw\
+18747 9592K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* !fw3 */\
+ 4183 1955K zone_lan_forward  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_forward  all  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_forward  all  --  wlan-sta0 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_buraVPN_forward  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+=== IPTABLES NAT POSTROUTING ===\
+Chain POSTROUTING (policy ACCEPT 10 packets, 926 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+   91 23071 NETBIRD-RT-NAT  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+ 2464  672K postrouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom postrouting rule chain */\
+    0     0 zone_lan_postrouting  all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_postrouting  all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+  499 71245 zone_wan_postrouting  all  --  *      wlan-sta0  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+ 1760  584K zone_buraVPN_postrouting  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+=== IPTABLES MANGLE ===\
+Chain PREROUTING (policy ACCEPT 2859 packets, 1018K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 2887 1026K NETBIRD-RT-PRE  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+ 336K  197M VPN_SER_POLICY  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+    9  3067 CONNMARK   all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ctstate NEW CONNMARK set 0x1bd10\
+\
+Chain INPUT (policy ACCEPT 1926 packets, 670K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain FORWARD (policy ACCEPT 920 packets, 335K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+  921  335K NETBIRD-RT-MSSCLAMP  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+    0     0 TCPMSS     tcp  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+    0     0 TCPMSS     tcp  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+   31  1984 TCPMSS     tcp  --  *      wlan-sta0  0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+   27  1620 TCPMSS     tcp  --  wlan-sta0 *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+\
+Chain OUTPUT (policy ACCEPT 1950 packets, 730K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner GID match 65533 /* !fw3: process_mark */ MARK xset 0x8000/0xc000\
+\
+Chain POSTROUTING (policy ACCEPT 2855 packets, 1062K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+  175 75981 CONNMARK   all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            ctstate NEW CONNMARK set 0x1bd11\
+\
+Chain NETBIRD-RT-MSSCLAMP (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+   18  1152 TCPMSS     tcp  --  *      wt0     0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 TCPMSS set 1240\
+\
+Chain NETBIRD-RT-PRE (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  427  151K MARK       all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL MARK set 0x1bd20\
+\
+Chain VPN_SER_POLICY (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+=== NETBIRD STATUS ===\
+OS: linux/mipsle\
+Daemon version: v0.60.7\
+CLI version: v0.60.7\
+Profile: default\
+Management: Connected\
+Signal: Connected\
+Relays: 1/3 Available\
+Nameservers: 0/0 Available\
+FQDN: marin-home-travel.netbird.selfhosted\
+NetBird IP: 100.77.6.87/16\
+Interface type: Kernel\
+Quantum resistance: false\
+Lazy connection: false\
+SSH Server: Disabled\
+Networks: -\
+Forwarding rules: 0\
+Peers count: 1/7 Connected

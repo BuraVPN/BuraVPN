@@ -1,0 +1,93 @@
+=== CAPTURE TIME: Mon Dec  8 11:33:56 CET 2025 ===\
+=== STATUS: BEFORE netbird up ===\
+\
+=== IP ROUTES (main) ===\
+default via 10.223.9.208 dev wlan-sta0 proto static src 10.223.9.211 metric 20\
+10.223.9.0/24 dev wlan-sta0 proto static scope link metric 20\
+192.168.8.0/24 dev br-lan proto kernel scope link src 192.168.8.1\
+\
+=== IP ROUTES (table all) ===\
+default via 10.223.9.208 dev wlan-sta0 table 2 metric 20\
+10.223.9.0/24 dev wlan-sta0 table 2 proto static scope link metric 20\
+192.168.8.0/24 dev br-lan table 2 proto kernel scope link src 192.168.8.1\
+default via 10.223.9.208 dev wlan-sta0 proto static src 10.223.9.211 metric 20\
+10.223.9.0/24 dev wlan-sta0 proto static scope link metric 20\
+192.168.8.0/24 dev br-lan proto kernel scope link src 192.168.8.1\
+broadcast 10.223.9.0 dev wlan-sta0 table local proto kernel scope link src 10.223.9.211\
+local 10.223.9.211 dev wlan-sta0 table local proto kernel scope host src 10.223.9.211\
+broadcast 10.223.9.255 dev wlan-sta0 table local proto kernel scope link src 10.223.9.211\
+broadcast 127.0.0.0 dev lo table local proto kernel scope link src 127.0.0.1\
+local 127.0.0.0/8 dev lo table local proto kernel scope host src 127.0.0.1\
+local 127.0.0.1 dev lo table local proto kernel scope host src 127.0.0.1\
+broadcast 127.255.255.255 dev lo table local proto kernel scope link src 127.0.0.1\
+broadcast 192.168.8.0 dev br-lan table local proto kernel scope link src 192.168.8.1\
+local 192.168.8.1 dev br-lan table local proto kernel scope host src 192.168.8.1\
+broadcast 192.168.8.255 dev br-lan table local proto kernel scope link src 192.168.8.1\
+unreachable fde4:21fb:c40c::/48 dev lo proto static metric 2147483647 error -148 pref medium\
+fe80::/64 dev eth0 proto kernel metric 256 pref medium\
+local ::1 dev lo table local proto kernel metric 0 pref medium\
+anycast fe80:: dev eth0 table local proto kernel metric 0 pref medium\
+local fe80::9683:c4ff:fe65:9126 dev eth0 table local proto kernel metric 0 pref medium\
+ff00::/8 dev eth0 table local metric 256 pref medium\
+\
+=== IP RULES ===\
+0:      from all lookup local\
+1:      from all iif lo lookup 16800\
+1002:   from all iif wlan-sta0 lookup 2\
+1099:   from all fwmark 0x80000/0xc0000 lookup main\
+1100:   from all lookup main suppress_prefixlength 0\
+1101:   not from all fwmark 0x8000/0xc000 lookup 8000\
+2002:   from all fwmark 0x200/0x3f00 lookup 2\
+2061:   from all fwmark 0x3d00/0x3f00 blackhole\
+2062:   from all fwmark 0x3e00/0x3f00 unreachable\
+32766:  from all lookup main\
+32767:  from all lookup default\
+\
+=== ROUTING TABLE 8000 ===\
+\
+=== IPTABLES FILTER FORWARD ===\
+Chain FORWARD (policy DROP 0 packets, 0 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            match-set GL_MAC_BLOCK src\
+22730   11M forwarding_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom forwarding rule chain */\
+22587   11M FLOWOFFLOAD  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Traffic offloading */ ctstate NEW,RELATED,ESTABLISHED FLOWOFFLOAD hw\
+18741 9592K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* !fw3 */\
+ 3989 1876K zone_lan_forward  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_forward  all  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_forward  all  --  wlan-sta0 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_buraVPN_forward  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+=== IPTABLES NAT POSTROUTING ===\
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 2337  647K postrouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom postrouting rule chain */\
+    0     0 zone_lan_postrouting  all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_postrouting  all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+  444 67009 zone_wan_postrouting  all  --  *      wlan-sta0  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+ 1698  563K zone_buraVPN_postrouting  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+=== IPTABLES MANGLE ===\
+Chain PREROUTING (policy ACCEPT 377 packets, 86191 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 333K  196M VPN_SER_POLICY  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+\
+Chain INPUT (policy ACCEPT 153 packets, 19164 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain FORWARD (policy ACCEPT 224 packets, 67027 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 TCPMSS     tcp  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+    0     0 TCPMSS     tcp  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+   29  1856 TCPMSS     tcp  --  *      wlan-sta0  0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+   26  1560 TCPMSS     tcp  --  wlan-sta0 *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+\
+Chain OUTPUT (policy ACCEPT 156 packets, 29544 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner GID match 65533 /* !fw3: process_mark */ MARK xset 0x8000/0xc000\
+\
+Chain POSTROUTING (policy ACCEPT 365 packets, 95803 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain VPN_SER_POLICY (1 references)\
+ pkts bytes target     prot opt in     out     source               destination}

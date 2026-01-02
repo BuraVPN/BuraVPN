@@ -1,0 +1,423 @@
+=== CAPTURE TIME: Mon Dec  8 01:39:00 CET 2025 ===\
+\
+=== IP ROUTES (main) ===\
+default via 192.168.1.1 dev eth0.2 proto static src 192.168.1.9\
+46.224.26.28 via 192.168.1.1 dev eth0.2\
+100.77.0.0/16 dev wt0 proto kernel scope link src 100.77.227.159\
+192.168.1.0/24 dev eth0.2 proto kernel scope link src 192.168.1.9\
+192.168.8.0/24 dev br-lan proto kernel scope link src 192.168.8.1\
+\
+=== IP ROUTES (all tables) ===\
+default via 192.168.1.1 dev eth0.2 table 1\
+46.224.26.28 via 192.168.1.1 dev eth0.2 table 1\
+100.77.0.0/16 dev wt0 table 1 proto kernel scope link src 100.77.227.159\
+192.168.1.0/24 dev eth0.2 table 1 proto kernel scope link src 192.168.1.9\
+192.168.8.0/24 dev br-lan table 1 proto kernel scope link src 192.168.8.1\
+default via 192.168.1.1 dev eth0.2 proto static src 192.168.1.9\
+46.224.26.28 via 192.168.1.1 dev eth0.2\
+100.77.0.0/16 dev wt0 proto kernel scope link src 100.77.227.159\
+192.168.1.0/24 dev eth0.2 proto kernel scope link src 192.168.1.9\
+192.168.8.0/24 dev br-lan proto kernel scope link src 192.168.8.1\
+broadcast 100.77.0.0 dev wt0 table local proto kernel scope link src 100.77.227.159\
+local 100.77.227.159 dev wt0 table local proto kernel scope host src 100.77.227.159\
+broadcast 100.77.255.255 dev wt0 table local proto kernel scope link src 100.77.227.159\
+broadcast 127.0.0.0 dev lo table local proto kernel scope link src 127.0.0.1\
+local 127.0.0.0/8 dev lo table local proto kernel scope host src 127.0.0.1\
+local 127.0.0.1 dev lo table local proto kernel scope host src 127.0.0.1\
+broadcast 127.255.255.255 dev lo table local proto kernel scope link src 127.0.0.1\
+broadcast 192.168.1.0 dev eth0.2 table local proto kernel scope link src 192.168.1.9\
+local 192.168.1.9 dev eth0.2 table local proto kernel scope host src 192.168.1.9\
+broadcast 192.168.1.255 dev eth0.2 table local proto kernel scope link src 192.168.1.9\
+broadcast 192.168.8.0 dev br-lan table local proto kernel scope link src 192.168.8.1\
+local 192.168.8.1 dev br-lan table local proto kernel scope host src 192.168.8.1\
+broadcast 192.168.8.255 dev br-lan table local proto kernel scope link src 192.168.8.1\
+unreachable fd18:9dd2:c84a::/48 dev lo proto static metric 2147483647 error -148 pref medium\
+fe80::/64 dev eth0 proto kernel metric 256 pref medium\
+local ::1 dev lo table local proto kernel metric 0 pref medium\
+anycast fe80:: dev eth0 table local proto kernel metric 0 pref medium\
+local fe80::9683:c4ff:fe65:908a dev eth0 table local proto kernel metric 0 pref medium\
+ff00::/8 dev eth0 table local metric 256 pref medium\
+\
+=== IP RULES ===\
+0:      from all lookup local\
+1:      from all iif lo lookup 16800\
+1001:   from all iif eth0.2 lookup 1\
+1050:   from 100.77.0.0/16 lookup main\
+1099:   from all fwmark 0x80000/0xc0000 lookup main\
+1100:   from all lookup main suppress_prefixlength 0\
+1101:   not from all fwmark 0x8000/0xc000 lookup 8000\
+2001:   from all fwmark 0x100/0x3f00 lookup 1\
+2061:   from all fwmark 0x3d00/0x3f00 blackhole\
+2062:   from all fwmark 0x3e00/0x3f00 unreachable\
+32766:  from all lookup main\
+32767:  from all lookup default\
+\
+=== IPTABLES FILTER ===\
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 ACCEPT     all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED\
+    0     0 NETBIRD-ACL-INPUT  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0\
+    0     0 DROP       all  --  wt0    *       0.0.0.0/0            0.0.0.0/0\
+10471 6081K ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+10891 2595K input_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom input rule chain */\
+10508 2542K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* !fw3 */\
+    0     0 syn_flood  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 /* !fw3 */\
+   43  4668 zone_lan_input  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+  340 48168 zone_wan_input  all  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_vpn_input  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain FORWARD (policy DROP 0 packets, 0 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+  650  174K NETBIRD-RT-FWD-IN  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            mark match 0x1bd20\
+  802  668K NETBIRD-RT-FWD-OUT  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0\
+    0     0 DROP       all  --  wt0    *       0.0.0.0/0            0.0.0.0/0\
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            match-set GL_MAC_BLOCK src\
+ 9392 4365K forwarding_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom forwarding rule chain */\
+ 9303 4361K FLOWOFFLOAD  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Traffic offloading */ ctstate NEW,RELATED,ESTABLISHED FLOWOFFLOAD hw\
+ 7933 3924K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* !fw3 */\
+ 1271  313K zone_lan_forward  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_wan_forward  all  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+  188  129K zone_vpn_forward  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+10471 6081K ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+10637 5613K output_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom output rule chain */\
+10141 5576K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* !fw3 */\
+    2   412 zone_lan_output  all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+  494 36168 zone_wan_output  all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_vpn_output  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain NETBIRD-ACL-INPUT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+\
+Chain NETBIRD-RT-FWD-IN (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  593  131K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED\
+   57 42827 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+\
+Chain NETBIRD-RT-FWD-OUT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  802  668K ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED\
+\
+Chain forwarding_guest_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain forwarding_lan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain forwarding_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain forwarding_vpn_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain forwarding_wan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain input_guest_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain input_lan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain input_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain input_vpn_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain input_wan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain output_guest_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain output_lan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain output_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain output_vpn_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain output_wan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain reject (2 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */ reject-with tcp-reset\
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */ reject-with icmp-port-unreachable\
+\
+Chain syn_flood (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 RETURN     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 limit: avg 25/sec burst 50 /* !fw3 */\
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_guest_dest_ACCEPT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain zone_guest_dest_REJECT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain zone_guest_forward (0 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 forwarding_guest_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom guest forwarding rule chain */\
+    0     0 zone_wan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Zone guest to wan forwarding policy */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port forwards */\
+    0     0 zone_guest_dest_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_guest_input (0 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 input_guest_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom guest input rule chain */\
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpts:67:68 /* !fw3: Allow-DHCP */\
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 /* !fw3: Allow-DNS */\
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53 /* !fw3: Allow-DNS */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port redirections */\
+    0     0 zone_guest_src_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_guest_output (0 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 output_guest_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom guest output rule chain */\
+    0     0 zone_guest_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_guest_src_REJECT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain zone_lan_dest_ACCEPT (4 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    2   412 ACCEPT     all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_lan_forward (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 1271  313K forwarding_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom lan forwarding rule chain */\
+ 1271  313K zone_wan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Zone lan to wan forwarding policy */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port forwards */\
+    0     0 zone_lan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_lan_input (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+   43  4668 input_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom lan input rule chain */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port redirections */\
+   43  4668 zone_lan_src_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_lan_output (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    2   412 output_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom lan output rule chain */\
+    2   412 zone_lan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_lan_src_ACCEPT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+   43  4668 ACCEPT     all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            ctstate NEW,UNTRACKED /* !fw3 */\
+\
+Chain zone_vpn_dest_ACCEPT (2 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    3   419 DROP       all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            ctstate INVALID /* !fw3: Prevent NAT leakage */\
+    0     0 ACCEPT     all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_vpn_forward (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  188  129K forwarding_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom vpn forwarding rule chain */\
+  188  129K zone_wan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Zone vpn to wan forwarding policy */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port forwards */\
+    3   419 zone_vpn_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_vpn_input (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 input_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom vpn input rule chain */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port redirections */\
+    0     0 zone_vpn_src_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_vpn_output (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 output_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom vpn output rule chain */\
+    0     0 zone_vpn_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_vpn_src_ACCEPT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 ACCEPT     all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ctstate NEW,UNTRACKED /* !fw3 */\
+\
+Chain zone_wan_dest_ACCEPT (4 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+   86  3896 DROP       all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            ctstate INVALID /* !fw3: Prevent NAT leakage */\
+ 1864  473K ACCEPT     all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_wan_dest_REJECT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 reject     all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_wan_forward (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 forwarding_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom wan forwarding rule chain */\
+    0     0 zone_lan_dest_ACCEPT  esp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Allow-IPSec-ESP */\
+    0     0 zone_lan_dest_ACCEPT  udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:500 /* !fw3: Allow-ISAKMP */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port forwards */\
+    0     0 zone_wan_dest_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_wan_input (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  340 48168 input_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom wan input rule chain */\
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:68 /* !fw3: Allow-DHCP-Renew */\
+    0     0 ACCEPT     2    --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Allow-IGMP */\
+    0     0 ACCEPT     udp  --  *      *       0.0.0.0/0            224.0.0.0/4          /* !fw3: Allow-UDP-udpxy */\
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate DNAT /* !fw3: Accept port redirections */\
+  340 48168 zone_wan_src_DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_wan_output (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  494 36168 output_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom wan output rule chain */\
+  494 36168 zone_wan_dest_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_wan_src_DROP (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  340 48168 DROP       all  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+=== IPTABLES NAT ===\
+Chain PREROUTING (policy ACCEPT 2493 packets, 593K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 2493  593K NETBIRD-RT-RDR  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+10384 2559K prerouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom prerouting rule chain */\
+ 8514 2091K zone_lan_prerouting  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+ 1319  239K zone_wan_prerouting  all  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+  551  229K zone_vpn_prerouting  all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain INPUT (policy ACCEPT 1 packets, 1368 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain OUTPUT (policy ACCEPT 91 packets, 7517 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain POSTROUTING (policy ACCEPT 29 packets, 2503 bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+  122 27670 NETBIRD-RT-NAT  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+ 1280  260K postrouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom postrouting rule chain */\
+    2   412 zone_lan_postrouting  all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+ 1109  245K zone_wan_postrouting  all  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+    0     0 zone_vpn_postrouting  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain NETBIRD-RT-NAT (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+   31 20153 MASQUERADE  all  --  *      !lo     0.0.0.0/0            0.0.0.0/0            mark match 0x1bd21\
+    0     0 MASQUERADE  all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            mark match 0x1bd22\
+\
+Chain NETBIRD-RT-RDR (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain postrouting_guest_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain postrouting_lan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain postrouting_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain postrouting_vpn_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain postrouting_wan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain prerouting_guest_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain prerouting_lan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain prerouting_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain prerouting_vpn_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain prerouting_wan_rule (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain zone_guest_postrouting (0 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 postrouting_guest_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom guest postrouting rule chain */\
+\
+Chain zone_guest_prerouting (0 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 prerouting_guest_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom guest prerouting rule chain */\
+\
+Chain zone_lan_postrouting (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    2   412 postrouting_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom lan postrouting rule chain */\
+\
+Chain zone_lan_prerouting (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 8514 2091K prerouting_lan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom lan prerouting rule chain */\
+\
+Chain zone_vpn_postrouting (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 postrouting_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom vpn postrouting rule chain */\
+    0     0 MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_vpn_prerouting (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+  551  229K prerouting_vpn_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom vpn prerouting rule chain */\
+\
+Chain zone_wan_postrouting (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 1109  245K postrouting_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom wan postrouting rule chain */\
+ 1109  245K MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3 */\
+\
+Chain zone_wan_prerouting (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 1319  239K prerouting_wan_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* !fw3: Custom wan prerouting rule chain */\
+\
+=== IPTABLES MANGLE ===\
+Chain PREROUTING (policy ACCEPT 7356 packets, 2805K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 7382 2811K NETBIRD-RT-PRE  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+42839   17M VPN_SER_POLICY  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+   53 42430 CONNMARK   all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ctstate NEW CONNMARK set 0x1bd10\
+\
+Chain INPUT (policy ACCEPT 3434 packets, 1388K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain FORWARD (policy ACCEPT 1494 packets, 844K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 1495  844K NETBIRD-RT-MSSCLAMP  all  --  *      *       0.0.0.0/0            0.0.0.0/0\
+  729 46076 TCPMSS     tcp  --  *      eth0.2  0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+  315 18932 TCPMSS     tcp  --  eth0.2 *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 /* !fw3: Zone wan MTU fixing */ TCPMSS clamp to PMTU\
+\
+Chain OUTPUT (policy ACCEPT 3476 packets, 1934K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner GID match 65533 /* !fw3: process_mark */ MARK xset 0x8000/0xc000\
+\
+Chain POSTROUTING (policy ACCEPT 4966 packets, 2778K bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+    0     0 CONNMARK   all  --  *      wt0     0.0.0.0/0            0.0.0.0/0            ctstate NEW CONNMARK set 0x1bd11\
+\
+Chain NETBIRD-RT-MSSCLAMP (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+   19  1148 TCPMSS     tcp  --  *      wt0     0.0.0.0/0            0.0.0.0/0            tcp flags:0x06/0x02 TCPMSS set 1240\
+\
+Chain NETBIRD-RT-PRE (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+ 2498  576K MARK       all  --  !wt0   *       0.0.0.0/0            0.0.0.0/0            ctstate NEW MARK set 0x1bd22\
+   53 42430 MARK       all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ctstate NEW MARK set 0x1bd21\
+    0     0 MARK       all  --  wt0    *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL MARK set 0x1bd20\
+\
+Chain VPN_SER_POLICY (1 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+=== IPTABLES RAW ===\
+Chain PREROUTING (policy ACCEPT 42884 packets, 17M bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+10672 2434K zone_lan_helper  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0            /* !fw3: lan CT helper assignment */\
+\
+Chain OUTPUT (policy ACCEPT 21106 packets, 12M bytes)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain zone_guest_helper (0 references)\
+ pkts bytes target     prot opt in     out     source               destination\
+\
+Chain zone_lan_helper (1 references)\
+ pkts bytes target     prot opt in     out     source               destination
