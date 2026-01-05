@@ -12,6 +12,19 @@ Navigate to the web directory:
 cd web
 ```
 
+Create a `.env` file in the web directory with the following variables:
+
+```properties
+#landing
+RESEND_API_KEY="resend-api-key"
+RESEND_FROM_EMAIL="your-email"
+
+#dashboard
+DATABASE_URL="database-url"
+NETBIRD_API_KEY="netbird-api-key"
+NETBIRD_API_URL="netbird-api-url"
+```
+
 Install dependencies:
 
 ```bash
