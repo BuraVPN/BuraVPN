@@ -1,137 +1,48 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const backCheckRequests = new Map<string, string>();
+interface Heartbeat {
+  routerId: string;
+  timestamp: string;
+  netbirdIp?: string;
+  tunnelUp: boolean;
+  packetLoss: number;
+  latencyMs?: number;
+}
 
-const ROUTER_IPS: Record<string, string> = {
-  "travel-router": "<netbird_travel_router_ip>",
-  "home-router": "<netbird_exit_node_ip>",
-};
+const routers = new Map<string, Heartbeat>();
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.json();
-    const {
-      routerId,
-      netbirdState,
-      tunnelUp,
-      exitNode,
-      pingResult,
-      requestBackCheck,
-      backCheckResult,
-    } = body as {
-      routerId: string;
-      netbirdState?: { connected: boolean; ip?: string };
-      tunnelUp: boolean;
-      exitNode?: { reachable: boolean; target?: string; latency?: number };
-      pingResult?: {
-        success: boolean;
-        packetLoss: number;
-        avgLatency?: number;
-      };
-      requestBackCheck?: boolean;
-      backCheckResult?: {
-        success: boolean;
-        packetLoss: number;
-        avgLatency?: number;
-      };
-    };
+    const hb: Heartbeat = await req.json();
 
-    console.log("=== Heartbeat Received ===");
-    console.log("Time:", new Date().toISOString());
-    console.log("Router ID:", routerId);
-    console.log("Status:", body.status);
+    routers.set(hb.routerId, hb);
+
+    const status = hb.tunnelUp ? "✓" : hb.netbirdIp ? "⚠" : "✗";
     console.log(
-      "NetBird:",
-      netbirdState?.connected
-        ? `Connected (${netbirdState.ip})`
-        : "Disconnected"
-    );
-    console.log("Tunnel Up:", tunnelUp);
-    if (pingResult) {
-      console.log(
-        `Tunnel Ping: ${pingResult.packetLoss}% loss, ${pingResult.avgLatency?.toFixed(1) || "N/A"}ms`
-      );
-    }
-    if (exitNode) {
-      console.log(
-        `Exit Node: ${exitNode.reachable ? `✓ ${exitNode.target} (${exitNode.latency?.toFixed(1)}ms)` : "✗ unreachable"}`
-      );
-    }
-    console.log("Router data:", JSON.stringify(body, null, 2));
-    console.log(
-      "IP address:",
-      request.headers.get("x-forwarded-for") ||
-        request.headers.get("x-real-ip") ||
-        "unknown"
+      `${status} ${hb.routerId} | ip=${hb.netbirdIp || "none"} tunnel=${hb.tunnelUp} loss=${hb.packetLoss}% latency=${hb.latencyMs?.toFixed(1) || "-"}ms`
     );
 
-    if (requestBackCheck && !tunnelUp) {
-      console.log(
-        `⚠️  Router ${routerId} reports tunnel down - requesting back-check`
-      );
-
-      const peerRouterId = getPeerRouterId(routerId);
-      if (peerRouterId) {
-        backCheckRequests.set(peerRouterId, ROUTER_IPS[routerId] || "");
-        console.log(`→ Back-check request queued for ${peerRouterId}`);
-      }
-    }
-
-    if (backCheckResult !== undefined) {
-      const success =
-        backCheckResult.success && backCheckResult.packetLoss < 100;
-      console.log(
-        `✓ Back-check result from ${routerId}: ${success ? "SUCCESS" : "FAILED"} (${backCheckResult.packetLoss}% loss)`
-      );
-
-      if (success) {
-        console.log(`→ Diagnosis: Problem is on the requesting router`);
-      } else {
-        console.log(
-          `→ Diagnosis: Problem is on both routers or NetBird network`
-        );
-      }
-
-      backCheckRequests.delete(routerId);
-    }
-
-    console.log("========================\n");
-
-    const shouldBackCheck = backCheckRequests.has(routerId);
-    const checkTarget = shouldBackCheck
-      ? backCheckRequests.get(routerId)
-      : undefined;
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Heartbeat received",
-        timestamp: new Date().toISOString(),
-        shouldBackCheck,
-        checkTarget,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error processing heartbeat:", error);
-
-    return NextResponse.json(
-      { success: false, message: "Error processing heartbeat" },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error("Heartbeat error:", e);
+    return NextResponse.json({ ok: false }, { status: 500 });
   }
 }
 
-function getPeerRouterId(routerId: string): string | null {
-  if (routerId === "travel-router") return "home-router";
-  if (routerId === "home-router") return "travel-router";
-  return null;
-}
+export async function GET() {
+  const status = Object.fromEntries(
+    Array.from(routers.entries()).map(([id, hb]) => [
+      id,
+      {
+        tunnelUp: hb.tunnelUp,
+        netbirdIp: hb.netbirdIp,
+        packetLoss: hb.packetLoss,
+        latencyMs: hb.latencyMs,
+        lastSeen: hb.timestamp,
+        stale: Date.now() - new Date(hb.timestamp).getTime() > 15000,
+      },
+    ])
+  );
 
-export async function GET(request: NextRequest) {
-  return NextResponse.json({
-    message: "Heartbeat endpoint active",
-    method: "POST expected",
-    pendingBackChecks: Array.from(backCheckRequests.keys()),
-  });
+  return NextResponse.json(status);
 }
