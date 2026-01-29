@@ -1,22 +1,16 @@
-import "../landing-globals.css";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 
-export default function RootLayout({
+export default function LandingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="/fav-bura.png" />
-      </head>
-      <body className="relative min-h-screen">
-        <Header />
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <div className="landing-layout relative min-h-screen">
+      <Header />
+      {children}
+      <Footer />
+    </div>
   );
 }
