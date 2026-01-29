@@ -41,10 +41,7 @@ export default function RouterFresh({
       <div className="mb-6">
         <div className="flex justify-center gap-2 mb-4">
           {Array.from({ length: routersNumber }).map((_, i) => (
-            <Router
-              key={i + Math.random()}
-              className="h-20 w-20 text-orange-400"
-            />
+            <Router key={i} className="h-20 w-20 text-orange-400" />
           ))}
         </div>
         <h3 className="text-3xl font-bold mb-2">{title}</h3>

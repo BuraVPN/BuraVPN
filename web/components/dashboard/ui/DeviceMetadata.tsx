@@ -45,7 +45,7 @@ export default function DeviceMetadata({
       </div>
       <div className="flex flex-col items-center justify-end h-full gap-5">
         <Link
-          href={`/devices/${id}`}
+          href={`/dashboard/devices/${id}`}
           className="bg-black rounded-lg p-1.5 self-end"
         >
           <Ellipsis color="white" />

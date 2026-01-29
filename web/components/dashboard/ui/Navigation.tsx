@@ -18,17 +18,17 @@ export default function Navigation({ onLinkClick, isMinimized }: Props) {
     { name: "Home", href: "/", icon: <House color="#cccccc" /> },
     {
       name: "Devices",
-      href: "/devices",
+      href: "/dashboard/devices",
       icon: <Router color="#cccccc" />,
     },
     {
       name: "Tunnels",
-      href: "/tunnels",
+      href: "/dashboard/tunnels",
       icon: <ChevronsLeftRightEllipsis color="#cccccc" />,
     },
     {
       name: "Account",
-      href: "/account",
+      href: "/dashboard/account",
       icon: <CircleUserRound color="#cccccc" />,
     },
     {

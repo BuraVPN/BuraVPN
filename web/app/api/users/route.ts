@@ -8,7 +8,12 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     // const userId = searchParams.get("userId");
     const email = searchParams.get("email");
-    const userId = "aacd1804-278f-46be-a1fb-53b4066b5e55";
+    const userId = "4c9ab938-757c-4ed4-99e7-7fd3dc1a6e84";
+
+    // const userId = "d3vvub3sujac73d5njf0";
+    //e935db0c-4156-43a0-bf3e-0fd1ab55fea6
+
+    //sa curla d3vvub3sujac73d5njf0
 
     if (!userId && !email) {
       return NextResponse.json(

@@ -1,0 +1,127 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ===== USER MODEL =====
+model User {
+  id    String  @id @default(uuid())
+  name  String
+  email String? @unique // Za NextAuth kasnije
+
+  groups Group[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ===== GROUP MODEL =====
+model Group {
+  id             String @id @default(uuid())
+  netbirdGroupId String @unique // "ch8i4ug6lnn4g9hqv7m0"
+  name           String // "devs"
+
+  // Relacija sa User
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Metadata iz NetBird
+  peersCount     Int     @default(0) // peers_count
+  resourcesCount Int     @default(0) // resources_count
+  issued         String? // "api"
+
+  // Relacija sa Peer (many-to-many kroz GroupPeer)
+  groupPeers GroupPeer[]
+
+  // Resources (JSON array jer su jednostavni objekti)
+  resources Json? // [{ id: "...", type: "host" }]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([netbirdGroupId])
+  @@map("groups")
+}
+
+// ===== PEER MODEL =====
+model Peer {
+  id            String @id @default(uuid())
+  netbirdPeerId String @unique // "chacbco6lnnbn6cg5s90"
+  name          String // "stage-host-1"
+
+  // Relacija sa Group (many-to-many kroz GroupPeer)
+  groupPeers GroupPeer[]
+
+  // Network info
+  ip             String? // "10.64.0.1"
+  connectionIp   String? // "35.64.0.1"
+  dnsLabel       String? // "stage-host-1.netbird.cloud"
+  extraDnsLabels String[] // ["stage-host-1"]
+
+  // Status
+  connected Boolean   @default(false)
+  lastSeen  DateTime?
+  lastLogin DateTime?
+
+  // System info
+  os            String? // "Darwin 13.2.1"
+  kernelVersion String? // "23.2.0"
+  version       String? // "0.14.0"
+  uiVersion     String? // "0.14.0"
+  hostname      String? // "stage-host-1"
+  serialNumber  String? // "C02XJ0J0JGH7"
+
+  // Location
+  geonameId   Int?
+  countryCode String? // "DE"
+  cityName    String? // "Berlin"
+
+  // User & Access
+  userId           String? // "google-oauth2|277474792786460067937"
+  sshEnabled       Boolean @default(false)
+  approvalRequired Boolean @default(false)
+  ephemeral        Boolean @default(false)
+
+  // Login expiration
+  loginExpirationEnabled      Boolean @default(false)
+  loginExpired                Boolean @default(false)
+  inactivityExpirationEnabled Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([netbirdPeerId])
+  @@index([connected])
+  @@index([hostname])
+  @@map("peers")
+}
+
+// ===== MANY-TO-MANY: Group <-> Peer =====
+// Peer može biti u više grupa, grupa može imati više peera
+model GroupPeer {
+  id String @id @default(uuid())
+
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  peerId String
+  peer   Peer   @relation(fields: [peerId], references: [id], onDelete: Cascade)
+
+  addedAt DateTime @default(now())
+
+  @@unique([groupId, peerId])
+  @@index([groupId])
+  @@index([peerId])
+  @@map("group_peers")
+}
