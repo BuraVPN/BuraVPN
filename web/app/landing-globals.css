@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -49,8 +51,9 @@ html {
 body {
   background: #0d0d0d;
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
 }
 
 html {
@@ -84,7 +87,8 @@ a:focus {
 }
 
 .bg-dual-radial {
-  background-image: radial-gradient(
+  background-image:
+    radial-gradient(
       circle at bottom,
       #040404 80%,
       #636363 85%,
