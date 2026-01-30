@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
         data: {
           connected: true,
           lastSeen: new Date(hb.timestamp),
+          ip: hb.netbirdIp || undefined,
         },
       });
     }

@@ -15,6 +15,7 @@ type Peer = {
   lastSeen?: string;
   countryCode: string;
   cityName: string;
+  ip: string;
 };
 
 type GroupPeer = {
@@ -143,10 +144,9 @@ export default function UserDashboard() {
               <DeviceMetada
                 key={element.peer.id}
                 name={element.peer.name}
-                publicIP={element.peer.connectionIp}
-                countryCode={element.peer.countryCode}
-                city={element.peer.cityName}
+                vpnIP={element.peer.ip}
                 isConnected={element.peer.connected}
+                lastSeen={element.peer.lastSeen}
                 id={element.peer.id}
               />
             ))}
