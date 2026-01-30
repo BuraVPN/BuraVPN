@@ -7,7 +7,13 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-HEARTBEAT_DOMAIN="bura-vpn-git-development-backend-624fef-mediteran2910s-projects.vercel.app"
+HEARTBEAT_CONFIG="/etc/heartbeat/config.json"
+if [ -f "$HEARTBEAT_CONFIG" ]; then
+    HEARTBEAT_URL=$(grep -o '"serverUrl"[[:space:]]*:[[:space:]]*"[^"]*"' "$HEARTBEAT_CONFIG" | cut -d'"' -f4)
+    HEARTBEAT_DOMAIN=$(echo "$HEARTBEAT_URL" | sed -e 's|https\?://||' -e 's|/.*||')
+else
+    HEARTBEAT_DOMAIN=""
+fi
 
 log_info() {
     echo -e "${GREEN}[INFO]${NC} $1"
