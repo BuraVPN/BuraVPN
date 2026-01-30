@@ -12,8 +12,6 @@ interface Heartbeat {
   tunnelUp: boolean;
   packetLoss: number;
   latencyMs?: number;
-  internetUp: boolean;
-  internetMs?: number;
 }
 
 export async function POST(req: NextRequest) {
@@ -28,23 +26,16 @@ export async function POST(req: NextRequest) {
       await prisma.peer.update({
         where: { id: hb.routerId },
         data: {
-          connected: hb.internetUp,
+          connected: true,
           lastSeen: new Date(hb.timestamp),
         },
       });
     }
 
-    const status =
-      hb.tunnelUp && hb.internetUp
-        ? "✓"
-        : hb.internetUp
-          ? "⚠ tunnel"
-          : hb.netbirdIp
-            ? "⚠ no inet"
-            : "✗";
+    const status = hb.tunnelUp ? "✓" : "⚠ tunnel down";
     const dbStatus = peer ? "db:✓" : "db:?";
     console.log(
-      `${status} ${hb.routerId} | inet=${hb.internetUp} tunnel=${hb.tunnelUp} latency=${hb.latencyMs?.toFixed(1) || "-"}ms ${dbStatus}`
+      `${status} ${hb.routerId} | tunnel=${hb.tunnelUp} loss=${hb.packetLoss}% latency=${hb.latencyMs?.toFixed(1) || "-"}ms ${dbStatus}`
     );
 
     return NextResponse.json({ ok: true, peerFound: !!peer });
@@ -80,5 +71,3 @@ export async function GET() {
 
   return NextResponse.json(status);
 }
-
-//
