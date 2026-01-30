@@ -15,27 +15,24 @@ import (
 const (
 	configFile       = "/etc/heartbeat/config.json"
 	netbirdStateFile = "/tmp/lib/netbird/state.json"
-	internetCheckIP  = "8.8.8.8"
 	interval         = 5 * time.Second
 )
 
 type Config struct {
-	PeerID     string `json:"peerId"`    
-	ServerURL  string `json:"serverUrl"`  
-	ExitNodeIP string `json:"exitNodeIp"` 
+	PeerID     string `json:"peerId"`
+	ServerURL  string `json:"serverUrl"`
+	ExitNodeIP string `json:"exitNodeIp,omitempty"`
 }
 
 var config Config
 
 type Heartbeat struct {
-	RouterID    string  `json:"routerId"`
-	Timestamp   string  `json:"timestamp"`
-	NetbirdIP   string  `json:"netbirdIp,omitempty"`
-	TunnelUp    bool    `json:"tunnelUp"`
-	PacketLoss  float64 `json:"packetLoss"`
-	LatencyMs   float64 `json:"latencyMs,omitempty"`
-	InternetUp  bool    `json:"internetUp"`
-	InternetMs  float64 `json:"internetMs,omitempty"`
+	RouterID   string  `json:"routerId"`
+	Timestamp  string  `json:"timestamp"`
+	NetbirdIP  string  `json:"netbirdIp,omitempty"`
+	TunnelUp   bool    `json:"tunnelUp"`
+	PacketLoss float64 `json:"packetLoss"`
+	LatencyMs  float64 `json:"latencyMs,omitempty"`
 }
 
 func main() {
@@ -47,7 +44,11 @@ func main() {
 		log.Fatalf("Failed to parse config: %v", err)
 	}
 
-	log.Printf("Starting heartbeat: peerId=%s, server=%s", config.PeerID, config.ServerURL)
+	if config.PeerID == "" || config.ServerURL == "" {
+		log.Fatalf("Config missing required fields: peerId and serverUrl")
+	}
+
+	log.Printf("Starting heartbeat: peerId=%s", config.PeerID)
 
 	for {
 		send()
@@ -67,25 +68,27 @@ func send() {
 		hb.TunnelUp, hb.PacketLoss, hb.LatencyMs = pingViaTunnel(config.ExitNodeIP)
 	}
 
-	hb.InternetUp, hb.InternetMs = pingDirect(internetCheckIP)
-
+	start := time.Now()
 	data, _ := json.Marshal(hb)
 	resp, err := http.Post(config.ServerURL, "application/json", bytes.NewBuffer(data))
+	latency := float64(time.Since(start).Milliseconds())
+
 	if err != nil {
-		log.Printf("✗ Send failed: %v", err)
+		_, netErr := http.Get("http://connectivitycheck.gstatic.com/generate_204")
+		if netErr != nil {
+			log.Printf("✗ No internet connection")
+		} else {
+			log.Printf("⚠ Internet OK, server unreachable: %v", err)
+		}
 		return
 	}
 	resp.Body.Close()
 
-	status := "✗ offline"
-	if hb.TunnelUp && hb.InternetUp {
-		status = "✓ online"
-	} else if hb.TunnelUp && !hb.InternetUp {
-		status = "⚠ no internet"
-	} else if hb.NetbirdIP != "" {
+	status := "✓"
+	if !hb.TunnelUp && config.ExitNodeIP != "" {
 		status = "⚠ tunnel down"
 	}
-	log.Printf("%s | ip=%s tunnel=%v internet=%v latency=%.1fms", status, hb.NetbirdIP, hb.TunnelUp, hb.InternetUp, hb.InternetMs)
+	log.Printf("%s | ip=%s tunnel=%v loss=%.0f%% latency=%.0fms", status, hb.NetbirdIP, hb.TunnelUp, hb.PacketLoss, latency)
 }
 
 func getNetbirdIP() string {
@@ -143,23 +146,4 @@ func pingViaTunnel(ip string) (up bool, loss, latency float64) {
 
 func parseFloat(s string, f *float64) (int, error) {
 	return fmt.Sscanf(s, "%f", f)
-}
-
-func pingDirect(ip string) (up bool, latency float64) {
-	out, err := exec.Command("ping", "-c", "2", "-W", "2", ip).Output()
-	if err != nil {
-		return false, 0
-	}
-
-	for _, line := range strings.Split(string(out), "\n") {
-		if strings.Contains(line, "rtt") {
-			if idx := strings.Index(line, "="); idx != -1 {
-				parts := strings.Split(strings.Fields(line[idx+1:])[0], "/")
-				if len(parts) >= 2 {
-					parseFloat(parts[1], &latency)
-				}
-			}
-		}
-	}
-	return true, latency
 }
