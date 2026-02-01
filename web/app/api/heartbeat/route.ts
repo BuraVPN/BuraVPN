@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
+import {
+  getCachedTunnelConfigs,
+  setCachedTunnelConfigs,
+} from "@/lib/tunnel-cache";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 const prisma = globalForPrisma.prisma || new PrismaClient();
@@ -14,6 +18,12 @@ interface Heartbeat {
   tunnelUp: boolean;
   packetLoss: number;
   latencyMs?: number;
+}
+
+interface TunnelConfig {
+  tunnelId: string;
+  role: "exit-node" | "travel-router";
+  tunnelPeerIps: string[];
 }
 
 export async function POST(req: NextRequest) {
@@ -37,16 +47,31 @@ export async function POST(req: NextRequest) {
 
     await markStalePeersOffline();
 
+    let tunnelConfigs: TunnelConfig[] = [];
+    if (peer) {
+      const cached = getCachedTunnelConfigs(peer.id);
+      if (cached) {
+        tunnelConfigs = cached;
+      } else {
+        tunnelConfigs = await getTunnelConfigs(peer.id);
+        setCachedTunnelConfigs(peer.id, tunnelConfigs);
+      }
+    }
+
     const status = hb.tunnelUp ? "✓" : "⚠ tunnel down";
     const dbStatus = peer ? "db:✓" : "db:?";
     console.log(
       `${status} ${hb.routerId} | tunnel=${hb.tunnelUp} loss=${hb.packetLoss}% latency=${hb.latencyMs?.toFixed(1) || "-"}ms ${dbStatus}`
     );
 
-    return NextResponse.json({ ok: true, peerFound: !!peer });
+    return NextResponse.json({
+      ok: true,
+      peerFound: !!peer,
+      tunnels: tunnelConfigs,
+    });
   } catch (e) {
     console.error("Heartbeat error:", e);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    return NextResponse.json({ ok: false, tunnels: [] }, { status: 500 });
   }
 }
 
@@ -78,6 +103,53 @@ export async function GET() {
   }));
 
   return NextResponse.json(status);
+}
+
+async function getTunnelConfigs(peerId: string): Promise<TunnelConfig[]> {
+  const configs: TunnelConfig[] = [];
+
+  const asExitNode = await prisma.tunnel.findMany({
+    where: { exitNodeId: peerId, enabled: true },
+    include: {
+      travelRouters: {
+        include: { peer: { select: { ip: true } } },
+      },
+    },
+  });
+
+  for (const t of asExitNode) {
+    const ips = t.travelRouters
+      .map((tr) => tr.peer.ip)
+      .filter((ip): ip is string => ip !== null);
+
+    configs.push({
+      tunnelId: t.id,
+      role: "exit-node",
+      tunnelPeerIps: ips,
+    });
+  }
+
+  const asTravelRouter = await prisma.tunnelTravelRouter.findMany({
+    where: { peerId, tunnel: { enabled: true } },
+    include: {
+      tunnel: {
+        include: {
+          exitNode: { select: { ip: true } },
+        },
+      },
+    },
+  });
+
+  for (const tr of asTravelRouter) {
+    const exitIp = tr.tunnel.exitNode.ip;
+    configs.push({
+      tunnelId: tr.tunnel.id,
+      role: "travel-router",
+      tunnelPeerIps: exitIp ? [exitIp] : [],
+    });
+  }
+
+  return configs;
 }
 
 async function markStalePeersOffline() {

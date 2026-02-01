@@ -33,6 +33,16 @@ export type Peer = $Result.DefaultSelection<Prisma.$PeerPayload>
  * 
  */
 export type GroupPeer = $Result.DefaultSelection<Prisma.$GroupPeerPayload>
+/**
+ * Model Tunnel
+ * 
+ */
+export type Tunnel = $Result.DefaultSelection<Prisma.$TunnelPayload>
+/**
+ * Model TunnelTravelRouter
+ * 
+ */
+export type TunnelTravelRouter = $Result.DefaultSelection<Prisma.$TunnelTravelRouterPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -191,6 +201,26 @@ export class PrismaClient<
     * ```
     */
   get groupPeer(): Prisma.GroupPeerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tunnel`: Exposes CRUD operations for the **Tunnel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tunnels
+    * const tunnels = await prisma.tunnel.findMany()
+    * ```
+    */
+  get tunnel(): Prisma.TunnelDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tunnelTravelRouter`: Exposes CRUD operations for the **TunnelTravelRouter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TunnelTravelRouters
+    * const tunnelTravelRouters = await prisma.tunnelTravelRouter.findMany()
+    * ```
+    */
+  get tunnelTravelRouter(): Prisma.TunnelTravelRouterDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -635,7 +665,9 @@ export namespace Prisma {
     User: 'User',
     Group: 'Group',
     Peer: 'Peer',
-    GroupPeer: 'GroupPeer'
+    GroupPeer: 'GroupPeer',
+    Tunnel: 'Tunnel',
+    TunnelTravelRouter: 'TunnelTravelRouter'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -654,7 +686,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "peer" | "groupPeer"
+      modelProps: "user" | "group" | "peer" | "groupPeer" | "tunnel" | "tunnelTravelRouter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -954,6 +986,154 @@ export namespace Prisma {
           }
         }
       }
+      Tunnel: {
+        payload: Prisma.$TunnelPayload<ExtArgs>
+        fields: Prisma.TunnelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TunnelFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TunnelFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>
+          }
+          findFirst: {
+            args: Prisma.TunnelFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TunnelFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>
+          }
+          findMany: {
+            args: Prisma.TunnelFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>[]
+          }
+          create: {
+            args: Prisma.TunnelCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>
+          }
+          createMany: {
+            args: Prisma.TunnelCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TunnelCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>[]
+          }
+          delete: {
+            args: Prisma.TunnelDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>
+          }
+          update: {
+            args: Prisma.TunnelUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>
+          }
+          deleteMany: {
+            args: Prisma.TunnelDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TunnelUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TunnelUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>[]
+          }
+          upsert: {
+            args: Prisma.TunnelUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelPayload>
+          }
+          aggregate: {
+            args: Prisma.TunnelAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTunnel>
+          }
+          groupBy: {
+            args: Prisma.TunnelGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TunnelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TunnelCountArgs<ExtArgs>
+            result: $Utils.Optional<TunnelCountAggregateOutputType> | number
+          }
+        }
+      }
+      TunnelTravelRouter: {
+        payload: Prisma.$TunnelTravelRouterPayload<ExtArgs>
+        fields: Prisma.TunnelTravelRouterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TunnelTravelRouterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TunnelTravelRouterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>
+          }
+          findFirst: {
+            args: Prisma.TunnelTravelRouterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TunnelTravelRouterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>
+          }
+          findMany: {
+            args: Prisma.TunnelTravelRouterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>[]
+          }
+          create: {
+            args: Prisma.TunnelTravelRouterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>
+          }
+          createMany: {
+            args: Prisma.TunnelTravelRouterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TunnelTravelRouterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>[]
+          }
+          delete: {
+            args: Prisma.TunnelTravelRouterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>
+          }
+          update: {
+            args: Prisma.TunnelTravelRouterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>
+          }
+          deleteMany: {
+            args: Prisma.TunnelTravelRouterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TunnelTravelRouterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TunnelTravelRouterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>[]
+          }
+          upsert: {
+            args: Prisma.TunnelTravelRouterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TunnelTravelRouterPayload>
+          }
+          aggregate: {
+            args: Prisma.TunnelTravelRouterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTunnelTravelRouter>
+          }
+          groupBy: {
+            args: Prisma.TunnelTravelRouterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TunnelTravelRouterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TunnelTravelRouterCountArgs<ExtArgs>
+            result: $Utils.Optional<TunnelTravelRouterCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1054,6 +1234,8 @@ export namespace Prisma {
     group?: GroupOmit
     peer?: PeerOmit
     groupPeer?: GroupPeerOmit
+    tunnel?: TunnelOmit
+    tunnelTravelRouter?: TunnelTravelRouterOmit
   }
 
   /* Types for Logging */
@@ -1135,10 +1317,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     groups: number
+    tunnels: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groups?: boolean | UserCountOutputTypeCountGroupsArgs
+    tunnels?: boolean | UserCountOutputTypeCountTunnelsArgs
   }
 
   // Custom InputTypes
@@ -1157,6 +1341,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountGroupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GroupWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTunnelsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TunnelWhereInput
   }
 
 
@@ -1197,10 +1388,14 @@ export namespace Prisma {
 
   export type PeerCountOutputType = {
     groupPeers: number
+    tunnelsAsExitNode: number
+    tunnelsAsTravelRouter: number
   }
 
   export type PeerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groupPeers?: boolean | PeerCountOutputTypeCountGroupPeersArgs
+    tunnelsAsExitNode?: boolean | PeerCountOutputTypeCountTunnelsAsExitNodeArgs
+    tunnelsAsTravelRouter?: boolean | PeerCountOutputTypeCountTunnelsAsTravelRouterArgs
   }
 
   // Custom InputTypes
@@ -1219,6 +1414,51 @@ export namespace Prisma {
    */
   export type PeerCountOutputTypeCountGroupPeersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GroupPeerWhereInput
+  }
+
+  /**
+   * PeerCountOutputType without action
+   */
+  export type PeerCountOutputTypeCountTunnelsAsExitNodeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TunnelWhereInput
+  }
+
+  /**
+   * PeerCountOutputType without action
+   */
+  export type PeerCountOutputTypeCountTunnelsAsTravelRouterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TunnelTravelRouterWhereInput
+  }
+
+
+  /**
+   * Count Type TunnelCountOutputType
+   */
+
+  export type TunnelCountOutputType = {
+    travelRouters: number
+  }
+
+  export type TunnelCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    travelRouters?: boolean | TunnelCountOutputTypeCountTravelRoutersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TunnelCountOutputType without action
+   */
+  export type TunnelCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelCountOutputType
+     */
+    select?: TunnelCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TunnelCountOutputType without action
+   */
+  export type TunnelCountOutputTypeCountTravelRoutersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TunnelTravelRouterWhereInput
   }
 
 
@@ -1391,6 +1631,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     groups?: boolean | User$groupsArgs<ExtArgs>
+    tunnels?: boolean | User$tunnelsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1421,6 +1662,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groups?: boolean | User$groupsArgs<ExtArgs>
+    tunnels?: boolean | User$tunnelsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1430,6 +1672,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       groups: Prisma.$GroupPayload<ExtArgs>[]
+      tunnels: Prisma.$TunnelPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1832,6 +2075,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     groups<T extends User$groupsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tunnels<T extends User$tunnelsArgs<ExtArgs> = {}>(args?: Subset<T, User$tunnelsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2275,6 +2519,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GroupScalarFieldEnum | GroupScalarFieldEnum[]
+  }
+
+  /**
+   * User.tunnels
+   */
+  export type User$tunnelsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    where?: TunnelWhereInput
+    orderBy?: TunnelOrderByWithRelationInput | TunnelOrderByWithRelationInput[]
+    cursor?: TunnelWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TunnelScalarFieldEnum | TunnelScalarFieldEnum[]
   }
 
   /**
@@ -3862,6 +4130,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     groupPeers?: boolean | Peer$groupPeersArgs<ExtArgs>
+    tunnelsAsExitNode?: boolean | Peer$tunnelsAsExitNodeArgs<ExtArgs>
+    tunnelsAsTravelRouter?: boolean | Peer$tunnelsAsTravelRouterArgs<ExtArgs>
     _count?: boolean | PeerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["peer"]>
 
@@ -3961,6 +4231,8 @@ export namespace Prisma {
   export type PeerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "netbirdPeerId" | "name" | "ip" | "connectionIp" | "dnsLabel" | "extraDnsLabels" | "connected" | "lastSeen" | "lastLogin" | "os" | "kernelVersion" | "version" | "uiVersion" | "hostname" | "serialNumber" | "geonameId" | "countryCode" | "cityName" | "userId" | "sshEnabled" | "approvalRequired" | "ephemeral" | "loginExpirationEnabled" | "loginExpired" | "inactivityExpirationEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["peer"]>
   export type PeerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groupPeers?: boolean | Peer$groupPeersArgs<ExtArgs>
+    tunnelsAsExitNode?: boolean | Peer$tunnelsAsExitNodeArgs<ExtArgs>
+    tunnelsAsTravelRouter?: boolean | Peer$tunnelsAsTravelRouterArgs<ExtArgs>
     _count?: boolean | PeerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PeerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3970,6 +4242,8 @@ export namespace Prisma {
     name: "Peer"
     objects: {
       groupPeers: Prisma.$GroupPeerPayload<ExtArgs>[]
+      tunnelsAsExitNode: Prisma.$TunnelPayload<ExtArgs>[]
+      tunnelsAsTravelRouter: Prisma.$TunnelTravelRouterPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4395,6 +4669,8 @@ export namespace Prisma {
   export interface Prisma__PeerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     groupPeers<T extends Peer$groupPeersArgs<ExtArgs> = {}>(args?: Subset<T, Peer$groupPeersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPeerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tunnelsAsExitNode<T extends Peer$tunnelsAsExitNodeArgs<ExtArgs> = {}>(args?: Subset<T, Peer$tunnelsAsExitNodeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tunnelsAsTravelRouter<T extends Peer$tunnelsAsTravelRouterArgs<ExtArgs> = {}>(args?: Subset<T, Peer$tunnelsAsTravelRouterArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4861,6 +5137,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GroupPeerScalarFieldEnum | GroupPeerScalarFieldEnum[]
+  }
+
+  /**
+   * Peer.tunnelsAsExitNode
+   */
+  export type Peer$tunnelsAsExitNodeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    where?: TunnelWhereInput
+    orderBy?: TunnelOrderByWithRelationInput | TunnelOrderByWithRelationInput[]
+    cursor?: TunnelWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TunnelScalarFieldEnum | TunnelScalarFieldEnum[]
+  }
+
+  /**
+   * Peer.tunnelsAsTravelRouter
+   */
+  export type Peer$tunnelsAsTravelRouterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    where?: TunnelTravelRouterWhereInput
+    orderBy?: TunnelTravelRouterOrderByWithRelationInput | TunnelTravelRouterOrderByWithRelationInput[]
+    cursor?: TunnelTravelRouterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TunnelTravelRouterScalarFieldEnum | TunnelTravelRouterScalarFieldEnum[]
   }
 
   /**
@@ -5936,6 +6260,2220 @@ export namespace Prisma {
 
 
   /**
+   * Model Tunnel
+   */
+
+  export type AggregateTunnel = {
+    _count: TunnelCountAggregateOutputType | null
+    _min: TunnelMinAggregateOutputType | null
+    _max: TunnelMaxAggregateOutputType | null
+  }
+
+  export type TunnelMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    exitNodeId: string | null
+    name: string | null
+    enabled: boolean | null
+    netbirdGroupId: string | null
+    netbirdRouteId: string | null
+    netbirdPolicyId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TunnelMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    exitNodeId: string | null
+    name: string | null
+    enabled: boolean | null
+    netbirdGroupId: string | null
+    netbirdRouteId: string | null
+    netbirdPolicyId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TunnelCountAggregateOutputType = {
+    id: number
+    userId: number
+    exitNodeId: number
+    name: number
+    enabled: number
+    netbirdGroupId: number
+    netbirdRouteId: number
+    netbirdPolicyId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TunnelMinAggregateInputType = {
+    id?: true
+    userId?: true
+    exitNodeId?: true
+    name?: true
+    enabled?: true
+    netbirdGroupId?: true
+    netbirdRouteId?: true
+    netbirdPolicyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TunnelMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    exitNodeId?: true
+    name?: true
+    enabled?: true
+    netbirdGroupId?: true
+    netbirdRouteId?: true
+    netbirdPolicyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TunnelCountAggregateInputType = {
+    id?: true
+    userId?: true
+    exitNodeId?: true
+    name?: true
+    enabled?: true
+    netbirdGroupId?: true
+    netbirdRouteId?: true
+    netbirdPolicyId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TunnelAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tunnel to aggregate.
+     */
+    where?: TunnelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tunnels to fetch.
+     */
+    orderBy?: TunnelOrderByWithRelationInput | TunnelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TunnelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tunnels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tunnels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tunnels
+    **/
+    _count?: true | TunnelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TunnelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TunnelMaxAggregateInputType
+  }
+
+  export type GetTunnelAggregateType<T extends TunnelAggregateArgs> = {
+        [P in keyof T & keyof AggregateTunnel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTunnel[P]>
+      : GetScalarType<T[P], AggregateTunnel[P]>
+  }
+
+
+
+
+  export type TunnelGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TunnelWhereInput
+    orderBy?: TunnelOrderByWithAggregationInput | TunnelOrderByWithAggregationInput[]
+    by: TunnelScalarFieldEnum[] | TunnelScalarFieldEnum
+    having?: TunnelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TunnelCountAggregateInputType | true
+    _min?: TunnelMinAggregateInputType
+    _max?: TunnelMaxAggregateInputType
+  }
+
+  export type TunnelGroupByOutputType = {
+    id: string
+    userId: string
+    exitNodeId: string
+    name: string | null
+    enabled: boolean
+    netbirdGroupId: string | null
+    netbirdRouteId: string | null
+    netbirdPolicyId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TunnelCountAggregateOutputType | null
+    _min: TunnelMinAggregateOutputType | null
+    _max: TunnelMaxAggregateOutputType | null
+  }
+
+  type GetTunnelGroupByPayload<T extends TunnelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TunnelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TunnelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TunnelGroupByOutputType[P]>
+            : GetScalarType<T[P], TunnelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TunnelSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    exitNodeId?: boolean
+    name?: boolean
+    enabled?: boolean
+    netbirdGroupId?: boolean
+    netbirdRouteId?: boolean
+    netbirdPolicyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exitNode?: boolean | PeerDefaultArgs<ExtArgs>
+    travelRouters?: boolean | Tunnel$travelRoutersArgs<ExtArgs>
+    _count?: boolean | TunnelCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tunnel"]>
+
+  export type TunnelSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    exitNodeId?: boolean
+    name?: boolean
+    enabled?: boolean
+    netbirdGroupId?: boolean
+    netbirdRouteId?: boolean
+    netbirdPolicyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exitNode?: boolean | PeerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tunnel"]>
+
+  export type TunnelSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    exitNodeId?: boolean
+    name?: boolean
+    enabled?: boolean
+    netbirdGroupId?: boolean
+    netbirdRouteId?: boolean
+    netbirdPolicyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exitNode?: boolean | PeerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tunnel"]>
+
+  export type TunnelSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    exitNodeId?: boolean
+    name?: boolean
+    enabled?: boolean
+    netbirdGroupId?: boolean
+    netbirdRouteId?: boolean
+    netbirdPolicyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TunnelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "exitNodeId" | "name" | "enabled" | "netbirdGroupId" | "netbirdRouteId" | "netbirdPolicyId" | "createdAt" | "updatedAt", ExtArgs["result"]["tunnel"]>
+  export type TunnelInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exitNode?: boolean | PeerDefaultArgs<ExtArgs>
+    travelRouters?: boolean | Tunnel$travelRoutersArgs<ExtArgs>
+    _count?: boolean | TunnelCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TunnelIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exitNode?: boolean | PeerDefaultArgs<ExtArgs>
+  }
+  export type TunnelIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exitNode?: boolean | PeerDefaultArgs<ExtArgs>
+  }
+
+  export type $TunnelPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Tunnel"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      exitNode: Prisma.$PeerPayload<ExtArgs>
+      travelRouters: Prisma.$TunnelTravelRouterPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      exitNodeId: string
+      name: string | null
+      enabled: boolean
+      netbirdGroupId: string | null
+      netbirdRouteId: string | null
+      netbirdPolicyId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tunnel"]>
+    composites: {}
+  }
+
+  type TunnelGetPayload<S extends boolean | null | undefined | TunnelDefaultArgs> = $Result.GetResult<Prisma.$TunnelPayload, S>
+
+  type TunnelCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TunnelFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TunnelCountAggregateInputType | true
+    }
+
+  export interface TunnelDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Tunnel'], meta: { name: 'Tunnel' } }
+    /**
+     * Find zero or one Tunnel that matches the filter.
+     * @param {TunnelFindUniqueArgs} args - Arguments to find a Tunnel
+     * @example
+     * // Get one Tunnel
+     * const tunnel = await prisma.tunnel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TunnelFindUniqueArgs>(args: SelectSubset<T, TunnelFindUniqueArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Tunnel that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TunnelFindUniqueOrThrowArgs} args - Arguments to find a Tunnel
+     * @example
+     * // Get one Tunnel
+     * const tunnel = await prisma.tunnel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TunnelFindUniqueOrThrowArgs>(args: SelectSubset<T, TunnelFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tunnel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelFindFirstArgs} args - Arguments to find a Tunnel
+     * @example
+     * // Get one Tunnel
+     * const tunnel = await prisma.tunnel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TunnelFindFirstArgs>(args?: SelectSubset<T, TunnelFindFirstArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tunnel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelFindFirstOrThrowArgs} args - Arguments to find a Tunnel
+     * @example
+     * // Get one Tunnel
+     * const tunnel = await prisma.tunnel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TunnelFindFirstOrThrowArgs>(args?: SelectSubset<T, TunnelFindFirstOrThrowArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tunnels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tunnels
+     * const tunnels = await prisma.tunnel.findMany()
+     * 
+     * // Get first 10 Tunnels
+     * const tunnels = await prisma.tunnel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tunnelWithIdOnly = await prisma.tunnel.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TunnelFindManyArgs>(args?: SelectSubset<T, TunnelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Tunnel.
+     * @param {TunnelCreateArgs} args - Arguments to create a Tunnel.
+     * @example
+     * // Create one Tunnel
+     * const Tunnel = await prisma.tunnel.create({
+     *   data: {
+     *     // ... data to create a Tunnel
+     *   }
+     * })
+     * 
+     */
+    create<T extends TunnelCreateArgs>(args: SelectSubset<T, TunnelCreateArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tunnels.
+     * @param {TunnelCreateManyArgs} args - Arguments to create many Tunnels.
+     * @example
+     * // Create many Tunnels
+     * const tunnel = await prisma.tunnel.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TunnelCreateManyArgs>(args?: SelectSubset<T, TunnelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tunnels and returns the data saved in the database.
+     * @param {TunnelCreateManyAndReturnArgs} args - Arguments to create many Tunnels.
+     * @example
+     * // Create many Tunnels
+     * const tunnel = await prisma.tunnel.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tunnels and only return the `id`
+     * const tunnelWithIdOnly = await prisma.tunnel.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TunnelCreateManyAndReturnArgs>(args?: SelectSubset<T, TunnelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Tunnel.
+     * @param {TunnelDeleteArgs} args - Arguments to delete one Tunnel.
+     * @example
+     * // Delete one Tunnel
+     * const Tunnel = await prisma.tunnel.delete({
+     *   where: {
+     *     // ... filter to delete one Tunnel
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TunnelDeleteArgs>(args: SelectSubset<T, TunnelDeleteArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Tunnel.
+     * @param {TunnelUpdateArgs} args - Arguments to update one Tunnel.
+     * @example
+     * // Update one Tunnel
+     * const tunnel = await prisma.tunnel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TunnelUpdateArgs>(args: SelectSubset<T, TunnelUpdateArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tunnels.
+     * @param {TunnelDeleteManyArgs} args - Arguments to filter Tunnels to delete.
+     * @example
+     * // Delete a few Tunnels
+     * const { count } = await prisma.tunnel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TunnelDeleteManyArgs>(args?: SelectSubset<T, TunnelDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tunnels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tunnels
+     * const tunnel = await prisma.tunnel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TunnelUpdateManyArgs>(args: SelectSubset<T, TunnelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tunnels and returns the data updated in the database.
+     * @param {TunnelUpdateManyAndReturnArgs} args - Arguments to update many Tunnels.
+     * @example
+     * // Update many Tunnels
+     * const tunnel = await prisma.tunnel.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tunnels and only return the `id`
+     * const tunnelWithIdOnly = await prisma.tunnel.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TunnelUpdateManyAndReturnArgs>(args: SelectSubset<T, TunnelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Tunnel.
+     * @param {TunnelUpsertArgs} args - Arguments to update or create a Tunnel.
+     * @example
+     * // Update or create a Tunnel
+     * const tunnel = await prisma.tunnel.upsert({
+     *   create: {
+     *     // ... data to create a Tunnel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Tunnel we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TunnelUpsertArgs>(args: SelectSubset<T, TunnelUpsertArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tunnels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelCountArgs} args - Arguments to filter Tunnels to count.
+     * @example
+     * // Count the number of Tunnels
+     * const count = await prisma.tunnel.count({
+     *   where: {
+     *     // ... the filter for the Tunnels we want to count
+     *   }
+     * })
+    **/
+    count<T extends TunnelCountArgs>(
+      args?: Subset<T, TunnelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TunnelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Tunnel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TunnelAggregateArgs>(args: Subset<T, TunnelAggregateArgs>): Prisma.PrismaPromise<GetTunnelAggregateType<T>>
+
+    /**
+     * Group by Tunnel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TunnelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TunnelGroupByArgs['orderBy'] }
+        : { orderBy?: TunnelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TunnelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTunnelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Tunnel model
+   */
+  readonly fields: TunnelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Tunnel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TunnelClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    exitNode<T extends PeerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeerDefaultArgs<ExtArgs>>): Prisma__PeerClient<$Result.GetResult<Prisma.$PeerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    travelRouters<T extends Tunnel$travelRoutersArgs<ExtArgs> = {}>(args?: Subset<T, Tunnel$travelRoutersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Tunnel model
+   */
+  interface TunnelFieldRefs {
+    readonly id: FieldRef<"Tunnel", 'String'>
+    readonly userId: FieldRef<"Tunnel", 'String'>
+    readonly exitNodeId: FieldRef<"Tunnel", 'String'>
+    readonly name: FieldRef<"Tunnel", 'String'>
+    readonly enabled: FieldRef<"Tunnel", 'Boolean'>
+    readonly netbirdGroupId: FieldRef<"Tunnel", 'String'>
+    readonly netbirdRouteId: FieldRef<"Tunnel", 'String'>
+    readonly netbirdPolicyId: FieldRef<"Tunnel", 'String'>
+    readonly createdAt: FieldRef<"Tunnel", 'DateTime'>
+    readonly updatedAt: FieldRef<"Tunnel", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Tunnel findUnique
+   */
+  export type TunnelFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * Filter, which Tunnel to fetch.
+     */
+    where: TunnelWhereUniqueInput
+  }
+
+  /**
+   * Tunnel findUniqueOrThrow
+   */
+  export type TunnelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * Filter, which Tunnel to fetch.
+     */
+    where: TunnelWhereUniqueInput
+  }
+
+  /**
+   * Tunnel findFirst
+   */
+  export type TunnelFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * Filter, which Tunnel to fetch.
+     */
+    where?: TunnelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tunnels to fetch.
+     */
+    orderBy?: TunnelOrderByWithRelationInput | TunnelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tunnels.
+     */
+    cursor?: TunnelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tunnels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tunnels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tunnels.
+     */
+    distinct?: TunnelScalarFieldEnum | TunnelScalarFieldEnum[]
+  }
+
+  /**
+   * Tunnel findFirstOrThrow
+   */
+  export type TunnelFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * Filter, which Tunnel to fetch.
+     */
+    where?: TunnelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tunnels to fetch.
+     */
+    orderBy?: TunnelOrderByWithRelationInput | TunnelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tunnels.
+     */
+    cursor?: TunnelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tunnels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tunnels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tunnels.
+     */
+    distinct?: TunnelScalarFieldEnum | TunnelScalarFieldEnum[]
+  }
+
+  /**
+   * Tunnel findMany
+   */
+  export type TunnelFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * Filter, which Tunnels to fetch.
+     */
+    where?: TunnelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tunnels to fetch.
+     */
+    orderBy?: TunnelOrderByWithRelationInput | TunnelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tunnels.
+     */
+    cursor?: TunnelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tunnels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tunnels.
+     */
+    skip?: number
+    distinct?: TunnelScalarFieldEnum | TunnelScalarFieldEnum[]
+  }
+
+  /**
+   * Tunnel create
+   */
+  export type TunnelCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Tunnel.
+     */
+    data: XOR<TunnelCreateInput, TunnelUncheckedCreateInput>
+  }
+
+  /**
+   * Tunnel createMany
+   */
+  export type TunnelCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tunnels.
+     */
+    data: TunnelCreateManyInput | TunnelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Tunnel createManyAndReturn
+   */
+  export type TunnelCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tunnels.
+     */
+    data: TunnelCreateManyInput | TunnelCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Tunnel update
+   */
+  export type TunnelUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Tunnel.
+     */
+    data: XOR<TunnelUpdateInput, TunnelUncheckedUpdateInput>
+    /**
+     * Choose, which Tunnel to update.
+     */
+    where: TunnelWhereUniqueInput
+  }
+
+  /**
+   * Tunnel updateMany
+   */
+  export type TunnelUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tunnels.
+     */
+    data: XOR<TunnelUpdateManyMutationInput, TunnelUncheckedUpdateManyInput>
+    /**
+     * Filter which Tunnels to update
+     */
+    where?: TunnelWhereInput
+    /**
+     * Limit how many Tunnels to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tunnel updateManyAndReturn
+   */
+  export type TunnelUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * The data used to update Tunnels.
+     */
+    data: XOR<TunnelUpdateManyMutationInput, TunnelUncheckedUpdateManyInput>
+    /**
+     * Filter which Tunnels to update
+     */
+    where?: TunnelWhereInput
+    /**
+     * Limit how many Tunnels to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Tunnel upsert
+   */
+  export type TunnelUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Tunnel to update in case it exists.
+     */
+    where: TunnelWhereUniqueInput
+    /**
+     * In case the Tunnel found by the `where` argument doesn't exist, create a new Tunnel with this data.
+     */
+    create: XOR<TunnelCreateInput, TunnelUncheckedCreateInput>
+    /**
+     * In case the Tunnel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TunnelUpdateInput, TunnelUncheckedUpdateInput>
+  }
+
+  /**
+   * Tunnel delete
+   */
+  export type TunnelDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+    /**
+     * Filter which Tunnel to delete.
+     */
+    where: TunnelWhereUniqueInput
+  }
+
+  /**
+   * Tunnel deleteMany
+   */
+  export type TunnelDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tunnels to delete
+     */
+    where?: TunnelWhereInput
+    /**
+     * Limit how many Tunnels to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tunnel.travelRouters
+   */
+  export type Tunnel$travelRoutersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    where?: TunnelTravelRouterWhereInput
+    orderBy?: TunnelTravelRouterOrderByWithRelationInput | TunnelTravelRouterOrderByWithRelationInput[]
+    cursor?: TunnelTravelRouterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TunnelTravelRouterScalarFieldEnum | TunnelTravelRouterScalarFieldEnum[]
+  }
+
+  /**
+   * Tunnel without action
+   */
+  export type TunnelDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tunnel
+     */
+    select?: TunnelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tunnel
+     */
+    omit?: TunnelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TunnelTravelRouter
+   */
+
+  export type AggregateTunnelTravelRouter = {
+    _count: TunnelTravelRouterCountAggregateOutputType | null
+    _min: TunnelTravelRouterMinAggregateOutputType | null
+    _max: TunnelTravelRouterMaxAggregateOutputType | null
+  }
+
+  export type TunnelTravelRouterMinAggregateOutputType = {
+    id: string | null
+    tunnelId: string | null
+    peerId: string | null
+    addedAt: Date | null
+  }
+
+  export type TunnelTravelRouterMaxAggregateOutputType = {
+    id: string | null
+    tunnelId: string | null
+    peerId: string | null
+    addedAt: Date | null
+  }
+
+  export type TunnelTravelRouterCountAggregateOutputType = {
+    id: number
+    tunnelId: number
+    peerId: number
+    addedAt: number
+    _all: number
+  }
+
+
+  export type TunnelTravelRouterMinAggregateInputType = {
+    id?: true
+    tunnelId?: true
+    peerId?: true
+    addedAt?: true
+  }
+
+  export type TunnelTravelRouterMaxAggregateInputType = {
+    id?: true
+    tunnelId?: true
+    peerId?: true
+    addedAt?: true
+  }
+
+  export type TunnelTravelRouterCountAggregateInputType = {
+    id?: true
+    tunnelId?: true
+    peerId?: true
+    addedAt?: true
+    _all?: true
+  }
+
+  export type TunnelTravelRouterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TunnelTravelRouter to aggregate.
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TunnelTravelRouters to fetch.
+     */
+    orderBy?: TunnelTravelRouterOrderByWithRelationInput | TunnelTravelRouterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TunnelTravelRouterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TunnelTravelRouters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TunnelTravelRouters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TunnelTravelRouters
+    **/
+    _count?: true | TunnelTravelRouterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TunnelTravelRouterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TunnelTravelRouterMaxAggregateInputType
+  }
+
+  export type GetTunnelTravelRouterAggregateType<T extends TunnelTravelRouterAggregateArgs> = {
+        [P in keyof T & keyof AggregateTunnelTravelRouter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTunnelTravelRouter[P]>
+      : GetScalarType<T[P], AggregateTunnelTravelRouter[P]>
+  }
+
+
+
+
+  export type TunnelTravelRouterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TunnelTravelRouterWhereInput
+    orderBy?: TunnelTravelRouterOrderByWithAggregationInput | TunnelTravelRouterOrderByWithAggregationInput[]
+    by: TunnelTravelRouterScalarFieldEnum[] | TunnelTravelRouterScalarFieldEnum
+    having?: TunnelTravelRouterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TunnelTravelRouterCountAggregateInputType | true
+    _min?: TunnelTravelRouterMinAggregateInputType
+    _max?: TunnelTravelRouterMaxAggregateInputType
+  }
+
+  export type TunnelTravelRouterGroupByOutputType = {
+    id: string
+    tunnelId: string
+    peerId: string
+    addedAt: Date
+    _count: TunnelTravelRouterCountAggregateOutputType | null
+    _min: TunnelTravelRouterMinAggregateOutputType | null
+    _max: TunnelTravelRouterMaxAggregateOutputType | null
+  }
+
+  type GetTunnelTravelRouterGroupByPayload<T extends TunnelTravelRouterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TunnelTravelRouterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TunnelTravelRouterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TunnelTravelRouterGroupByOutputType[P]>
+            : GetScalarType<T[P], TunnelTravelRouterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TunnelTravelRouterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tunnelId?: boolean
+    peerId?: boolean
+    addedAt?: boolean
+    tunnel?: boolean | TunnelDefaultArgs<ExtArgs>
+    peer?: boolean | PeerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tunnelTravelRouter"]>
+
+  export type TunnelTravelRouterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tunnelId?: boolean
+    peerId?: boolean
+    addedAt?: boolean
+    tunnel?: boolean | TunnelDefaultArgs<ExtArgs>
+    peer?: boolean | PeerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tunnelTravelRouter"]>
+
+  export type TunnelTravelRouterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tunnelId?: boolean
+    peerId?: boolean
+    addedAt?: boolean
+    tunnel?: boolean | TunnelDefaultArgs<ExtArgs>
+    peer?: boolean | PeerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tunnelTravelRouter"]>
+
+  export type TunnelTravelRouterSelectScalar = {
+    id?: boolean
+    tunnelId?: boolean
+    peerId?: boolean
+    addedAt?: boolean
+  }
+
+  export type TunnelTravelRouterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tunnelId" | "peerId" | "addedAt", ExtArgs["result"]["tunnelTravelRouter"]>
+  export type TunnelTravelRouterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tunnel?: boolean | TunnelDefaultArgs<ExtArgs>
+    peer?: boolean | PeerDefaultArgs<ExtArgs>
+  }
+  export type TunnelTravelRouterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tunnel?: boolean | TunnelDefaultArgs<ExtArgs>
+    peer?: boolean | PeerDefaultArgs<ExtArgs>
+  }
+  export type TunnelTravelRouterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tunnel?: boolean | TunnelDefaultArgs<ExtArgs>
+    peer?: boolean | PeerDefaultArgs<ExtArgs>
+  }
+
+  export type $TunnelTravelRouterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TunnelTravelRouter"
+    objects: {
+      tunnel: Prisma.$TunnelPayload<ExtArgs>
+      peer: Prisma.$PeerPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tunnelId: string
+      peerId: string
+      addedAt: Date
+    }, ExtArgs["result"]["tunnelTravelRouter"]>
+    composites: {}
+  }
+
+  type TunnelTravelRouterGetPayload<S extends boolean | null | undefined | TunnelTravelRouterDefaultArgs> = $Result.GetResult<Prisma.$TunnelTravelRouterPayload, S>
+
+  type TunnelTravelRouterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TunnelTravelRouterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TunnelTravelRouterCountAggregateInputType | true
+    }
+
+  export interface TunnelTravelRouterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TunnelTravelRouter'], meta: { name: 'TunnelTravelRouter' } }
+    /**
+     * Find zero or one TunnelTravelRouter that matches the filter.
+     * @param {TunnelTravelRouterFindUniqueArgs} args - Arguments to find a TunnelTravelRouter
+     * @example
+     * // Get one TunnelTravelRouter
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TunnelTravelRouterFindUniqueArgs>(args: SelectSubset<T, TunnelTravelRouterFindUniqueArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TunnelTravelRouter that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TunnelTravelRouterFindUniqueOrThrowArgs} args - Arguments to find a TunnelTravelRouter
+     * @example
+     * // Get one TunnelTravelRouter
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TunnelTravelRouterFindUniqueOrThrowArgs>(args: SelectSubset<T, TunnelTravelRouterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TunnelTravelRouter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterFindFirstArgs} args - Arguments to find a TunnelTravelRouter
+     * @example
+     * // Get one TunnelTravelRouter
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TunnelTravelRouterFindFirstArgs>(args?: SelectSubset<T, TunnelTravelRouterFindFirstArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TunnelTravelRouter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterFindFirstOrThrowArgs} args - Arguments to find a TunnelTravelRouter
+     * @example
+     * // Get one TunnelTravelRouter
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TunnelTravelRouterFindFirstOrThrowArgs>(args?: SelectSubset<T, TunnelTravelRouterFindFirstOrThrowArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TunnelTravelRouters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TunnelTravelRouters
+     * const tunnelTravelRouters = await prisma.tunnelTravelRouter.findMany()
+     * 
+     * // Get first 10 TunnelTravelRouters
+     * const tunnelTravelRouters = await prisma.tunnelTravelRouter.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tunnelTravelRouterWithIdOnly = await prisma.tunnelTravelRouter.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TunnelTravelRouterFindManyArgs>(args?: SelectSubset<T, TunnelTravelRouterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TunnelTravelRouter.
+     * @param {TunnelTravelRouterCreateArgs} args - Arguments to create a TunnelTravelRouter.
+     * @example
+     * // Create one TunnelTravelRouter
+     * const TunnelTravelRouter = await prisma.tunnelTravelRouter.create({
+     *   data: {
+     *     // ... data to create a TunnelTravelRouter
+     *   }
+     * })
+     * 
+     */
+    create<T extends TunnelTravelRouterCreateArgs>(args: SelectSubset<T, TunnelTravelRouterCreateArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TunnelTravelRouters.
+     * @param {TunnelTravelRouterCreateManyArgs} args - Arguments to create many TunnelTravelRouters.
+     * @example
+     * // Create many TunnelTravelRouters
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TunnelTravelRouterCreateManyArgs>(args?: SelectSubset<T, TunnelTravelRouterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TunnelTravelRouters and returns the data saved in the database.
+     * @param {TunnelTravelRouterCreateManyAndReturnArgs} args - Arguments to create many TunnelTravelRouters.
+     * @example
+     * // Create many TunnelTravelRouters
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TunnelTravelRouters and only return the `id`
+     * const tunnelTravelRouterWithIdOnly = await prisma.tunnelTravelRouter.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TunnelTravelRouterCreateManyAndReturnArgs>(args?: SelectSubset<T, TunnelTravelRouterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TunnelTravelRouter.
+     * @param {TunnelTravelRouterDeleteArgs} args - Arguments to delete one TunnelTravelRouter.
+     * @example
+     * // Delete one TunnelTravelRouter
+     * const TunnelTravelRouter = await prisma.tunnelTravelRouter.delete({
+     *   where: {
+     *     // ... filter to delete one TunnelTravelRouter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TunnelTravelRouterDeleteArgs>(args: SelectSubset<T, TunnelTravelRouterDeleteArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TunnelTravelRouter.
+     * @param {TunnelTravelRouterUpdateArgs} args - Arguments to update one TunnelTravelRouter.
+     * @example
+     * // Update one TunnelTravelRouter
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TunnelTravelRouterUpdateArgs>(args: SelectSubset<T, TunnelTravelRouterUpdateArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TunnelTravelRouters.
+     * @param {TunnelTravelRouterDeleteManyArgs} args - Arguments to filter TunnelTravelRouters to delete.
+     * @example
+     * // Delete a few TunnelTravelRouters
+     * const { count } = await prisma.tunnelTravelRouter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TunnelTravelRouterDeleteManyArgs>(args?: SelectSubset<T, TunnelTravelRouterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TunnelTravelRouters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TunnelTravelRouters
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TunnelTravelRouterUpdateManyArgs>(args: SelectSubset<T, TunnelTravelRouterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TunnelTravelRouters and returns the data updated in the database.
+     * @param {TunnelTravelRouterUpdateManyAndReturnArgs} args - Arguments to update many TunnelTravelRouters.
+     * @example
+     * // Update many TunnelTravelRouters
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TunnelTravelRouters and only return the `id`
+     * const tunnelTravelRouterWithIdOnly = await prisma.tunnelTravelRouter.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TunnelTravelRouterUpdateManyAndReturnArgs>(args: SelectSubset<T, TunnelTravelRouterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TunnelTravelRouter.
+     * @param {TunnelTravelRouterUpsertArgs} args - Arguments to update or create a TunnelTravelRouter.
+     * @example
+     * // Update or create a TunnelTravelRouter
+     * const tunnelTravelRouter = await prisma.tunnelTravelRouter.upsert({
+     *   create: {
+     *     // ... data to create a TunnelTravelRouter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TunnelTravelRouter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TunnelTravelRouterUpsertArgs>(args: SelectSubset<T, TunnelTravelRouterUpsertArgs<ExtArgs>>): Prisma__TunnelTravelRouterClient<$Result.GetResult<Prisma.$TunnelTravelRouterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TunnelTravelRouters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterCountArgs} args - Arguments to filter TunnelTravelRouters to count.
+     * @example
+     * // Count the number of TunnelTravelRouters
+     * const count = await prisma.tunnelTravelRouter.count({
+     *   where: {
+     *     // ... the filter for the TunnelTravelRouters we want to count
+     *   }
+     * })
+    **/
+    count<T extends TunnelTravelRouterCountArgs>(
+      args?: Subset<T, TunnelTravelRouterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TunnelTravelRouterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TunnelTravelRouter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TunnelTravelRouterAggregateArgs>(args: Subset<T, TunnelTravelRouterAggregateArgs>): Prisma.PrismaPromise<GetTunnelTravelRouterAggregateType<T>>
+
+    /**
+     * Group by TunnelTravelRouter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TunnelTravelRouterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TunnelTravelRouterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TunnelTravelRouterGroupByArgs['orderBy'] }
+        : { orderBy?: TunnelTravelRouterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TunnelTravelRouterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTunnelTravelRouterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TunnelTravelRouter model
+   */
+  readonly fields: TunnelTravelRouterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TunnelTravelRouter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TunnelTravelRouterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tunnel<T extends TunnelDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TunnelDefaultArgs<ExtArgs>>): Prisma__TunnelClient<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    peer<T extends PeerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeerDefaultArgs<ExtArgs>>): Prisma__PeerClient<$Result.GetResult<Prisma.$PeerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TunnelTravelRouter model
+   */
+  interface TunnelTravelRouterFieldRefs {
+    readonly id: FieldRef<"TunnelTravelRouter", 'String'>
+    readonly tunnelId: FieldRef<"TunnelTravelRouter", 'String'>
+    readonly peerId: FieldRef<"TunnelTravelRouter", 'String'>
+    readonly addedAt: FieldRef<"TunnelTravelRouter", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TunnelTravelRouter findUnique
+   */
+  export type TunnelTravelRouterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * Filter, which TunnelTravelRouter to fetch.
+     */
+    where: TunnelTravelRouterWhereUniqueInput
+  }
+
+  /**
+   * TunnelTravelRouter findUniqueOrThrow
+   */
+  export type TunnelTravelRouterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * Filter, which TunnelTravelRouter to fetch.
+     */
+    where: TunnelTravelRouterWhereUniqueInput
+  }
+
+  /**
+   * TunnelTravelRouter findFirst
+   */
+  export type TunnelTravelRouterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * Filter, which TunnelTravelRouter to fetch.
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TunnelTravelRouters to fetch.
+     */
+    orderBy?: TunnelTravelRouterOrderByWithRelationInput | TunnelTravelRouterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TunnelTravelRouters.
+     */
+    cursor?: TunnelTravelRouterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TunnelTravelRouters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TunnelTravelRouters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TunnelTravelRouters.
+     */
+    distinct?: TunnelTravelRouterScalarFieldEnum | TunnelTravelRouterScalarFieldEnum[]
+  }
+
+  /**
+   * TunnelTravelRouter findFirstOrThrow
+   */
+  export type TunnelTravelRouterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * Filter, which TunnelTravelRouter to fetch.
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TunnelTravelRouters to fetch.
+     */
+    orderBy?: TunnelTravelRouterOrderByWithRelationInput | TunnelTravelRouterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TunnelTravelRouters.
+     */
+    cursor?: TunnelTravelRouterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TunnelTravelRouters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TunnelTravelRouters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TunnelTravelRouters.
+     */
+    distinct?: TunnelTravelRouterScalarFieldEnum | TunnelTravelRouterScalarFieldEnum[]
+  }
+
+  /**
+   * TunnelTravelRouter findMany
+   */
+  export type TunnelTravelRouterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * Filter, which TunnelTravelRouters to fetch.
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TunnelTravelRouters to fetch.
+     */
+    orderBy?: TunnelTravelRouterOrderByWithRelationInput | TunnelTravelRouterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TunnelTravelRouters.
+     */
+    cursor?: TunnelTravelRouterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TunnelTravelRouters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TunnelTravelRouters.
+     */
+    skip?: number
+    distinct?: TunnelTravelRouterScalarFieldEnum | TunnelTravelRouterScalarFieldEnum[]
+  }
+
+  /**
+   * TunnelTravelRouter create
+   */
+  export type TunnelTravelRouterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TunnelTravelRouter.
+     */
+    data: XOR<TunnelTravelRouterCreateInput, TunnelTravelRouterUncheckedCreateInput>
+  }
+
+  /**
+   * TunnelTravelRouter createMany
+   */
+  export type TunnelTravelRouterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TunnelTravelRouters.
+     */
+    data: TunnelTravelRouterCreateManyInput | TunnelTravelRouterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TunnelTravelRouter createManyAndReturn
+   */
+  export type TunnelTravelRouterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * The data used to create many TunnelTravelRouters.
+     */
+    data: TunnelTravelRouterCreateManyInput | TunnelTravelRouterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TunnelTravelRouter update
+   */
+  export type TunnelTravelRouterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TunnelTravelRouter.
+     */
+    data: XOR<TunnelTravelRouterUpdateInput, TunnelTravelRouterUncheckedUpdateInput>
+    /**
+     * Choose, which TunnelTravelRouter to update.
+     */
+    where: TunnelTravelRouterWhereUniqueInput
+  }
+
+  /**
+   * TunnelTravelRouter updateMany
+   */
+  export type TunnelTravelRouterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TunnelTravelRouters.
+     */
+    data: XOR<TunnelTravelRouterUpdateManyMutationInput, TunnelTravelRouterUncheckedUpdateManyInput>
+    /**
+     * Filter which TunnelTravelRouters to update
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * Limit how many TunnelTravelRouters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TunnelTravelRouter updateManyAndReturn
+   */
+  export type TunnelTravelRouterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * The data used to update TunnelTravelRouters.
+     */
+    data: XOR<TunnelTravelRouterUpdateManyMutationInput, TunnelTravelRouterUncheckedUpdateManyInput>
+    /**
+     * Filter which TunnelTravelRouters to update
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * Limit how many TunnelTravelRouters to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TunnelTravelRouter upsert
+   */
+  export type TunnelTravelRouterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TunnelTravelRouter to update in case it exists.
+     */
+    where: TunnelTravelRouterWhereUniqueInput
+    /**
+     * In case the TunnelTravelRouter found by the `where` argument doesn't exist, create a new TunnelTravelRouter with this data.
+     */
+    create: XOR<TunnelTravelRouterCreateInput, TunnelTravelRouterUncheckedCreateInput>
+    /**
+     * In case the TunnelTravelRouter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TunnelTravelRouterUpdateInput, TunnelTravelRouterUncheckedUpdateInput>
+  }
+
+  /**
+   * TunnelTravelRouter delete
+   */
+  export type TunnelTravelRouterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+    /**
+     * Filter which TunnelTravelRouter to delete.
+     */
+    where: TunnelTravelRouterWhereUniqueInput
+  }
+
+  /**
+   * TunnelTravelRouter deleteMany
+   */
+  export type TunnelTravelRouterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TunnelTravelRouters to delete
+     */
+    where?: TunnelTravelRouterWhereInput
+    /**
+     * Limit how many TunnelTravelRouters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TunnelTravelRouter without action
+   */
+  export type TunnelTravelRouterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TunnelTravelRouter
+     */
+    select?: TunnelTravelRouterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TunnelTravelRouter
+     */
+    omit?: TunnelTravelRouterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TunnelTravelRouterInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6018,6 +8556,32 @@ export namespace Prisma {
   };
 
   export type GroupPeerScalarFieldEnum = (typeof GroupPeerScalarFieldEnum)[keyof typeof GroupPeerScalarFieldEnum]
+
+
+  export const TunnelScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    exitNodeId: 'exitNodeId',
+    name: 'name',
+    enabled: 'enabled',
+    netbirdGroupId: 'netbirdGroupId',
+    netbirdRouteId: 'netbirdRouteId',
+    netbirdPolicyId: 'netbirdPolicyId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TunnelScalarFieldEnum = (typeof TunnelScalarFieldEnum)[keyof typeof TunnelScalarFieldEnum]
+
+
+  export const TunnelTravelRouterScalarFieldEnum: {
+    id: 'id',
+    tunnelId: 'tunnelId',
+    peerId: 'peerId',
+    addedAt: 'addedAt'
+  };
+
+  export type TunnelTravelRouterScalarFieldEnum = (typeof TunnelTravelRouterScalarFieldEnum)[keyof typeof TunnelTravelRouterScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6156,6 +8720,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     groups?: GroupListRelationFilter
+    tunnels?: TunnelListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -6165,6 +8730,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     groups?: GroupOrderByRelationAggregateInput
+    tunnels?: TunnelOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -6177,6 +8743,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     groups?: GroupListRelationFilter
+    tunnels?: TunnelListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -6319,6 +8886,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Peer"> | Date | string
     updatedAt?: DateTimeFilter<"Peer"> | Date | string
     groupPeers?: GroupPeerListRelationFilter
+    tunnelsAsExitNode?: TunnelListRelationFilter
+    tunnelsAsTravelRouter?: TunnelTravelRouterListRelationFilter
   }
 
   export type PeerOrderByWithRelationInput = {
@@ -6351,6 +8920,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     groupPeers?: GroupPeerOrderByRelationAggregateInput
+    tunnelsAsExitNode?: TunnelOrderByRelationAggregateInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterOrderByRelationAggregateInput
   }
 
   export type PeerWhereUniqueInput = Prisma.AtLeast<{
@@ -6386,6 +8957,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Peer"> | Date | string
     updatedAt?: DateTimeFilter<"Peer"> | Date | string
     groupPeers?: GroupPeerListRelationFilter
+    tunnelsAsExitNode?: TunnelListRelationFilter
+    tunnelsAsTravelRouter?: TunnelTravelRouterListRelationFilter
   }, "id" | "netbirdPeerId">
 
   export type PeerOrderByWithAggregationInput = {
@@ -6512,6 +9085,146 @@ export namespace Prisma {
     addedAt?: DateTimeWithAggregatesFilter<"GroupPeer"> | Date | string
   }
 
+  export type TunnelWhereInput = {
+    AND?: TunnelWhereInput | TunnelWhereInput[]
+    OR?: TunnelWhereInput[]
+    NOT?: TunnelWhereInput | TunnelWhereInput[]
+    id?: StringFilter<"Tunnel"> | string
+    userId?: StringFilter<"Tunnel"> | string
+    exitNodeId?: StringFilter<"Tunnel"> | string
+    name?: StringNullableFilter<"Tunnel"> | string | null
+    enabled?: BoolFilter<"Tunnel"> | boolean
+    netbirdGroupId?: StringNullableFilter<"Tunnel"> | string | null
+    netbirdRouteId?: StringNullableFilter<"Tunnel"> | string | null
+    netbirdPolicyId?: StringNullableFilter<"Tunnel"> | string | null
+    createdAt?: DateTimeFilter<"Tunnel"> | Date | string
+    updatedAt?: DateTimeFilter<"Tunnel"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    exitNode?: XOR<PeerScalarRelationFilter, PeerWhereInput>
+    travelRouters?: TunnelTravelRouterListRelationFilter
+  }
+
+  export type TunnelOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    exitNodeId?: SortOrder
+    name?: SortOrderInput | SortOrder
+    enabled?: SortOrder
+    netbirdGroupId?: SortOrderInput | SortOrder
+    netbirdRouteId?: SortOrderInput | SortOrder
+    netbirdPolicyId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    exitNode?: PeerOrderByWithRelationInput
+    travelRouters?: TunnelTravelRouterOrderByRelationAggregateInput
+  }
+
+  export type TunnelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TunnelWhereInput | TunnelWhereInput[]
+    OR?: TunnelWhereInput[]
+    NOT?: TunnelWhereInput | TunnelWhereInput[]
+    userId?: StringFilter<"Tunnel"> | string
+    exitNodeId?: StringFilter<"Tunnel"> | string
+    name?: StringNullableFilter<"Tunnel"> | string | null
+    enabled?: BoolFilter<"Tunnel"> | boolean
+    netbirdGroupId?: StringNullableFilter<"Tunnel"> | string | null
+    netbirdRouteId?: StringNullableFilter<"Tunnel"> | string | null
+    netbirdPolicyId?: StringNullableFilter<"Tunnel"> | string | null
+    createdAt?: DateTimeFilter<"Tunnel"> | Date | string
+    updatedAt?: DateTimeFilter<"Tunnel"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    exitNode?: XOR<PeerScalarRelationFilter, PeerWhereInput>
+    travelRouters?: TunnelTravelRouterListRelationFilter
+  }, "id">
+
+  export type TunnelOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    exitNodeId?: SortOrder
+    name?: SortOrderInput | SortOrder
+    enabled?: SortOrder
+    netbirdGroupId?: SortOrderInput | SortOrder
+    netbirdRouteId?: SortOrderInput | SortOrder
+    netbirdPolicyId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TunnelCountOrderByAggregateInput
+    _max?: TunnelMaxOrderByAggregateInput
+    _min?: TunnelMinOrderByAggregateInput
+  }
+
+  export type TunnelScalarWhereWithAggregatesInput = {
+    AND?: TunnelScalarWhereWithAggregatesInput | TunnelScalarWhereWithAggregatesInput[]
+    OR?: TunnelScalarWhereWithAggregatesInput[]
+    NOT?: TunnelScalarWhereWithAggregatesInput | TunnelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Tunnel"> | string
+    userId?: StringWithAggregatesFilter<"Tunnel"> | string
+    exitNodeId?: StringWithAggregatesFilter<"Tunnel"> | string
+    name?: StringNullableWithAggregatesFilter<"Tunnel"> | string | null
+    enabled?: BoolWithAggregatesFilter<"Tunnel"> | boolean
+    netbirdGroupId?: StringNullableWithAggregatesFilter<"Tunnel"> | string | null
+    netbirdRouteId?: StringNullableWithAggregatesFilter<"Tunnel"> | string | null
+    netbirdPolicyId?: StringNullableWithAggregatesFilter<"Tunnel"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Tunnel"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Tunnel"> | Date | string
+  }
+
+  export type TunnelTravelRouterWhereInput = {
+    AND?: TunnelTravelRouterWhereInput | TunnelTravelRouterWhereInput[]
+    OR?: TunnelTravelRouterWhereInput[]
+    NOT?: TunnelTravelRouterWhereInput | TunnelTravelRouterWhereInput[]
+    id?: StringFilter<"TunnelTravelRouter"> | string
+    tunnelId?: StringFilter<"TunnelTravelRouter"> | string
+    peerId?: StringFilter<"TunnelTravelRouter"> | string
+    addedAt?: DateTimeFilter<"TunnelTravelRouter"> | Date | string
+    tunnel?: XOR<TunnelScalarRelationFilter, TunnelWhereInput>
+    peer?: XOR<PeerScalarRelationFilter, PeerWhereInput>
+  }
+
+  export type TunnelTravelRouterOrderByWithRelationInput = {
+    id?: SortOrder
+    tunnelId?: SortOrder
+    peerId?: SortOrder
+    addedAt?: SortOrder
+    tunnel?: TunnelOrderByWithRelationInput
+    peer?: PeerOrderByWithRelationInput
+  }
+
+  export type TunnelTravelRouterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tunnelId_peerId?: TunnelTravelRouterTunnelIdPeerIdCompoundUniqueInput
+    AND?: TunnelTravelRouterWhereInput | TunnelTravelRouterWhereInput[]
+    OR?: TunnelTravelRouterWhereInput[]
+    NOT?: TunnelTravelRouterWhereInput | TunnelTravelRouterWhereInput[]
+    tunnelId?: StringFilter<"TunnelTravelRouter"> | string
+    peerId?: StringFilter<"TunnelTravelRouter"> | string
+    addedAt?: DateTimeFilter<"TunnelTravelRouter"> | Date | string
+    tunnel?: XOR<TunnelScalarRelationFilter, TunnelWhereInput>
+    peer?: XOR<PeerScalarRelationFilter, PeerWhereInput>
+  }, "id" | "tunnelId_peerId">
+
+  export type TunnelTravelRouterOrderByWithAggregationInput = {
+    id?: SortOrder
+    tunnelId?: SortOrder
+    peerId?: SortOrder
+    addedAt?: SortOrder
+    _count?: TunnelTravelRouterCountOrderByAggregateInput
+    _max?: TunnelTravelRouterMaxOrderByAggregateInput
+    _min?: TunnelTravelRouterMinOrderByAggregateInput
+  }
+
+  export type TunnelTravelRouterScalarWhereWithAggregatesInput = {
+    AND?: TunnelTravelRouterScalarWhereWithAggregatesInput | TunnelTravelRouterScalarWhereWithAggregatesInput[]
+    OR?: TunnelTravelRouterScalarWhereWithAggregatesInput[]
+    NOT?: TunnelTravelRouterScalarWhereWithAggregatesInput | TunnelTravelRouterScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TunnelTravelRouter"> | string
+    tunnelId?: StringWithAggregatesFilter<"TunnelTravelRouter"> | string
+    peerId?: StringWithAggregatesFilter<"TunnelTravelRouter"> | string
+    addedAt?: DateTimeWithAggregatesFilter<"TunnelTravelRouter"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -6519,6 +9232,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: GroupCreateNestedManyWithoutUserInput
+    tunnels?: TunnelCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -6528,6 +9242,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: GroupUncheckedCreateNestedManyWithoutUserInput
+    tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -6537,6 +9252,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUpdateManyWithoutUserNestedInput
+    tunnels?: TunnelUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -6546,6 +9262,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
+    tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -6696,6 +9413,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groupPeers?: GroupPeerCreateNestedManyWithoutPeerInput
+    tunnelsAsExitNode?: TunnelCreateNestedManyWithoutExitNodeInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterCreateNestedManyWithoutPeerInput
   }
 
   export type PeerUncheckedCreateInput = {
@@ -6728,6 +9447,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     groupPeers?: GroupPeerUncheckedCreateNestedManyWithoutPeerInput
+    tunnelsAsExitNode?: TunnelUncheckedCreateNestedManyWithoutExitNodeInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUncheckedCreateNestedManyWithoutPeerInput
   }
 
   export type PeerUpdateInput = {
@@ -6760,6 +9481,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupPeers?: GroupPeerUpdateManyWithoutPeerNestedInput
+    tunnelsAsExitNode?: TunnelUpdateManyWithoutExitNodeNestedInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUpdateManyWithoutPeerNestedInput
   }
 
   export type PeerUncheckedUpdateInput = {
@@ -6792,6 +9515,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupPeers?: GroupPeerUncheckedUpdateManyWithoutPeerNestedInput
+    tunnelsAsExitNode?: TunnelUncheckedUpdateManyWithoutExitNodeNestedInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUncheckedUpdateManyWithoutPeerNestedInput
   }
 
   export type PeerCreateManyInput = {
@@ -6934,6 +9659,146 @@ export namespace Prisma {
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TunnelCreateInput = {
+    id?: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTunnelsInput
+    exitNode: PeerCreateNestedOneWithoutTunnelsAsExitNodeInput
+    travelRouters?: TunnelTravelRouterCreateNestedManyWithoutTunnelInput
+  }
+
+  export type TunnelUncheckedCreateInput = {
+    id?: string
+    userId: string
+    exitNodeId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    travelRouters?: TunnelTravelRouterUncheckedCreateNestedManyWithoutTunnelInput
+  }
+
+  export type TunnelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTunnelsNestedInput
+    exitNode?: PeerUpdateOneRequiredWithoutTunnelsAsExitNodeNestedInput
+    travelRouters?: TunnelTravelRouterUpdateManyWithoutTunnelNestedInput
+  }
+
+  export type TunnelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    exitNodeId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    travelRouters?: TunnelTravelRouterUncheckedUpdateManyWithoutTunnelNestedInput
+  }
+
+  export type TunnelCreateManyInput = {
+    id?: string
+    userId: string
+    exitNodeId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TunnelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    exitNodeId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterCreateInput = {
+    id?: string
+    addedAt?: Date | string
+    tunnel: TunnelCreateNestedOneWithoutTravelRoutersInput
+    peer: PeerCreateNestedOneWithoutTunnelsAsTravelRouterInput
+  }
+
+  export type TunnelTravelRouterUncheckedCreateInput = {
+    id?: string
+    tunnelId: string
+    peerId: string
+    addedAt?: Date | string
+  }
+
+  export type TunnelTravelRouterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tunnel?: TunnelUpdateOneRequiredWithoutTravelRoutersNestedInput
+    peer?: PeerUpdateOneRequiredWithoutTunnelsAsTravelRouterNestedInput
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tunnelId?: StringFieldUpdateOperationsInput | string
+    peerId?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterCreateManyInput = {
+    id?: string
+    tunnelId: string
+    peerId: string
+    addedAt?: Date | string
+  }
+
+  export type TunnelTravelRouterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tunnelId?: StringFieldUpdateOperationsInput | string
+    peerId?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -6981,12 +9846,22 @@ export namespace Prisma {
     none?: GroupWhereInput
   }
 
+  export type TunnelListRelationFilter = {
+    every?: TunnelWhereInput
+    some?: TunnelWhereInput
+    none?: TunnelWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type GroupOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TunnelOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -7237,6 +10112,16 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type TunnelTravelRouterListRelationFilter = {
+    every?: TunnelTravelRouterWhereInput
+    some?: TunnelTravelRouterWhereInput
+    none?: TunnelTravelRouterWhereInput
+  }
+
+  export type TunnelTravelRouterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type PeerCountOrderByAggregateInput = {
     id?: SortOrder
     netbirdPeerId?: SortOrder
@@ -7410,6 +10295,76 @@ export namespace Prisma {
     addedAt?: SortOrder
   }
 
+  export type TunnelCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    exitNodeId?: SortOrder
+    name?: SortOrder
+    enabled?: SortOrder
+    netbirdGroupId?: SortOrder
+    netbirdRouteId?: SortOrder
+    netbirdPolicyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TunnelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    exitNodeId?: SortOrder
+    name?: SortOrder
+    enabled?: SortOrder
+    netbirdGroupId?: SortOrder
+    netbirdRouteId?: SortOrder
+    netbirdPolicyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TunnelMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    exitNodeId?: SortOrder
+    name?: SortOrder
+    enabled?: SortOrder
+    netbirdGroupId?: SortOrder
+    netbirdRouteId?: SortOrder
+    netbirdPolicyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TunnelScalarRelationFilter = {
+    is?: TunnelWhereInput
+    isNot?: TunnelWhereInput
+  }
+
+  export type TunnelTravelRouterTunnelIdPeerIdCompoundUniqueInput = {
+    tunnelId: string
+    peerId: string
+  }
+
+  export type TunnelTravelRouterCountOrderByAggregateInput = {
+    id?: SortOrder
+    tunnelId?: SortOrder
+    peerId?: SortOrder
+    addedAt?: SortOrder
+  }
+
+  export type TunnelTravelRouterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tunnelId?: SortOrder
+    peerId?: SortOrder
+    addedAt?: SortOrder
+  }
+
+  export type TunnelTravelRouterMinOrderByAggregateInput = {
+    id?: SortOrder
+    tunnelId?: SortOrder
+    peerId?: SortOrder
+    addedAt?: SortOrder
+  }
+
   export type GroupCreateNestedManyWithoutUserInput = {
     create?: XOR<GroupCreateWithoutUserInput, GroupUncheckedCreateWithoutUserInput> | GroupCreateWithoutUserInput[] | GroupUncheckedCreateWithoutUserInput[]
     connectOrCreate?: GroupCreateOrConnectWithoutUserInput | GroupCreateOrConnectWithoutUserInput[]
@@ -7417,11 +10372,25 @@ export namespace Prisma {
     connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
   }
 
+  export type TunnelCreateNestedManyWithoutUserInput = {
+    create?: XOR<TunnelCreateWithoutUserInput, TunnelUncheckedCreateWithoutUserInput> | TunnelCreateWithoutUserInput[] | TunnelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutUserInput | TunnelCreateOrConnectWithoutUserInput[]
+    createMany?: TunnelCreateManyUserInputEnvelope
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+  }
+
   export type GroupUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<GroupCreateWithoutUserInput, GroupUncheckedCreateWithoutUserInput> | GroupCreateWithoutUserInput[] | GroupUncheckedCreateWithoutUserInput[]
     connectOrCreate?: GroupCreateOrConnectWithoutUserInput | GroupCreateOrConnectWithoutUserInput[]
     createMany?: GroupCreateManyUserInputEnvelope
     connect?: GroupWhereUniqueInput | GroupWhereUniqueInput[]
+  }
+
+  export type TunnelUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TunnelCreateWithoutUserInput, TunnelUncheckedCreateWithoutUserInput> | TunnelCreateWithoutUserInput[] | TunnelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutUserInput | TunnelCreateOrConnectWithoutUserInput[]
+    createMany?: TunnelCreateManyUserInputEnvelope
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -7450,6 +10419,20 @@ export namespace Prisma {
     deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
   }
 
+  export type TunnelUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TunnelCreateWithoutUserInput, TunnelUncheckedCreateWithoutUserInput> | TunnelCreateWithoutUserInput[] | TunnelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutUserInput | TunnelCreateOrConnectWithoutUserInput[]
+    upsert?: TunnelUpsertWithWhereUniqueWithoutUserInput | TunnelUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TunnelCreateManyUserInputEnvelope
+    set?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    disconnect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    delete?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    update?: TunnelUpdateWithWhereUniqueWithoutUserInput | TunnelUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TunnelUpdateManyWithWhereWithoutUserInput | TunnelUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
+  }
+
   export type GroupUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<GroupCreateWithoutUserInput, GroupUncheckedCreateWithoutUserInput> | GroupCreateWithoutUserInput[] | GroupUncheckedCreateWithoutUserInput[]
     connectOrCreate?: GroupCreateOrConnectWithoutUserInput | GroupCreateOrConnectWithoutUserInput[]
@@ -7462,6 +10445,20 @@ export namespace Prisma {
     update?: GroupUpdateWithWhereUniqueWithoutUserInput | GroupUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GroupUpdateManyWithWhereWithoutUserInput | GroupUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GroupScalarWhereInput | GroupScalarWhereInput[]
+  }
+
+  export type TunnelUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TunnelCreateWithoutUserInput, TunnelUncheckedCreateWithoutUserInput> | TunnelCreateWithoutUserInput[] | TunnelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutUserInput | TunnelCreateOrConnectWithoutUserInput[]
+    upsert?: TunnelUpsertWithWhereUniqueWithoutUserInput | TunnelUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TunnelCreateManyUserInputEnvelope
+    set?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    disconnect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    delete?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    update?: TunnelUpdateWithWhereUniqueWithoutUserInput | TunnelUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TunnelUpdateManyWithWhereWithoutUserInput | TunnelUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutGroupsInput = {
@@ -7539,11 +10536,39 @@ export namespace Prisma {
     connect?: GroupPeerWhereUniqueInput | GroupPeerWhereUniqueInput[]
   }
 
+  export type TunnelCreateNestedManyWithoutExitNodeInput = {
+    create?: XOR<TunnelCreateWithoutExitNodeInput, TunnelUncheckedCreateWithoutExitNodeInput> | TunnelCreateWithoutExitNodeInput[] | TunnelUncheckedCreateWithoutExitNodeInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutExitNodeInput | TunnelCreateOrConnectWithoutExitNodeInput[]
+    createMany?: TunnelCreateManyExitNodeInputEnvelope
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+  }
+
+  export type TunnelTravelRouterCreateNestedManyWithoutPeerInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutPeerInput, TunnelTravelRouterUncheckedCreateWithoutPeerInput> | TunnelTravelRouterCreateWithoutPeerInput[] | TunnelTravelRouterUncheckedCreateWithoutPeerInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutPeerInput | TunnelTravelRouterCreateOrConnectWithoutPeerInput[]
+    createMany?: TunnelTravelRouterCreateManyPeerInputEnvelope
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+  }
+
   export type GroupPeerUncheckedCreateNestedManyWithoutPeerInput = {
     create?: XOR<GroupPeerCreateWithoutPeerInput, GroupPeerUncheckedCreateWithoutPeerInput> | GroupPeerCreateWithoutPeerInput[] | GroupPeerUncheckedCreateWithoutPeerInput[]
     connectOrCreate?: GroupPeerCreateOrConnectWithoutPeerInput | GroupPeerCreateOrConnectWithoutPeerInput[]
     createMany?: GroupPeerCreateManyPeerInputEnvelope
     connect?: GroupPeerWhereUniqueInput | GroupPeerWhereUniqueInput[]
+  }
+
+  export type TunnelUncheckedCreateNestedManyWithoutExitNodeInput = {
+    create?: XOR<TunnelCreateWithoutExitNodeInput, TunnelUncheckedCreateWithoutExitNodeInput> | TunnelCreateWithoutExitNodeInput[] | TunnelUncheckedCreateWithoutExitNodeInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutExitNodeInput | TunnelCreateOrConnectWithoutExitNodeInput[]
+    createMany?: TunnelCreateManyExitNodeInputEnvelope
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+  }
+
+  export type TunnelTravelRouterUncheckedCreateNestedManyWithoutPeerInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutPeerInput, TunnelTravelRouterUncheckedCreateWithoutPeerInput> | TunnelTravelRouterCreateWithoutPeerInput[] | TunnelTravelRouterUncheckedCreateWithoutPeerInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutPeerInput | TunnelTravelRouterCreateOrConnectWithoutPeerInput[]
+    createMany?: TunnelTravelRouterCreateManyPeerInputEnvelope
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
   }
 
   export type PeerUpdateextraDnsLabelsInput = {
@@ -7581,6 +10606,34 @@ export namespace Prisma {
     deleteMany?: GroupPeerScalarWhereInput | GroupPeerScalarWhereInput[]
   }
 
+  export type TunnelUpdateManyWithoutExitNodeNestedInput = {
+    create?: XOR<TunnelCreateWithoutExitNodeInput, TunnelUncheckedCreateWithoutExitNodeInput> | TunnelCreateWithoutExitNodeInput[] | TunnelUncheckedCreateWithoutExitNodeInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutExitNodeInput | TunnelCreateOrConnectWithoutExitNodeInput[]
+    upsert?: TunnelUpsertWithWhereUniqueWithoutExitNodeInput | TunnelUpsertWithWhereUniqueWithoutExitNodeInput[]
+    createMany?: TunnelCreateManyExitNodeInputEnvelope
+    set?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    disconnect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    delete?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    update?: TunnelUpdateWithWhereUniqueWithoutExitNodeInput | TunnelUpdateWithWhereUniqueWithoutExitNodeInput[]
+    updateMany?: TunnelUpdateManyWithWhereWithoutExitNodeInput | TunnelUpdateManyWithWhereWithoutExitNodeInput[]
+    deleteMany?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
+  }
+
+  export type TunnelTravelRouterUpdateManyWithoutPeerNestedInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutPeerInput, TunnelTravelRouterUncheckedCreateWithoutPeerInput> | TunnelTravelRouterCreateWithoutPeerInput[] | TunnelTravelRouterUncheckedCreateWithoutPeerInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutPeerInput | TunnelTravelRouterCreateOrConnectWithoutPeerInput[]
+    upsert?: TunnelTravelRouterUpsertWithWhereUniqueWithoutPeerInput | TunnelTravelRouterUpsertWithWhereUniqueWithoutPeerInput[]
+    createMany?: TunnelTravelRouterCreateManyPeerInputEnvelope
+    set?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    disconnect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    delete?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    update?: TunnelTravelRouterUpdateWithWhereUniqueWithoutPeerInput | TunnelTravelRouterUpdateWithWhereUniqueWithoutPeerInput[]
+    updateMany?: TunnelTravelRouterUpdateManyWithWhereWithoutPeerInput | TunnelTravelRouterUpdateManyWithWhereWithoutPeerInput[]
+    deleteMany?: TunnelTravelRouterScalarWhereInput | TunnelTravelRouterScalarWhereInput[]
+  }
+
   export type GroupPeerUncheckedUpdateManyWithoutPeerNestedInput = {
     create?: XOR<GroupPeerCreateWithoutPeerInput, GroupPeerUncheckedCreateWithoutPeerInput> | GroupPeerCreateWithoutPeerInput[] | GroupPeerUncheckedCreateWithoutPeerInput[]
     connectOrCreate?: GroupPeerCreateOrConnectWithoutPeerInput | GroupPeerCreateOrConnectWithoutPeerInput[]
@@ -7593,6 +10646,34 @@ export namespace Prisma {
     update?: GroupPeerUpdateWithWhereUniqueWithoutPeerInput | GroupPeerUpdateWithWhereUniqueWithoutPeerInput[]
     updateMany?: GroupPeerUpdateManyWithWhereWithoutPeerInput | GroupPeerUpdateManyWithWhereWithoutPeerInput[]
     deleteMany?: GroupPeerScalarWhereInput | GroupPeerScalarWhereInput[]
+  }
+
+  export type TunnelUncheckedUpdateManyWithoutExitNodeNestedInput = {
+    create?: XOR<TunnelCreateWithoutExitNodeInput, TunnelUncheckedCreateWithoutExitNodeInput> | TunnelCreateWithoutExitNodeInput[] | TunnelUncheckedCreateWithoutExitNodeInput[]
+    connectOrCreate?: TunnelCreateOrConnectWithoutExitNodeInput | TunnelCreateOrConnectWithoutExitNodeInput[]
+    upsert?: TunnelUpsertWithWhereUniqueWithoutExitNodeInput | TunnelUpsertWithWhereUniqueWithoutExitNodeInput[]
+    createMany?: TunnelCreateManyExitNodeInputEnvelope
+    set?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    disconnect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    delete?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+    update?: TunnelUpdateWithWhereUniqueWithoutExitNodeInput | TunnelUpdateWithWhereUniqueWithoutExitNodeInput[]
+    updateMany?: TunnelUpdateManyWithWhereWithoutExitNodeInput | TunnelUpdateManyWithWhereWithoutExitNodeInput[]
+    deleteMany?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateManyWithoutPeerNestedInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutPeerInput, TunnelTravelRouterUncheckedCreateWithoutPeerInput> | TunnelTravelRouterCreateWithoutPeerInput[] | TunnelTravelRouterUncheckedCreateWithoutPeerInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutPeerInput | TunnelTravelRouterCreateOrConnectWithoutPeerInput[]
+    upsert?: TunnelTravelRouterUpsertWithWhereUniqueWithoutPeerInput | TunnelTravelRouterUpsertWithWhereUniqueWithoutPeerInput[]
+    createMany?: TunnelTravelRouterCreateManyPeerInputEnvelope
+    set?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    disconnect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    delete?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    update?: TunnelTravelRouterUpdateWithWhereUniqueWithoutPeerInput | TunnelTravelRouterUpdateWithWhereUniqueWithoutPeerInput[]
+    updateMany?: TunnelTravelRouterUpdateManyWithWhereWithoutPeerInput | TunnelTravelRouterUpdateManyWithWhereWithoutPeerInput[]
+    deleteMany?: TunnelTravelRouterScalarWhereInput | TunnelTravelRouterScalarWhereInput[]
   }
 
   export type GroupCreateNestedOneWithoutGroupPeersInput = {
@@ -7621,6 +10702,104 @@ export namespace Prisma {
     upsert?: PeerUpsertWithoutGroupPeersInput
     connect?: PeerWhereUniqueInput
     update?: XOR<XOR<PeerUpdateToOneWithWhereWithoutGroupPeersInput, PeerUpdateWithoutGroupPeersInput>, PeerUncheckedUpdateWithoutGroupPeersInput>
+  }
+
+  export type UserCreateNestedOneWithoutTunnelsInput = {
+    create?: XOR<UserCreateWithoutTunnelsInput, UserUncheckedCreateWithoutTunnelsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTunnelsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PeerCreateNestedOneWithoutTunnelsAsExitNodeInput = {
+    create?: XOR<PeerCreateWithoutTunnelsAsExitNodeInput, PeerUncheckedCreateWithoutTunnelsAsExitNodeInput>
+    connectOrCreate?: PeerCreateOrConnectWithoutTunnelsAsExitNodeInput
+    connect?: PeerWhereUniqueInput
+  }
+
+  export type TunnelTravelRouterCreateNestedManyWithoutTunnelInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutTunnelInput, TunnelTravelRouterUncheckedCreateWithoutTunnelInput> | TunnelTravelRouterCreateWithoutTunnelInput[] | TunnelTravelRouterUncheckedCreateWithoutTunnelInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutTunnelInput | TunnelTravelRouterCreateOrConnectWithoutTunnelInput[]
+    createMany?: TunnelTravelRouterCreateManyTunnelInputEnvelope
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+  }
+
+  export type TunnelTravelRouterUncheckedCreateNestedManyWithoutTunnelInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutTunnelInput, TunnelTravelRouterUncheckedCreateWithoutTunnelInput> | TunnelTravelRouterCreateWithoutTunnelInput[] | TunnelTravelRouterUncheckedCreateWithoutTunnelInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutTunnelInput | TunnelTravelRouterCreateOrConnectWithoutTunnelInput[]
+    createMany?: TunnelTravelRouterCreateManyTunnelInputEnvelope
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutTunnelsNestedInput = {
+    create?: XOR<UserCreateWithoutTunnelsInput, UserUncheckedCreateWithoutTunnelsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTunnelsInput
+    upsert?: UserUpsertWithoutTunnelsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTunnelsInput, UserUpdateWithoutTunnelsInput>, UserUncheckedUpdateWithoutTunnelsInput>
+  }
+
+  export type PeerUpdateOneRequiredWithoutTunnelsAsExitNodeNestedInput = {
+    create?: XOR<PeerCreateWithoutTunnelsAsExitNodeInput, PeerUncheckedCreateWithoutTunnelsAsExitNodeInput>
+    connectOrCreate?: PeerCreateOrConnectWithoutTunnelsAsExitNodeInput
+    upsert?: PeerUpsertWithoutTunnelsAsExitNodeInput
+    connect?: PeerWhereUniqueInput
+    update?: XOR<XOR<PeerUpdateToOneWithWhereWithoutTunnelsAsExitNodeInput, PeerUpdateWithoutTunnelsAsExitNodeInput>, PeerUncheckedUpdateWithoutTunnelsAsExitNodeInput>
+  }
+
+  export type TunnelTravelRouterUpdateManyWithoutTunnelNestedInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutTunnelInput, TunnelTravelRouterUncheckedCreateWithoutTunnelInput> | TunnelTravelRouterCreateWithoutTunnelInput[] | TunnelTravelRouterUncheckedCreateWithoutTunnelInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutTunnelInput | TunnelTravelRouterCreateOrConnectWithoutTunnelInput[]
+    upsert?: TunnelTravelRouterUpsertWithWhereUniqueWithoutTunnelInput | TunnelTravelRouterUpsertWithWhereUniqueWithoutTunnelInput[]
+    createMany?: TunnelTravelRouterCreateManyTunnelInputEnvelope
+    set?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    disconnect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    delete?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    update?: TunnelTravelRouterUpdateWithWhereUniqueWithoutTunnelInput | TunnelTravelRouterUpdateWithWhereUniqueWithoutTunnelInput[]
+    updateMany?: TunnelTravelRouterUpdateManyWithWhereWithoutTunnelInput | TunnelTravelRouterUpdateManyWithWhereWithoutTunnelInput[]
+    deleteMany?: TunnelTravelRouterScalarWhereInput | TunnelTravelRouterScalarWhereInput[]
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateManyWithoutTunnelNestedInput = {
+    create?: XOR<TunnelTravelRouterCreateWithoutTunnelInput, TunnelTravelRouterUncheckedCreateWithoutTunnelInput> | TunnelTravelRouterCreateWithoutTunnelInput[] | TunnelTravelRouterUncheckedCreateWithoutTunnelInput[]
+    connectOrCreate?: TunnelTravelRouterCreateOrConnectWithoutTunnelInput | TunnelTravelRouterCreateOrConnectWithoutTunnelInput[]
+    upsert?: TunnelTravelRouterUpsertWithWhereUniqueWithoutTunnelInput | TunnelTravelRouterUpsertWithWhereUniqueWithoutTunnelInput[]
+    createMany?: TunnelTravelRouterCreateManyTunnelInputEnvelope
+    set?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    disconnect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    delete?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    connect?: TunnelTravelRouterWhereUniqueInput | TunnelTravelRouterWhereUniqueInput[]
+    update?: TunnelTravelRouterUpdateWithWhereUniqueWithoutTunnelInput | TunnelTravelRouterUpdateWithWhereUniqueWithoutTunnelInput[]
+    updateMany?: TunnelTravelRouterUpdateManyWithWhereWithoutTunnelInput | TunnelTravelRouterUpdateManyWithWhereWithoutTunnelInput[]
+    deleteMany?: TunnelTravelRouterScalarWhereInput | TunnelTravelRouterScalarWhereInput[]
+  }
+
+  export type TunnelCreateNestedOneWithoutTravelRoutersInput = {
+    create?: XOR<TunnelCreateWithoutTravelRoutersInput, TunnelUncheckedCreateWithoutTravelRoutersInput>
+    connectOrCreate?: TunnelCreateOrConnectWithoutTravelRoutersInput
+    connect?: TunnelWhereUniqueInput
+  }
+
+  export type PeerCreateNestedOneWithoutTunnelsAsTravelRouterInput = {
+    create?: XOR<PeerCreateWithoutTunnelsAsTravelRouterInput, PeerUncheckedCreateWithoutTunnelsAsTravelRouterInput>
+    connectOrCreate?: PeerCreateOrConnectWithoutTunnelsAsTravelRouterInput
+    connect?: PeerWhereUniqueInput
+  }
+
+  export type TunnelUpdateOneRequiredWithoutTravelRoutersNestedInput = {
+    create?: XOR<TunnelCreateWithoutTravelRoutersInput, TunnelUncheckedCreateWithoutTravelRoutersInput>
+    connectOrCreate?: TunnelCreateOrConnectWithoutTravelRoutersInput
+    upsert?: TunnelUpsertWithoutTravelRoutersInput
+    connect?: TunnelWhereUniqueInput
+    update?: XOR<XOR<TunnelUpdateToOneWithWhereWithoutTravelRoutersInput, TunnelUpdateWithoutTravelRoutersInput>, TunnelUncheckedUpdateWithoutTravelRoutersInput>
+  }
+
+  export type PeerUpdateOneRequiredWithoutTunnelsAsTravelRouterNestedInput = {
+    create?: XOR<PeerCreateWithoutTunnelsAsTravelRouterInput, PeerUncheckedCreateWithoutTunnelsAsTravelRouterInput>
+    connectOrCreate?: PeerCreateOrConnectWithoutTunnelsAsTravelRouterInput
+    upsert?: PeerUpsertWithoutTunnelsAsTravelRouterInput
+    connect?: PeerWhereUniqueInput
+    update?: XOR<XOR<PeerUpdateToOneWithWhereWithoutTunnelsAsTravelRouterInput, PeerUpdateWithoutTunnelsAsTravelRouterInput>, PeerUncheckedUpdateWithoutTunnelsAsTravelRouterInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -7883,6 +11062,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TunnelCreateWithoutUserInput = {
+    id?: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    exitNode: PeerCreateNestedOneWithoutTunnelsAsExitNodeInput
+    travelRouters?: TunnelTravelRouterCreateNestedManyWithoutTunnelInput
+  }
+
+  export type TunnelUncheckedCreateWithoutUserInput = {
+    id?: string
+    exitNodeId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    travelRouters?: TunnelTravelRouterUncheckedCreateNestedManyWithoutTunnelInput
+  }
+
+  export type TunnelCreateOrConnectWithoutUserInput = {
+    where: TunnelWhereUniqueInput
+    create: XOR<TunnelCreateWithoutUserInput, TunnelUncheckedCreateWithoutUserInput>
+  }
+
+  export type TunnelCreateManyUserInputEnvelope = {
+    data: TunnelCreateManyUserInput | TunnelCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GroupUpsertWithWhereUniqueWithoutUserInput = {
     where: GroupWhereUniqueInput
     update: XOR<GroupUpdateWithoutUserInput, GroupUncheckedUpdateWithoutUserInput>
@@ -7915,12 +11130,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Group"> | Date | string
   }
 
+  export type TunnelUpsertWithWhereUniqueWithoutUserInput = {
+    where: TunnelWhereUniqueInput
+    update: XOR<TunnelUpdateWithoutUserInput, TunnelUncheckedUpdateWithoutUserInput>
+    create: XOR<TunnelCreateWithoutUserInput, TunnelUncheckedCreateWithoutUserInput>
+  }
+
+  export type TunnelUpdateWithWhereUniqueWithoutUserInput = {
+    where: TunnelWhereUniqueInput
+    data: XOR<TunnelUpdateWithoutUserInput, TunnelUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TunnelUpdateManyWithWhereWithoutUserInput = {
+    where: TunnelScalarWhereInput
+    data: XOR<TunnelUpdateManyMutationInput, TunnelUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type TunnelScalarWhereInput = {
+    AND?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
+    OR?: TunnelScalarWhereInput[]
+    NOT?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
+    id?: StringFilter<"Tunnel"> | string
+    userId?: StringFilter<"Tunnel"> | string
+    exitNodeId?: StringFilter<"Tunnel"> | string
+    name?: StringNullableFilter<"Tunnel"> | string | null
+    enabled?: BoolFilter<"Tunnel"> | boolean
+    netbirdGroupId?: StringNullableFilter<"Tunnel"> | string | null
+    netbirdRouteId?: StringNullableFilter<"Tunnel"> | string | null
+    netbirdPolicyId?: StringNullableFilter<"Tunnel"> | string | null
+    createdAt?: DateTimeFilter<"Tunnel"> | Date | string
+    updatedAt?: DateTimeFilter<"Tunnel"> | Date | string
+  }
+
   export type UserCreateWithoutGroupsInput = {
     id?: string
     name: string
     email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tunnels?: TunnelCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGroupsInput = {
@@ -7929,6 +11177,7 @@ export namespace Prisma {
     email?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGroupsInput = {
@@ -7975,6 +11224,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tunnels?: TunnelUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGroupsInput = {
@@ -7983,6 +11233,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GroupPeerUpsertWithWhereUniqueWithoutGroupInput = {
@@ -8033,6 +11284,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TunnelCreateWithoutExitNodeInput = {
+    id?: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTunnelsInput
+    travelRouters?: TunnelTravelRouterCreateNestedManyWithoutTunnelInput
+  }
+
+  export type TunnelUncheckedCreateWithoutExitNodeInput = {
+    id?: string
+    userId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    travelRouters?: TunnelTravelRouterUncheckedCreateNestedManyWithoutTunnelInput
+  }
+
+  export type TunnelCreateOrConnectWithoutExitNodeInput = {
+    where: TunnelWhereUniqueInput
+    create: XOR<TunnelCreateWithoutExitNodeInput, TunnelUncheckedCreateWithoutExitNodeInput>
+  }
+
+  export type TunnelCreateManyExitNodeInputEnvelope = {
+    data: TunnelCreateManyExitNodeInput | TunnelCreateManyExitNodeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TunnelTravelRouterCreateWithoutPeerInput = {
+    id?: string
+    addedAt?: Date | string
+    tunnel: TunnelCreateNestedOneWithoutTravelRoutersInput
+  }
+
+  export type TunnelTravelRouterUncheckedCreateWithoutPeerInput = {
+    id?: string
+    tunnelId: string
+    addedAt?: Date | string
+  }
+
+  export type TunnelTravelRouterCreateOrConnectWithoutPeerInput = {
+    where: TunnelTravelRouterWhereUniqueInput
+    create: XOR<TunnelTravelRouterCreateWithoutPeerInput, TunnelTravelRouterUncheckedCreateWithoutPeerInput>
+  }
+
+  export type TunnelTravelRouterCreateManyPeerInputEnvelope = {
+    data: TunnelTravelRouterCreateManyPeerInput | TunnelTravelRouterCreateManyPeerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GroupPeerUpsertWithWhereUniqueWithoutPeerInput = {
     where: GroupPeerWhereUniqueInput
     update: XOR<GroupPeerUpdateWithoutPeerInput, GroupPeerUncheckedUpdateWithoutPeerInput>
@@ -8047,6 +11356,48 @@ export namespace Prisma {
   export type GroupPeerUpdateManyWithWhereWithoutPeerInput = {
     where: GroupPeerScalarWhereInput
     data: XOR<GroupPeerUpdateManyMutationInput, GroupPeerUncheckedUpdateManyWithoutPeerInput>
+  }
+
+  export type TunnelUpsertWithWhereUniqueWithoutExitNodeInput = {
+    where: TunnelWhereUniqueInput
+    update: XOR<TunnelUpdateWithoutExitNodeInput, TunnelUncheckedUpdateWithoutExitNodeInput>
+    create: XOR<TunnelCreateWithoutExitNodeInput, TunnelUncheckedCreateWithoutExitNodeInput>
+  }
+
+  export type TunnelUpdateWithWhereUniqueWithoutExitNodeInput = {
+    where: TunnelWhereUniqueInput
+    data: XOR<TunnelUpdateWithoutExitNodeInput, TunnelUncheckedUpdateWithoutExitNodeInput>
+  }
+
+  export type TunnelUpdateManyWithWhereWithoutExitNodeInput = {
+    where: TunnelScalarWhereInput
+    data: XOR<TunnelUpdateManyMutationInput, TunnelUncheckedUpdateManyWithoutExitNodeInput>
+  }
+
+  export type TunnelTravelRouterUpsertWithWhereUniqueWithoutPeerInput = {
+    where: TunnelTravelRouterWhereUniqueInput
+    update: XOR<TunnelTravelRouterUpdateWithoutPeerInput, TunnelTravelRouterUncheckedUpdateWithoutPeerInput>
+    create: XOR<TunnelTravelRouterCreateWithoutPeerInput, TunnelTravelRouterUncheckedCreateWithoutPeerInput>
+  }
+
+  export type TunnelTravelRouterUpdateWithWhereUniqueWithoutPeerInput = {
+    where: TunnelTravelRouterWhereUniqueInput
+    data: XOR<TunnelTravelRouterUpdateWithoutPeerInput, TunnelTravelRouterUncheckedUpdateWithoutPeerInput>
+  }
+
+  export type TunnelTravelRouterUpdateManyWithWhereWithoutPeerInput = {
+    where: TunnelTravelRouterScalarWhereInput
+    data: XOR<TunnelTravelRouterUpdateManyMutationInput, TunnelTravelRouterUncheckedUpdateManyWithoutPeerInput>
+  }
+
+  export type TunnelTravelRouterScalarWhereInput = {
+    AND?: TunnelTravelRouterScalarWhereInput | TunnelTravelRouterScalarWhereInput[]
+    OR?: TunnelTravelRouterScalarWhereInput[]
+    NOT?: TunnelTravelRouterScalarWhereInput | TunnelTravelRouterScalarWhereInput[]
+    id?: StringFilter<"TunnelTravelRouter"> | string
+    tunnelId?: StringFilter<"TunnelTravelRouter"> | string
+    peerId?: StringFilter<"TunnelTravelRouter"> | string
+    addedAt?: DateTimeFilter<"TunnelTravelRouter"> | Date | string
   }
 
   export type GroupCreateWithoutGroupPeersInput = {
@@ -8109,6 +11460,8 @@ export namespace Prisma {
     inactivityExpirationEnabled?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tunnelsAsExitNode?: TunnelCreateNestedManyWithoutExitNodeInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterCreateNestedManyWithoutPeerInput
   }
 
   export type PeerUncheckedCreateWithoutGroupPeersInput = {
@@ -8140,6 +11493,8 @@ export namespace Prisma {
     inactivityExpirationEnabled?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tunnelsAsExitNode?: TunnelUncheckedCreateNestedManyWithoutExitNodeInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUncheckedCreateNestedManyWithoutPeerInput
   }
 
   export type PeerCreateOrConnectWithoutGroupPeersInput = {
@@ -8224,6 +11579,8 @@ export namespace Prisma {
     inactivityExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tunnelsAsExitNode?: TunnelUpdateManyWithoutExitNodeNestedInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUpdateManyWithoutPeerNestedInput
   }
 
   export type PeerUncheckedUpdateWithoutGroupPeersInput = {
@@ -8255,6 +11612,462 @@ export namespace Prisma {
     inactivityExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tunnelsAsExitNode?: TunnelUncheckedUpdateManyWithoutExitNodeNestedInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUncheckedUpdateManyWithoutPeerNestedInput
+  }
+
+  export type UserCreateWithoutTunnelsInput = {
+    id?: string
+    name: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTunnelsInput = {
+    id?: string
+    name: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groups?: GroupUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTunnelsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTunnelsInput, UserUncheckedCreateWithoutTunnelsInput>
+  }
+
+  export type PeerCreateWithoutTunnelsAsExitNodeInput = {
+    id?: string
+    netbirdPeerId: string
+    name: string
+    ip?: string | null
+    connectionIp?: string | null
+    dnsLabel?: string | null
+    extraDnsLabels?: PeerCreateextraDnsLabelsInput | string[]
+    connected?: boolean
+    lastSeen?: Date | string | null
+    lastLogin?: Date | string | null
+    os?: string | null
+    kernelVersion?: string | null
+    version?: string | null
+    uiVersion?: string | null
+    hostname?: string | null
+    serialNumber?: string | null
+    geonameId?: number | null
+    countryCode?: string | null
+    cityName?: string | null
+    userId?: string | null
+    sshEnabled?: boolean
+    approvalRequired?: boolean
+    ephemeral?: boolean
+    loginExpirationEnabled?: boolean
+    loginExpired?: boolean
+    inactivityExpirationEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groupPeers?: GroupPeerCreateNestedManyWithoutPeerInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterCreateNestedManyWithoutPeerInput
+  }
+
+  export type PeerUncheckedCreateWithoutTunnelsAsExitNodeInput = {
+    id?: string
+    netbirdPeerId: string
+    name: string
+    ip?: string | null
+    connectionIp?: string | null
+    dnsLabel?: string | null
+    extraDnsLabels?: PeerCreateextraDnsLabelsInput | string[]
+    connected?: boolean
+    lastSeen?: Date | string | null
+    lastLogin?: Date | string | null
+    os?: string | null
+    kernelVersion?: string | null
+    version?: string | null
+    uiVersion?: string | null
+    hostname?: string | null
+    serialNumber?: string | null
+    geonameId?: number | null
+    countryCode?: string | null
+    cityName?: string | null
+    userId?: string | null
+    sshEnabled?: boolean
+    approvalRequired?: boolean
+    ephemeral?: boolean
+    loginExpirationEnabled?: boolean
+    loginExpired?: boolean
+    inactivityExpirationEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groupPeers?: GroupPeerUncheckedCreateNestedManyWithoutPeerInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUncheckedCreateNestedManyWithoutPeerInput
+  }
+
+  export type PeerCreateOrConnectWithoutTunnelsAsExitNodeInput = {
+    where: PeerWhereUniqueInput
+    create: XOR<PeerCreateWithoutTunnelsAsExitNodeInput, PeerUncheckedCreateWithoutTunnelsAsExitNodeInput>
+  }
+
+  export type TunnelTravelRouterCreateWithoutTunnelInput = {
+    id?: string
+    addedAt?: Date | string
+    peer: PeerCreateNestedOneWithoutTunnelsAsTravelRouterInput
+  }
+
+  export type TunnelTravelRouterUncheckedCreateWithoutTunnelInput = {
+    id?: string
+    peerId: string
+    addedAt?: Date | string
+  }
+
+  export type TunnelTravelRouterCreateOrConnectWithoutTunnelInput = {
+    where: TunnelTravelRouterWhereUniqueInput
+    create: XOR<TunnelTravelRouterCreateWithoutTunnelInput, TunnelTravelRouterUncheckedCreateWithoutTunnelInput>
+  }
+
+  export type TunnelTravelRouterCreateManyTunnelInputEnvelope = {
+    data: TunnelTravelRouterCreateManyTunnelInput | TunnelTravelRouterCreateManyTunnelInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutTunnelsInput = {
+    update: XOR<UserUpdateWithoutTunnelsInput, UserUncheckedUpdateWithoutTunnelsInput>
+    create: XOR<UserCreateWithoutTunnelsInput, UserUncheckedCreateWithoutTunnelsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTunnelsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTunnelsInput, UserUncheckedUpdateWithoutTunnelsInput>
+  }
+
+  export type UserUpdateWithoutTunnelsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTunnelsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PeerUpsertWithoutTunnelsAsExitNodeInput = {
+    update: XOR<PeerUpdateWithoutTunnelsAsExitNodeInput, PeerUncheckedUpdateWithoutTunnelsAsExitNodeInput>
+    create: XOR<PeerCreateWithoutTunnelsAsExitNodeInput, PeerUncheckedCreateWithoutTunnelsAsExitNodeInput>
+    where?: PeerWhereInput
+  }
+
+  export type PeerUpdateToOneWithWhereWithoutTunnelsAsExitNodeInput = {
+    where?: PeerWhereInput
+    data: XOR<PeerUpdateWithoutTunnelsAsExitNodeInput, PeerUncheckedUpdateWithoutTunnelsAsExitNodeInput>
+  }
+
+  export type PeerUpdateWithoutTunnelsAsExitNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    netbirdPeerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionIp?: NullableStringFieldUpdateOperationsInput | string | null
+    dnsLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    extraDnsLabels?: PeerUpdateextraDnsLabelsInput | string[]
+    connected?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    os?: NullableStringFieldUpdateOperationsInput | string | null
+    kernelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: NullableStringFieldUpdateOperationsInput | string | null
+    uiVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    hostname?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    geonameId?: NullableIntFieldUpdateOperationsInput | number | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    cityName?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    sshEnabled?: BoolFieldUpdateOperationsInput | boolean
+    approvalRequired?: BoolFieldUpdateOperationsInput | boolean
+    ephemeral?: BoolFieldUpdateOperationsInput | boolean
+    loginExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    loginExpired?: BoolFieldUpdateOperationsInput | boolean
+    inactivityExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPeers?: GroupPeerUpdateManyWithoutPeerNestedInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUpdateManyWithoutPeerNestedInput
+  }
+
+  export type PeerUncheckedUpdateWithoutTunnelsAsExitNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    netbirdPeerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionIp?: NullableStringFieldUpdateOperationsInput | string | null
+    dnsLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    extraDnsLabels?: PeerUpdateextraDnsLabelsInput | string[]
+    connected?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    os?: NullableStringFieldUpdateOperationsInput | string | null
+    kernelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: NullableStringFieldUpdateOperationsInput | string | null
+    uiVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    hostname?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    geonameId?: NullableIntFieldUpdateOperationsInput | number | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    cityName?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    sshEnabled?: BoolFieldUpdateOperationsInput | boolean
+    approvalRequired?: BoolFieldUpdateOperationsInput | boolean
+    ephemeral?: BoolFieldUpdateOperationsInput | boolean
+    loginExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    loginExpired?: BoolFieldUpdateOperationsInput | boolean
+    inactivityExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPeers?: GroupPeerUncheckedUpdateManyWithoutPeerNestedInput
+    tunnelsAsTravelRouter?: TunnelTravelRouterUncheckedUpdateManyWithoutPeerNestedInput
+  }
+
+  export type TunnelTravelRouterUpsertWithWhereUniqueWithoutTunnelInput = {
+    where: TunnelTravelRouterWhereUniqueInput
+    update: XOR<TunnelTravelRouterUpdateWithoutTunnelInput, TunnelTravelRouterUncheckedUpdateWithoutTunnelInput>
+    create: XOR<TunnelTravelRouterCreateWithoutTunnelInput, TunnelTravelRouterUncheckedCreateWithoutTunnelInput>
+  }
+
+  export type TunnelTravelRouterUpdateWithWhereUniqueWithoutTunnelInput = {
+    where: TunnelTravelRouterWhereUniqueInput
+    data: XOR<TunnelTravelRouterUpdateWithoutTunnelInput, TunnelTravelRouterUncheckedUpdateWithoutTunnelInput>
+  }
+
+  export type TunnelTravelRouterUpdateManyWithWhereWithoutTunnelInput = {
+    where: TunnelTravelRouterScalarWhereInput
+    data: XOR<TunnelTravelRouterUpdateManyMutationInput, TunnelTravelRouterUncheckedUpdateManyWithoutTunnelInput>
+  }
+
+  export type TunnelCreateWithoutTravelRoutersInput = {
+    id?: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTunnelsInput
+    exitNode: PeerCreateNestedOneWithoutTunnelsAsExitNodeInput
+  }
+
+  export type TunnelUncheckedCreateWithoutTravelRoutersInput = {
+    id?: string
+    userId: string
+    exitNodeId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TunnelCreateOrConnectWithoutTravelRoutersInput = {
+    where: TunnelWhereUniqueInput
+    create: XOR<TunnelCreateWithoutTravelRoutersInput, TunnelUncheckedCreateWithoutTravelRoutersInput>
+  }
+
+  export type PeerCreateWithoutTunnelsAsTravelRouterInput = {
+    id?: string
+    netbirdPeerId: string
+    name: string
+    ip?: string | null
+    connectionIp?: string | null
+    dnsLabel?: string | null
+    extraDnsLabels?: PeerCreateextraDnsLabelsInput | string[]
+    connected?: boolean
+    lastSeen?: Date | string | null
+    lastLogin?: Date | string | null
+    os?: string | null
+    kernelVersion?: string | null
+    version?: string | null
+    uiVersion?: string | null
+    hostname?: string | null
+    serialNumber?: string | null
+    geonameId?: number | null
+    countryCode?: string | null
+    cityName?: string | null
+    userId?: string | null
+    sshEnabled?: boolean
+    approvalRequired?: boolean
+    ephemeral?: boolean
+    loginExpirationEnabled?: boolean
+    loginExpired?: boolean
+    inactivityExpirationEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groupPeers?: GroupPeerCreateNestedManyWithoutPeerInput
+    tunnelsAsExitNode?: TunnelCreateNestedManyWithoutExitNodeInput
+  }
+
+  export type PeerUncheckedCreateWithoutTunnelsAsTravelRouterInput = {
+    id?: string
+    netbirdPeerId: string
+    name: string
+    ip?: string | null
+    connectionIp?: string | null
+    dnsLabel?: string | null
+    extraDnsLabels?: PeerCreateextraDnsLabelsInput | string[]
+    connected?: boolean
+    lastSeen?: Date | string | null
+    lastLogin?: Date | string | null
+    os?: string | null
+    kernelVersion?: string | null
+    version?: string | null
+    uiVersion?: string | null
+    hostname?: string | null
+    serialNumber?: string | null
+    geonameId?: number | null
+    countryCode?: string | null
+    cityName?: string | null
+    userId?: string | null
+    sshEnabled?: boolean
+    approvalRequired?: boolean
+    ephemeral?: boolean
+    loginExpirationEnabled?: boolean
+    loginExpired?: boolean
+    inactivityExpirationEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groupPeers?: GroupPeerUncheckedCreateNestedManyWithoutPeerInput
+    tunnelsAsExitNode?: TunnelUncheckedCreateNestedManyWithoutExitNodeInput
+  }
+
+  export type PeerCreateOrConnectWithoutTunnelsAsTravelRouterInput = {
+    where: PeerWhereUniqueInput
+    create: XOR<PeerCreateWithoutTunnelsAsTravelRouterInput, PeerUncheckedCreateWithoutTunnelsAsTravelRouterInput>
+  }
+
+  export type TunnelUpsertWithoutTravelRoutersInput = {
+    update: XOR<TunnelUpdateWithoutTravelRoutersInput, TunnelUncheckedUpdateWithoutTravelRoutersInput>
+    create: XOR<TunnelCreateWithoutTravelRoutersInput, TunnelUncheckedCreateWithoutTravelRoutersInput>
+    where?: TunnelWhereInput
+  }
+
+  export type TunnelUpdateToOneWithWhereWithoutTravelRoutersInput = {
+    where?: TunnelWhereInput
+    data: XOR<TunnelUpdateWithoutTravelRoutersInput, TunnelUncheckedUpdateWithoutTravelRoutersInput>
+  }
+
+  export type TunnelUpdateWithoutTravelRoutersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTunnelsNestedInput
+    exitNode?: PeerUpdateOneRequiredWithoutTunnelsAsExitNodeNestedInput
+  }
+
+  export type TunnelUncheckedUpdateWithoutTravelRoutersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    exitNodeId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PeerUpsertWithoutTunnelsAsTravelRouterInput = {
+    update: XOR<PeerUpdateWithoutTunnelsAsTravelRouterInput, PeerUncheckedUpdateWithoutTunnelsAsTravelRouterInput>
+    create: XOR<PeerCreateWithoutTunnelsAsTravelRouterInput, PeerUncheckedCreateWithoutTunnelsAsTravelRouterInput>
+    where?: PeerWhereInput
+  }
+
+  export type PeerUpdateToOneWithWhereWithoutTunnelsAsTravelRouterInput = {
+    where?: PeerWhereInput
+    data: XOR<PeerUpdateWithoutTunnelsAsTravelRouterInput, PeerUncheckedUpdateWithoutTunnelsAsTravelRouterInput>
+  }
+
+  export type PeerUpdateWithoutTunnelsAsTravelRouterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    netbirdPeerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionIp?: NullableStringFieldUpdateOperationsInput | string | null
+    dnsLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    extraDnsLabels?: PeerUpdateextraDnsLabelsInput | string[]
+    connected?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    os?: NullableStringFieldUpdateOperationsInput | string | null
+    kernelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: NullableStringFieldUpdateOperationsInput | string | null
+    uiVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    hostname?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    geonameId?: NullableIntFieldUpdateOperationsInput | number | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    cityName?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    sshEnabled?: BoolFieldUpdateOperationsInput | boolean
+    approvalRequired?: BoolFieldUpdateOperationsInput | boolean
+    ephemeral?: BoolFieldUpdateOperationsInput | boolean
+    loginExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    loginExpired?: BoolFieldUpdateOperationsInput | boolean
+    inactivityExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPeers?: GroupPeerUpdateManyWithoutPeerNestedInput
+    tunnelsAsExitNode?: TunnelUpdateManyWithoutExitNodeNestedInput
+  }
+
+  export type PeerUncheckedUpdateWithoutTunnelsAsTravelRouterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    netbirdPeerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionIp?: NullableStringFieldUpdateOperationsInput | string | null
+    dnsLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    extraDnsLabels?: PeerUpdateextraDnsLabelsInput | string[]
+    connected?: BoolFieldUpdateOperationsInput | boolean
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    os?: NullableStringFieldUpdateOperationsInput | string | null
+    kernelVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: NullableStringFieldUpdateOperationsInput | string | null
+    uiVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    hostname?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    geonameId?: NullableIntFieldUpdateOperationsInput | number | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    cityName?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    sshEnabled?: BoolFieldUpdateOperationsInput | boolean
+    approvalRequired?: BoolFieldUpdateOperationsInput | boolean
+    ephemeral?: BoolFieldUpdateOperationsInput | boolean
+    loginExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    loginExpired?: BoolFieldUpdateOperationsInput | boolean
+    inactivityExpirationEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPeers?: GroupPeerUncheckedUpdateManyWithoutPeerNestedInput
+    tunnelsAsExitNode?: TunnelUncheckedUpdateManyWithoutExitNodeNestedInput
   }
 
   export type GroupCreateManyUserInput = {
@@ -8265,6 +12078,18 @@ export namespace Prisma {
     resourcesCount?: number
     issued?: string | null
     resources?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TunnelCreateManyUserInput = {
+    id?: string
+    exitNodeId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8307,6 +12132,44 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TunnelUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    exitNode?: PeerUpdateOneRequiredWithoutTunnelsAsExitNodeNestedInput
+    travelRouters?: TunnelTravelRouterUpdateManyWithoutTunnelNestedInput
+  }
+
+  export type TunnelUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exitNodeId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    travelRouters?: TunnelTravelRouterUncheckedUpdateManyWithoutTunnelNestedInput
+  }
+
+  export type TunnelUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    exitNodeId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GroupPeerCreateManyGroupInput = {
     id?: string
     peerId: string
@@ -8337,6 +12200,24 @@ export namespace Prisma {
     addedAt?: Date | string
   }
 
+  export type TunnelCreateManyExitNodeInput = {
+    id?: string
+    userId: string
+    name?: string | null
+    enabled?: boolean
+    netbirdGroupId?: string | null
+    netbirdRouteId?: string | null
+    netbirdPolicyId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TunnelTravelRouterCreateManyPeerInput = {
+    id?: string
+    tunnelId: string
+    addedAt?: Date | string
+  }
+
   export type GroupPeerUpdateWithoutPeerInput = {
     id?: StringFieldUpdateOperationsInput | string
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8352,6 +12233,86 @@ export namespace Prisma {
   export type GroupPeerUncheckedUpdateManyWithoutPeerInput = {
     id?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelUpdateWithoutExitNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTunnelsNestedInput
+    travelRouters?: TunnelTravelRouterUpdateManyWithoutTunnelNestedInput
+  }
+
+  export type TunnelUncheckedUpdateWithoutExitNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    travelRouters?: TunnelTravelRouterUncheckedUpdateManyWithoutTunnelNestedInput
+  }
+
+  export type TunnelUncheckedUpdateManyWithoutExitNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    netbirdGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterUpdateWithoutPeerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tunnel?: TunnelUpdateOneRequiredWithoutTravelRoutersNestedInput
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateWithoutPeerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tunnelId?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateManyWithoutPeerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tunnelId?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterCreateManyTunnelInput = {
+    id?: string
+    peerId: string
+    addedAt?: Date | string
+  }
+
+  export type TunnelTravelRouterUpdateWithoutTunnelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    peer?: PeerUpdateOneRequiredWithoutTunnelsAsTravelRouterNestedInput
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateWithoutTunnelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    peerId?: StringFieldUpdateOperationsInput | string
+    addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TunnelTravelRouterUncheckedUpdateManyWithoutTunnelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    peerId?: StringFieldUpdateOperationsInput | string
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

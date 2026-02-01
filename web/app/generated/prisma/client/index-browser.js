@@ -180,6 +180,26 @@ exports.Prisma.GroupPeerScalarFieldEnum = {
   addedAt: 'addedAt'
 };
 
+exports.Prisma.TunnelScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  exitNodeId: 'exitNodeId',
+  name: 'name',
+  enabled: 'enabled',
+  netbirdGroupId: 'netbirdGroupId',
+  netbirdRouteId: 'netbirdRouteId',
+  netbirdPolicyId: 'netbirdPolicyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TunnelTravelRouterScalarFieldEnum = {
+  id: 'id',
+  tunnelId: 'tunnelId',
+  peerId: 'peerId',
+  addedAt: 'addedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -211,7 +231,9 @@ exports.Prisma.ModelName = {
   User: 'User',
   Group: 'Group',
   Peer: 'Peer',
-  GroupPeer: 'GroupPeer'
+  GroupPeer: 'GroupPeer',
+  Tunnel: 'Tunnel',
+  TunnelTravelRouter: 'TunnelTravelRouter'
 };
 
 /**
