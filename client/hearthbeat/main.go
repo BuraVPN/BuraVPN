@@ -2,13 +2,16 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -21,19 +24,113 @@ const (
 type Config struct {
 	PeerID    string `json:"peerId"`
 	ServerURL string `json:"serverUrl"`
-	TunnelPeerIP string `json:"tunnelPeerIp,omitempty"`
 }
 
 var config Config
 
 type Heartbeat struct {
-	RouterID   string  `json:"routerId"`
-	Timestamp  string  `json:"timestamp"`
-	NetbirdIP  string  `json:"netbirdIp,omitempty"`
-	TunnelUp   bool    `json:"tunnelUp"`
-	PacketLoss float64 `json:"packetLoss"`
-	LatencyMs  float64 `json:"latencyMs,omitempty"`
+	RouterID     string       `json:"routerId"`
+	Timestamp    string       `json:"timestamp"`
+	NetbirdIP    string       `json:"netbirdIp,omitempty"`
+	TunnelUp     bool         `json:"tunnelUp"`
+	PacketLoss   float64      `json:"packetLoss"`
+	LatencyMs    float64      `json:"latencyMs,omitempty"`
+	TunnelStatus []TunnelPing `json:"tunnelStatus,omitempty"`
 }
+
+type TunnelPing struct {
+	TunnelID   string  `json:"tunnelId"`
+	PeerIP     string  `json:"peerIp"`
+	Up         bool    `json:"up"`
+	PacketLoss float64 `json:"packetLoss"`
+	LatencyMs  float64 `json:"latencyMs"`
+}
+
+type HeartbeatResponse struct {
+	OK        bool           `json:"ok"`
+	PeerFound bool           `json:"peerFound"`
+	Tunnels   []TunnelConfig `json:"tunnels"`
+}
+
+type TunnelConfig struct {
+	TunnelID      string   `json:"tunnelId"`
+	Role          string   `json:"role"`
+	TunnelPeerIPs []string `json:"tunnelPeerIps"`
+}
+
+var (
+	activeTunnels []TunnelConfig
+	appliedRole   string
+	mu            sync.Mutex
+)
+
+
+func getWANBindAddr() (string, error) {
+	out, err := exec.Command("ip", "route", "show", "default").Output()
+	if err != nil {
+		return "", fmt.Errorf("ip route: %w", err)
+	}
+
+	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+		if strings.Contains(line, "wt0") {
+			continue
+		}
+		fields := strings.Fields(line)
+		for i, f := range fields {
+			if f == "src" && i+1 < len(fields) {
+				return fields[i+1], nil
+			}
+		}
+		for i, f := range fields {
+			if f == "dev" && i+1 < len(fields) {
+				return getIfaceIP(fields[i+1])
+			}
+		}
+	}
+	return "", fmt.Errorf("no non-VPN default route found")
+}
+
+func getIfaceIP(name string) (string, error) {
+	iface, err := net.InterfaceByName(name)
+	if err != nil {
+		return "", err
+	}
+	addrs, err := iface.Addrs()
+	if err != nil {
+		return "", err
+	}
+	for _, a := range addrs {
+		if ipnet, ok := a.(*net.IPNet); ok && ipnet.IP.To4() != nil {
+			return ipnet.IP.String(), nil
+		}
+	}
+	return "", fmt.Errorf("no IPv4 on %s", name)
+}
+
+func makeDirectClient() *http.Client {
+	srcIP, err := getWANBindAddr()
+	if err != nil {
+		log.Printf("WAN bind: %v, using default client", err)
+		return http.DefaultClient
+	}
+
+	log.Printf("Heartbeat binding to WAN: %s", srcIP)
+
+	localAddr := net.ParseIP(srcIP)
+	dialer := &net.Dialer{
+		LocalAddr: &net.TCPAddr{IP: localAddr},
+		Timeout:   5 * time.Second,
+	}
+	return &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+				return dialer.DialContext(ctx, network, addr)
+			},
+		},
+	}
+}
+
 
 func main() {
 	data, err := os.ReadFile(configFile)
@@ -43,20 +140,31 @@ func main() {
 	if err := json.Unmarshal(data, &config); err != nil {
 		log.Fatalf("Failed to parse config: %v", err)
 	}
-
 	if config.PeerID == "" || config.ServerURL == "" {
 		log.Fatalf("Config missing required fields: peerId and serverUrl")
 	}
 
 	log.Printf("Starting heartbeat: peerId=%s", config.PeerID)
 
+	client := makeDirectClient()
+
+	refreshTicker := time.NewTicker(60 * time.Second)
+	defer refreshTicker.Stop()
+
 	for {
-		send()
+		select {
+		case <-refreshTicker.C:
+			client = makeDirectClient()
+		default:
+		}
+
+		send(client)
 		time.Sleep(interval)
 	}
 }
 
-func send() {
+
+func send(client *http.Client) {
 	hb := Heartbeat{
 		RouterID:  config.PeerID,
 		Timestamp: time.Now().UTC().Format(time.RFC3339),
@@ -64,13 +172,42 @@ func send() {
 
 	hb.NetbirdIP = getNetbirdIP()
 
-	if hb.NetbirdIP != "" && config.TunnelPeerIP != "" {
-		hb.TunnelUp, hb.PacketLoss, hb.LatencyMs = pingViaTunnel(config.TunnelPeerIP)
+	mu.Lock()
+	tunnels := activeTunnels
+	mu.Unlock()
+
+	anyTunnelUp := false
+	var totalLoss, totalLatency float64
+	var pingCount int
+
+	for _, t := range tunnels {
+		for _, ip := range t.TunnelPeerIPs {
+			up, loss, lat := pingViaTunnel(ip)
+			hb.TunnelStatus = append(hb.TunnelStatus, TunnelPing{
+				TunnelID:   t.TunnelID,
+				PeerIP:     ip,
+				Up:         up,
+				PacketLoss: loss,
+				LatencyMs:  lat,
+			})
+			if up {
+				anyTunnelUp = true
+			}
+			totalLoss += loss
+			totalLatency += lat
+			pingCount++
+		}
+	}
+
+	if pingCount > 0 {
+		hb.TunnelUp = anyTunnelUp
+		hb.PacketLoss = totalLoss / float64(pingCount)
+		hb.LatencyMs = totalLatency / float64(pingCount)
 	}
 
 	start := time.Now()
 	data, _ := json.Marshal(hb)
-	resp, err := http.Post(config.ServerURL, "application/json", bytes.NewBuffer(data))
+	resp, err := client.Post(config.ServerURL, "application/json", bytes.NewBuffer(data))
 	latency := float64(time.Since(start).Milliseconds())
 
 	if err != nil {
@@ -82,14 +219,86 @@ func send() {
 		}
 		return
 	}
-	resp.Body.Close()
+	defer resp.Body.Close()
+
+	var hbResp HeartbeatResponse
+	if err := json.NewDecoder(resp.Body).Decode(&hbResp); err != nil {
+		log.Printf("⚠ Failed to parse response: %v", err)
+		return
+	}
+
+	applyTunnelConfig(hbResp.Tunnels)
 
 	status := "✓"
-	if !hb.TunnelUp && config.TunnelPeerIP != "" {
+	if len(tunnels) > 0 && !anyTunnelUp {
 		status = "⚠ tunnel down"
 	}
-	log.Printf("%s | ip=%s tunnel=%v loss=%.0f%% latency=%.0fms", status, hb.NetbirdIP, hb.TunnelUp, hb.PacketLoss, latency)
+	log.Printf("%s | ip=%s tunnels=%d up=%v loss=%.0f%% latency=%.0fms",
+		status, hb.NetbirdIP, len(tunnels), anyTunnelUp, hb.PacketLoss, latency)
 }
+
+
+func applyTunnelConfig(newTunnels []TunnelConfig) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	newRole := ""
+	if len(newTunnels) > 0 {
+		newRole = newTunnels[0].Role
+	}
+
+	if newRole == appliedRole && tunnelsMatch(activeTunnels, newTunnels) {
+		return
+	}
+
+	if newRole == "" && appliedRole != "" {
+		log.Printf("⚡ Tunnel removed, no longer in any tunnel")
+		activeTunnels = nil
+		appliedRole = ""
+		return
+	}
+
+	if newRole != "" {
+		mode := "travel"
+		if newRole == "exit-node" {
+			mode = "exit-node"
+		}
+
+		log.Printf("⚡ Applying tunnel config: role=%s mode=%s", newRole, mode)
+
+		cmd := exec.Command("buravpn_networking", mode)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Printf("✗ buravpn_networking failed: %v\n%s", err, string(out))
+		} else {
+			log.Printf("✓ buravpn_networking %s applied successfully", mode)
+		}
+	}
+
+	activeTunnels = newTunnels
+	appliedRole = newRole
+}
+
+func tunnelsMatch(a, b []TunnelConfig) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i].TunnelID != b[i].TunnelID || a[i].Role != b[i].Role {
+			return false
+		}
+		if len(a[i].TunnelPeerIPs) != len(b[i].TunnelPeerIPs) {
+			return false
+		}
+		for j := range a[i].TunnelPeerIPs {
+			if a[i].TunnelPeerIPs[j] != b[i].TunnelPeerIPs[j] {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 
 func getNetbirdIP() string {
 	data, err := os.ReadFile(netbirdStateFile)
@@ -112,6 +321,7 @@ func getNetbirdIP() string {
 	}
 	return state.IptablesState.InterfaceState.WgAddress.IP
 }
+
 
 func pingViaTunnel(ip string) (up bool, loss, latency float64) {
 	loss = 100.0
