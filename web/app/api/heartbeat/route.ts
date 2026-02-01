@@ -5,6 +5,8 @@ const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
+const STALE_MS = 60_000;
+
 interface Heartbeat {
   routerId: string;
   timestamp: string;
@@ -33,6 +35,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    await markStalePeersOffline();
+
     const status = hb.tunnelUp ? "✓" : "⚠ tunnel down";
     const dbStatus = peer ? "db:✓" : "db:?";
     console.log(
@@ -47,6 +51,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  await markStalePeersOffline();
+
   const peers = await prisma.peer.findMany({
     select: {
       id: true,
@@ -58,6 +64,7 @@ export async function GET() {
     },
   });
 
+  const now = Date.now();
   const status = peers.map((peer) => ({
     id: peer.id,
     name: peer.name,
@@ -66,9 +73,21 @@ export async function GET() {
     lastSeen: peer.lastSeen,
     hostname: peer.hostname,
     stale: peer.lastSeen
-      ? Date.now() - new Date(peer.lastSeen).getTime() > 15000
+      ? now - new Date(peer.lastSeen).getTime() > STALE_MS
       : true,
   }));
 
   return NextResponse.json(status);
+}
+
+async function markStalePeersOffline() {
+  const cutoff = new Date(Date.now() - STALE_MS);
+
+  await prisma.peer.updateMany({
+    where: {
+      connected: true,
+      OR: [{ lastSeen: { lt: cutoff } }, { lastSeen: null }],
+    },
+    data: { connected: false },
+  });
 }
