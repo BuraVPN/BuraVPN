@@ -2,9 +2,11 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -35,6 +37,74 @@ type Heartbeat struct {
 	LatencyMs  float64 `json:"latencyMs,omitempty"`
 }
 
+
+func getWANBindAddr() (string, error) {
+	out, err := exec.Command("ip", "route", "show", "default").Output()
+	if err != nil {
+		return "", fmt.Errorf("ip route: %w", err)
+	}
+
+	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+		if strings.Contains(line, "wt0") {
+			continue
+		}
+		fields := strings.Fields(line)
+		for i, f := range fields {
+			if f == "src" && i+1 < len(fields) {
+				return fields[i+1], nil
+			}
+		}
+		for i, f := range fields {
+			if f == "dev" && i+1 < len(fields) {
+				return getIfaceIP(fields[i+1])
+			}
+		}
+	}
+	return "", fmt.Errorf("no non-VPN default route found")
+}
+
+func getIfaceIP(name string) (string, error) {
+	iface, err := net.InterfaceByName(name)
+	if err != nil {
+		return "", err
+	}
+	addrs, err := iface.Addrs()
+	if err != nil {
+		return "", err
+	}
+	for _, a := range addrs {
+		if ipnet, ok := a.(*net.IPNet); ok && ipnet.IP.To4() != nil {
+			return ipnet.IP.String(), nil
+		}
+	}
+	return "", fmt.Errorf("no IPv4 on %s", name)
+}
+
+
+func makeDirectClient() *http.Client {
+	srcIP, err := getWANBindAddr()
+	if err != nil {
+		log.Printf("WAN bind: %v, using default client", err)
+		return http.DefaultClient
+	}
+
+	log.Printf("Heartbeat binding to WAN: %s", srcIP)
+
+	localAddr := net.ParseIP(srcIP)
+	dialer := &net.Dialer{
+		LocalAddr: &net.TCPAddr{IP: localAddr},
+		Timeout:   5 * time.Second,
+	}
+	return &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+				return dialer.DialContext(ctx, network, addr)
+			},
+		},
+	}
+}
+
 func main() {
 	data, err := os.ReadFile(configFile)
 	if err != nil {
@@ -50,13 +120,24 @@ func main() {
 
 	log.Printf("Starting heartbeat: peerId=%s", config.PeerID)
 
+	client := makeDirectClient()
+
+	refreshTicker := time.NewTicker(60 * time.Second)
+	defer refreshTicker.Stop()
+
 	for {
-		send()
+		select {
+		case <-refreshTicker.C:
+			client = makeDirectClient()
+		default:
+		}
+
+		send(client)
 		time.Sleep(interval)
 	}
 }
 
-func send() {
+func send(client *http.Client) {
 	hb := Heartbeat{
 		RouterID:  config.PeerID,
 		Timestamp: time.Now().UTC().Format(time.RFC3339),
@@ -70,7 +151,7 @@ func send() {
 
 	start := time.Now()
 	data, _ := json.Marshal(hb)
-	resp, err := http.Post(config.ServerURL, "application/json", bytes.NewBuffer(data))
+	resp, err := client.Post(config.ServerURL, "application/json", bytes.NewBuffer(data))
 	latency := float64(time.Since(start).Milliseconds())
 
 	if err != nil {
