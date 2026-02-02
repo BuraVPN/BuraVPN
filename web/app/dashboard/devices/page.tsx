@@ -15,6 +15,7 @@ type Peer = {
   lastSeen?: string;
   countryCode: string;
   cityName: string;
+  ip: string;
 };
 
 type GroupPeer = {
@@ -55,7 +56,7 @@ export default function UserDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = "e935db0c-4156-43a0-bf3e-0fd1ab55fea6";
+  const userId = "4c9ab938-757c-4ed4-99e7-7fd3dc1a6e84";
 
   const fetchUser = async () => {
     try {
@@ -143,10 +144,9 @@ export default function UserDashboard() {
               <DeviceMetada
                 key={element.peer.id}
                 name={element.peer.name}
-                publicIP={element.peer.connectionIp}
-                countryCode={element.peer.countryCode}
-                city={element.peer.cityName}
+                vpnIP={element.peer.ip}
                 isConnected={element.peer.connected}
+                lastSeen={element.peer.lastSeen}
                 id={element.peer.id}
               />
             ))}

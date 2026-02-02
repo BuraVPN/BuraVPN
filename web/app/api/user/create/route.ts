@@ -194,13 +194,9 @@ export async function POST(request: Request) {
             },
           });
 
-          console.log("✅ Peer saved and linked:", peer.name);
+          console.log("Peer saved and linked:", peer.name);
         } catch (peerError) {
-          console.error(
-            "⚠️  Failed to sync peer:",
-            netbirdPeerBasic.id,
-            peerError
-          );
+          console.error("Failed to sync peer:", netbirdPeerBasic.id, peerError);
         }
       }
     }

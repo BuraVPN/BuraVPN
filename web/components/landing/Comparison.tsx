@@ -112,7 +112,7 @@ export default function Comparison() {
               </div>
               <div className="text-center">
                 <h4 className="text-lg font-semibold mb-4 text-red-400">
-                  ✗ What You Don't Pay:
+                  ✗ What You Don&apos;t Pay:
                 </h4>
                 <ul className="space-y-2 text-gray-400">
                   <li>• Monthly subscription fees</li>

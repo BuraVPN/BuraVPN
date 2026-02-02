@@ -13,8 +13,8 @@ export default function Guarantee() {
         <Shield className="h-12 w-12 text-green-400 mx-auto mb-4" />
         <h3 className="text-2xl font-bold mb-4">100% Risk-Free Guarantee</h3>
         <p className="text-lg text-gray-300 mb-6">
-          Try your VPN router for 30 days. If you're not completely satisfied,
-          we'll refund every penny. No questions asked.
+          Try your VPN router for 30 days. If you&apos;re not completely
+          satisfied, we&apos;ll refund every penny. No questions asked.
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-400">

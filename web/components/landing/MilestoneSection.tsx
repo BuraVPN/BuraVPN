@@ -40,8 +40,8 @@ export default function MilestoneSection() {
             </h2>
             <hr className="w-24 h-1 bg-gradient-to-r from-orange-400 to-red-500 mx-auto mb-6 rounded-full" />
             <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-              Our journey doesn't end with the router. Discover what's coming
-              next in our mission to revolutionize online privacy.
+              Our journey doesn&apos;t end with the router. Discover what&apos;s
+              coming next in our mission to revolutionize online privacy.
             </p>
           </div>
 

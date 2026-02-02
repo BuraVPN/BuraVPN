@@ -1,13 +1,15 @@
 // prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../app/generated/prisma/client"
+  provider      = "prisma-client-js"
+  output        = "../app/generated/prisma/client"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ===== USER MODEL =====
@@ -17,6 +19,7 @@ model User {
   email     String?  @unique  // Za NextAuth kasnije
   
   groups    Group[]
+  tunnels   Tunnel[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -61,6 +64,10 @@ model Peer {
   
   // Relacija sa Group (many-to-many kroz GroupPeer)
   groupPeers                  GroupPeer[]
+  
+  // Tunnel relacije
+  tunnelsAsExitNode           Tunnel[]              @relation("TunnelExitNode")
+  tunnelsAsTravelRouter       TunnelTravelRouter[]  @relation("TunnelTravelRouter")
   
   // Network info
   ip                          String?              // "10.64.0.1"
@@ -107,7 +114,6 @@ model Peer {
 }
 
 // ===== MANY-TO-MANY: Group <-> Peer =====
-// Peer može biti u više grupa, grupa može imati više peera
 model GroupPeer {
   id        String   @id @default(uuid())
   
@@ -123,4 +129,52 @@ model GroupPeer {
   @@index([groupId])
   @@index([peerId])
   @@map("group_peers")
+}
+
+// ===== TUNNEL MODEL =====
+model Tunnel {
+  id        String   @id @default(uuid())
+
+  // tunnel owner
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Exit node 
+  exitNodeId String
+  exitNode   Peer    @relation("TunnelExitNode", fields: [exitNodeId], references: [id], onDelete: Cascade)
+
+  // Travel routers - 1 do 3 
+  travelRouters TunnelTravelRouter[]
+
+  name      String?  // "Office <-> Berlin"
+  enabled   Boolean  @default(true)
+
+  // NetBird resource IDs 
+  netbirdGroupId  String?
+  netbirdRouteId  String?
+  netbirdPolicyId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("tunnels")
+}
+
+// ===== MANY-TO-MANY: Tunnel <-> Peer =====
+model TunnelTravelRouter {
+  id        String   @id @default(uuid())
+
+  tunnelId  String
+  tunnel    Tunnel   @relation(fields: [tunnelId], references: [id], onDelete: Cascade)
+
+  peerId    String
+  peer      Peer     @relation("TunnelTravelRouter", fields: [peerId], references: [id], onDelete: Cascade)
+
+  addedAt   DateTime @default(now())
+
+  @@unique([tunnelId, peerId])
+  @@index([tunnelId])
+  @@index([peerId])
+  @@map("tunnel_travel_routers")
 }
