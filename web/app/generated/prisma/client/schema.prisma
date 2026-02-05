@@ -65,16 +65,34 @@ model User {
   sessions Session[]
 
   // App relacije
-  groups  Group[]
-  tunnels Tunnel[]
-
-  // NetBird
-  setupKey String? @unique
+  groups    Group[]
+  tunnels   Tunnel[]
+  setupKeys SetupKey[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model SetupKey {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  key       String @unique
+  netbirdId String
+  name      String
+
+  autoGroups String[]
+
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@index([userId])
+  @@map("setup_keys")
 }
 
 // ===== GROUP MODEL =====

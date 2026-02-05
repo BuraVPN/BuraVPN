@@ -5,6 +5,50 @@ import Resend from "next-auth/providers/resend";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
 
+const NETBIRD_API_URL = process.env.NETBIRD_API_URL;
+const NETBIRD_API_KEY = process.env.NETBIRD_API_KEY;
+
+async function createNetBirdGroup(name: string) {
+  const response = await fetch(`${NETBIRD_API_URL}/api/groups`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${NETBIRD_API_KEY}`,
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create NetBird group: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+async function createNetBirdSetupKey(groupId: string, name: string) {
+  const response = await fetch(`${NETBIRD_API_URL}/api/setup-keys`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${NETBIRD_API_KEY}`,
+    },
+    body: JSON.stringify({
+      name: `${name} Setup Key`,
+      type: "reusable",
+      expires_in: 31536000, // 1 godina (max)
+      auto_groups: [groupId],
+      usage_limit: 0,
+      ephemeral: false,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create NetBird setup key: ${response.status}`);
+  }
+
+  return response.json();
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -20,6 +64,61 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       from: "info@buravpn.com",
     }),
   ],
+  callbacks: {
+    session({ session, user }) {
+      session.user.id = user.id;
+      return session;
+    },
+  },
+  events: {
+    async createUser({ user }) {
+      if (!user.id) {
+        console.error("User ID is missing");
+        return;
+      }
+      try {
+        const userName = user.name || user.email || "User";
+        const groupName = `${userName}'s Group`;
+
+        const netbirdGroup = await createNetBirdGroup(groupName);
+        console.log(`NetBird group created: ${netbirdGroup.id}`);
+
+        const netbirdSetupKey = await createNetBirdSetupKey(
+          netbirdGroup.id,
+          userName
+        );
+        console.log(`NetBird setup key created: ${netbirdSetupKey.id}`);
+
+        await prisma.group.create({
+          data: {
+            netbirdGroupId: netbirdGroup.id,
+            name: netbirdGroup.name,
+            peersCount: 0,
+            resourcesCount: 0,
+            issued: "api",
+            userId: user.id,
+          },
+        });
+
+        await prisma.setupKey.create({
+          data: {
+            userId: user.id,
+            key: netbirdSetupKey.key,
+            netbirdId: netbirdSetupKey.id.toString(),
+            name: `${userName} Setup Key`,
+            autoGroups: [netbirdGroup.id],
+            expiresAt: new Date(netbirdSetupKey.expires),
+          },
+        });
+
+        console.log(
+          `User ${user.id} provisioned with NetBird group and setup key`
+        );
+      } catch (error) {
+        console.error("Failed to provision NetBird resources:", error);
+      }
+    },
+  },
   pages: {
     signIn: "/login",
   },

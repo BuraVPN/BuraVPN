@@ -34,6 +34,11 @@ export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTok
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model SetupKey
+ * 
+ */
+export type SetupKey = $Result.DefaultSelection<Prisma.$SetupKeyPayload>
+/**
  * Model Group
  * 
  */
@@ -216,6 +221,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.setupKey`: Exposes CRUD operations for the **SetupKey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SetupKeys
+    * const setupKeys = await prisma.setupKey.findMany()
+    * ```
+    */
+  get setupKey(): Prisma.SetupKeyDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.group`: Exposes CRUD operations for the **Group** model.
@@ -711,6 +726,7 @@ export namespace Prisma {
     Session: 'Session',
     VerificationToken: 'VerificationToken',
     User: 'User',
+    SetupKey: 'SetupKey',
     Group: 'Group',
     Peer: 'Peer',
     GroupPeer: 'GroupPeer',
@@ -734,7 +750,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "session" | "verificationToken" | "user" | "group" | "peer" | "groupPeer" | "tunnel" | "tunnelTravelRouter"
+      modelProps: "account" | "session" | "verificationToken" | "user" | "setupKey" | "group" | "peer" | "groupPeer" | "tunnel" | "tunnelTravelRouter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1031,6 +1047,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      SetupKey: {
+        payload: Prisma.$SetupKeyPayload<ExtArgs>
+        fields: Prisma.SetupKeyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SetupKeyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SetupKeyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>
+          }
+          findFirst: {
+            args: Prisma.SetupKeyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SetupKeyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>
+          }
+          findMany: {
+            args: Prisma.SetupKeyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>[]
+          }
+          create: {
+            args: Prisma.SetupKeyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>
+          }
+          createMany: {
+            args: Prisma.SetupKeyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SetupKeyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>[]
+          }
+          delete: {
+            args: Prisma.SetupKeyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>
+          }
+          update: {
+            args: Prisma.SetupKeyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>
+          }
+          deleteMany: {
+            args: Prisma.SetupKeyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SetupKeyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SetupKeyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>[]
+          }
+          upsert: {
+            args: Prisma.SetupKeyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SetupKeyPayload>
+          }
+          aggregate: {
+            args: Prisma.SetupKeyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSetupKey>
+          }
+          groupBy: {
+            args: Prisma.SetupKeyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SetupKeyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SetupKeyCountArgs<ExtArgs>
+            result: $Utils.Optional<SetupKeyCountAggregateOutputType> | number
           }
         }
       }
@@ -1504,6 +1594,7 @@ export namespace Prisma {
     session?: SessionOmit
     verificationToken?: VerificationTokenOmit
     user?: UserOmit
+    setupKey?: SetupKeyOmit
     group?: GroupOmit
     peer?: PeerOmit
     groupPeer?: GroupPeerOmit
@@ -1593,6 +1684,7 @@ export namespace Prisma {
     sessions: number
     groups: number
     tunnels: number
+    setupKeys: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1600,6 +1692,7 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     groups?: boolean | UserCountOutputTypeCountGroupsArgs
     tunnels?: boolean | UserCountOutputTypeCountTunnelsArgs
+    setupKeys?: boolean | UserCountOutputTypeCountSetupKeysArgs
   }
 
   // Custom InputTypes
@@ -1639,6 +1732,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountTunnelsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TunnelWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSetupKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SetupKeyWhereInput
   }
 
 
@@ -4970,7 +5070,6 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
-    setupKey: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4981,7 +5080,6 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
-    setupKey: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4992,7 +5090,6 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
-    setupKey: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5005,7 +5102,6 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
-    setupKey?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5016,7 +5112,6 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
-    setupKey?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5027,7 +5122,6 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
-    setupKey?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5111,7 +5205,6 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
-    setupKey: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -5139,13 +5232,13 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
-    setupKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     groups?: boolean | User$groupsArgs<ExtArgs>
     tunnels?: boolean | User$tunnelsArgs<ExtArgs>
+    setupKeys?: boolean | User$setupKeysArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5155,7 +5248,6 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
-    setupKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -5166,7 +5258,6 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
-    setupKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -5177,17 +5268,17 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
-    setupKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "setupKey" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     groups?: boolean | User$groupsArgs<ExtArgs>
     tunnels?: boolean | User$tunnelsArgs<ExtArgs>
+    setupKeys?: boolean | User$setupKeysArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5200,6 +5291,7 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       groups: Prisma.$GroupPayload<ExtArgs>[]
       tunnels: Prisma.$TunnelPayload<ExtArgs>[]
+      setupKeys: Prisma.$SetupKeyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5207,7 +5299,6 @@ export namespace Prisma {
       email: string | null
       emailVerified: Date | null
       image: string | null
-      setupKey: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -5608,6 +5699,7 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     groups<T extends User$groupsArgs<ExtArgs> = {}>(args?: Subset<T, User$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tunnels<T extends User$tunnelsArgs<ExtArgs> = {}>(args?: Subset<T, User$tunnelsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TunnelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    setupKeys<T extends User$setupKeysArgs<ExtArgs> = {}>(args?: Subset<T, User$setupKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5642,7 +5734,6 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
-    readonly setupKey: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -6129,6 +6220,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.setupKeys
+   */
+  export type User$setupKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    where?: SetupKeyWhereInput
+    orderBy?: SetupKeyOrderByWithRelationInput | SetupKeyOrderByWithRelationInput[]
+    cursor?: SetupKeyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SetupKeyScalarFieldEnum | SetupKeyScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6144,6 +6259,1112 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SetupKey
+   */
+
+  export type AggregateSetupKey = {
+    _count: SetupKeyCountAggregateOutputType | null
+    _min: SetupKeyMinAggregateOutputType | null
+    _max: SetupKeyMaxAggregateOutputType | null
+  }
+
+  export type SetupKeyMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    key: string | null
+    netbirdId: string | null
+    name: string | null
+    expiresAt: Date | null
+    createdAt: Date | null
+    revokedAt: Date | null
+  }
+
+  export type SetupKeyMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    key: string | null
+    netbirdId: string | null
+    name: string | null
+    expiresAt: Date | null
+    createdAt: Date | null
+    revokedAt: Date | null
+  }
+
+  export type SetupKeyCountAggregateOutputType = {
+    id: number
+    userId: number
+    key: number
+    netbirdId: number
+    name: number
+    autoGroups: number
+    expiresAt: number
+    createdAt: number
+    revokedAt: number
+    _all: number
+  }
+
+
+  export type SetupKeyMinAggregateInputType = {
+    id?: true
+    userId?: true
+    key?: true
+    netbirdId?: true
+    name?: true
+    expiresAt?: true
+    createdAt?: true
+    revokedAt?: true
+  }
+
+  export type SetupKeyMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    key?: true
+    netbirdId?: true
+    name?: true
+    expiresAt?: true
+    createdAt?: true
+    revokedAt?: true
+  }
+
+  export type SetupKeyCountAggregateInputType = {
+    id?: true
+    userId?: true
+    key?: true
+    netbirdId?: true
+    name?: true
+    autoGroups?: true
+    expiresAt?: true
+    createdAt?: true
+    revokedAt?: true
+    _all?: true
+  }
+
+  export type SetupKeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SetupKey to aggregate.
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SetupKeys to fetch.
+     */
+    orderBy?: SetupKeyOrderByWithRelationInput | SetupKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SetupKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SetupKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SetupKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SetupKeys
+    **/
+    _count?: true | SetupKeyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SetupKeyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SetupKeyMaxAggregateInputType
+  }
+
+  export type GetSetupKeyAggregateType<T extends SetupKeyAggregateArgs> = {
+        [P in keyof T & keyof AggregateSetupKey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSetupKey[P]>
+      : GetScalarType<T[P], AggregateSetupKey[P]>
+  }
+
+
+
+
+  export type SetupKeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SetupKeyWhereInput
+    orderBy?: SetupKeyOrderByWithAggregationInput | SetupKeyOrderByWithAggregationInput[]
+    by: SetupKeyScalarFieldEnum[] | SetupKeyScalarFieldEnum
+    having?: SetupKeyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SetupKeyCountAggregateInputType | true
+    _min?: SetupKeyMinAggregateInputType
+    _max?: SetupKeyMaxAggregateInputType
+  }
+
+  export type SetupKeyGroupByOutputType = {
+    id: string
+    userId: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups: string[]
+    expiresAt: Date
+    createdAt: Date
+    revokedAt: Date | null
+    _count: SetupKeyCountAggregateOutputType | null
+    _min: SetupKeyMinAggregateOutputType | null
+    _max: SetupKeyMaxAggregateOutputType | null
+  }
+
+  type GetSetupKeyGroupByPayload<T extends SetupKeyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SetupKeyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SetupKeyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SetupKeyGroupByOutputType[P]>
+            : GetScalarType<T[P], SetupKeyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SetupKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    key?: boolean
+    netbirdId?: boolean
+    name?: boolean
+    autoGroups?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["setupKey"]>
+
+  export type SetupKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    key?: boolean
+    netbirdId?: boolean
+    name?: boolean
+    autoGroups?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["setupKey"]>
+
+  export type SetupKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    key?: boolean
+    netbirdId?: boolean
+    name?: boolean
+    autoGroups?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["setupKey"]>
+
+  export type SetupKeySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    key?: boolean
+    netbirdId?: boolean
+    name?: boolean
+    autoGroups?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+  }
+
+  export type SetupKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "key" | "netbirdId" | "name" | "autoGroups" | "expiresAt" | "createdAt" | "revokedAt", ExtArgs["result"]["setupKey"]>
+  export type SetupKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SetupKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SetupKeyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SetupKeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SetupKey"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      key: string
+      netbirdId: string
+      name: string
+      autoGroups: string[]
+      expiresAt: Date
+      createdAt: Date
+      revokedAt: Date | null
+    }, ExtArgs["result"]["setupKey"]>
+    composites: {}
+  }
+
+  type SetupKeyGetPayload<S extends boolean | null | undefined | SetupKeyDefaultArgs> = $Result.GetResult<Prisma.$SetupKeyPayload, S>
+
+  type SetupKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SetupKeyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SetupKeyCountAggregateInputType | true
+    }
+
+  export interface SetupKeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SetupKey'], meta: { name: 'SetupKey' } }
+    /**
+     * Find zero or one SetupKey that matches the filter.
+     * @param {SetupKeyFindUniqueArgs} args - Arguments to find a SetupKey
+     * @example
+     * // Get one SetupKey
+     * const setupKey = await prisma.setupKey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SetupKeyFindUniqueArgs>(args: SelectSubset<T, SetupKeyFindUniqueArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SetupKey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SetupKeyFindUniqueOrThrowArgs} args - Arguments to find a SetupKey
+     * @example
+     * // Get one SetupKey
+     * const setupKey = await prisma.setupKey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SetupKeyFindUniqueOrThrowArgs>(args: SelectSubset<T, SetupKeyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SetupKey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyFindFirstArgs} args - Arguments to find a SetupKey
+     * @example
+     * // Get one SetupKey
+     * const setupKey = await prisma.setupKey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SetupKeyFindFirstArgs>(args?: SelectSubset<T, SetupKeyFindFirstArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SetupKey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyFindFirstOrThrowArgs} args - Arguments to find a SetupKey
+     * @example
+     * // Get one SetupKey
+     * const setupKey = await prisma.setupKey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SetupKeyFindFirstOrThrowArgs>(args?: SelectSubset<T, SetupKeyFindFirstOrThrowArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SetupKeys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SetupKeys
+     * const setupKeys = await prisma.setupKey.findMany()
+     * 
+     * // Get first 10 SetupKeys
+     * const setupKeys = await prisma.setupKey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const setupKeyWithIdOnly = await prisma.setupKey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SetupKeyFindManyArgs>(args?: SelectSubset<T, SetupKeyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SetupKey.
+     * @param {SetupKeyCreateArgs} args - Arguments to create a SetupKey.
+     * @example
+     * // Create one SetupKey
+     * const SetupKey = await prisma.setupKey.create({
+     *   data: {
+     *     // ... data to create a SetupKey
+     *   }
+     * })
+     * 
+     */
+    create<T extends SetupKeyCreateArgs>(args: SelectSubset<T, SetupKeyCreateArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SetupKeys.
+     * @param {SetupKeyCreateManyArgs} args - Arguments to create many SetupKeys.
+     * @example
+     * // Create many SetupKeys
+     * const setupKey = await prisma.setupKey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SetupKeyCreateManyArgs>(args?: SelectSubset<T, SetupKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SetupKeys and returns the data saved in the database.
+     * @param {SetupKeyCreateManyAndReturnArgs} args - Arguments to create many SetupKeys.
+     * @example
+     * // Create many SetupKeys
+     * const setupKey = await prisma.setupKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SetupKeys and only return the `id`
+     * const setupKeyWithIdOnly = await prisma.setupKey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SetupKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, SetupKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SetupKey.
+     * @param {SetupKeyDeleteArgs} args - Arguments to delete one SetupKey.
+     * @example
+     * // Delete one SetupKey
+     * const SetupKey = await prisma.setupKey.delete({
+     *   where: {
+     *     // ... filter to delete one SetupKey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SetupKeyDeleteArgs>(args: SelectSubset<T, SetupKeyDeleteArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SetupKey.
+     * @param {SetupKeyUpdateArgs} args - Arguments to update one SetupKey.
+     * @example
+     * // Update one SetupKey
+     * const setupKey = await prisma.setupKey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SetupKeyUpdateArgs>(args: SelectSubset<T, SetupKeyUpdateArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SetupKeys.
+     * @param {SetupKeyDeleteManyArgs} args - Arguments to filter SetupKeys to delete.
+     * @example
+     * // Delete a few SetupKeys
+     * const { count } = await prisma.setupKey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SetupKeyDeleteManyArgs>(args?: SelectSubset<T, SetupKeyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SetupKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SetupKeys
+     * const setupKey = await prisma.setupKey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SetupKeyUpdateManyArgs>(args: SelectSubset<T, SetupKeyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SetupKeys and returns the data updated in the database.
+     * @param {SetupKeyUpdateManyAndReturnArgs} args - Arguments to update many SetupKeys.
+     * @example
+     * // Update many SetupKeys
+     * const setupKey = await prisma.setupKey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SetupKeys and only return the `id`
+     * const setupKeyWithIdOnly = await prisma.setupKey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SetupKeyUpdateManyAndReturnArgs>(args: SelectSubset<T, SetupKeyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SetupKey.
+     * @param {SetupKeyUpsertArgs} args - Arguments to update or create a SetupKey.
+     * @example
+     * // Update or create a SetupKey
+     * const setupKey = await prisma.setupKey.upsert({
+     *   create: {
+     *     // ... data to create a SetupKey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SetupKey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SetupKeyUpsertArgs>(args: SelectSubset<T, SetupKeyUpsertArgs<ExtArgs>>): Prisma__SetupKeyClient<$Result.GetResult<Prisma.$SetupKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SetupKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyCountArgs} args - Arguments to filter SetupKeys to count.
+     * @example
+     * // Count the number of SetupKeys
+     * const count = await prisma.setupKey.count({
+     *   where: {
+     *     // ... the filter for the SetupKeys we want to count
+     *   }
+     * })
+    **/
+    count<T extends SetupKeyCountArgs>(
+      args?: Subset<T, SetupKeyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SetupKeyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SetupKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SetupKeyAggregateArgs>(args: Subset<T, SetupKeyAggregateArgs>): Prisma.PrismaPromise<GetSetupKeyAggregateType<T>>
+
+    /**
+     * Group by SetupKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SetupKeyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SetupKeyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SetupKeyGroupByArgs['orderBy'] }
+        : { orderBy?: SetupKeyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SetupKeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSetupKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SetupKey model
+   */
+  readonly fields: SetupKeyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SetupKey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SetupKeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SetupKey model
+   */
+  interface SetupKeyFieldRefs {
+    readonly id: FieldRef<"SetupKey", 'String'>
+    readonly userId: FieldRef<"SetupKey", 'String'>
+    readonly key: FieldRef<"SetupKey", 'String'>
+    readonly netbirdId: FieldRef<"SetupKey", 'String'>
+    readonly name: FieldRef<"SetupKey", 'String'>
+    readonly autoGroups: FieldRef<"SetupKey", 'String[]'>
+    readonly expiresAt: FieldRef<"SetupKey", 'DateTime'>
+    readonly createdAt: FieldRef<"SetupKey", 'DateTime'>
+    readonly revokedAt: FieldRef<"SetupKey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SetupKey findUnique
+   */
+  export type SetupKeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which SetupKey to fetch.
+     */
+    where: SetupKeyWhereUniqueInput
+  }
+
+  /**
+   * SetupKey findUniqueOrThrow
+   */
+  export type SetupKeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which SetupKey to fetch.
+     */
+    where: SetupKeyWhereUniqueInput
+  }
+
+  /**
+   * SetupKey findFirst
+   */
+  export type SetupKeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which SetupKey to fetch.
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SetupKeys to fetch.
+     */
+    orderBy?: SetupKeyOrderByWithRelationInput | SetupKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SetupKeys.
+     */
+    cursor?: SetupKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SetupKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SetupKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SetupKeys.
+     */
+    distinct?: SetupKeyScalarFieldEnum | SetupKeyScalarFieldEnum[]
+  }
+
+  /**
+   * SetupKey findFirstOrThrow
+   */
+  export type SetupKeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which SetupKey to fetch.
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SetupKeys to fetch.
+     */
+    orderBy?: SetupKeyOrderByWithRelationInput | SetupKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SetupKeys.
+     */
+    cursor?: SetupKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SetupKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SetupKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SetupKeys.
+     */
+    distinct?: SetupKeyScalarFieldEnum | SetupKeyScalarFieldEnum[]
+  }
+
+  /**
+   * SetupKey findMany
+   */
+  export type SetupKeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which SetupKeys to fetch.
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SetupKeys to fetch.
+     */
+    orderBy?: SetupKeyOrderByWithRelationInput | SetupKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SetupKeys.
+     */
+    cursor?: SetupKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SetupKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SetupKeys.
+     */
+    skip?: number
+    distinct?: SetupKeyScalarFieldEnum | SetupKeyScalarFieldEnum[]
+  }
+
+  /**
+   * SetupKey create
+   */
+  export type SetupKeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SetupKey.
+     */
+    data: XOR<SetupKeyCreateInput, SetupKeyUncheckedCreateInput>
+  }
+
+  /**
+   * SetupKey createMany
+   */
+  export type SetupKeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SetupKeys.
+     */
+    data: SetupKeyCreateManyInput | SetupKeyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SetupKey createManyAndReturn
+   */
+  export type SetupKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * The data used to create many SetupKeys.
+     */
+    data: SetupKeyCreateManyInput | SetupKeyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SetupKey update
+   */
+  export type SetupKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SetupKey.
+     */
+    data: XOR<SetupKeyUpdateInput, SetupKeyUncheckedUpdateInput>
+    /**
+     * Choose, which SetupKey to update.
+     */
+    where: SetupKeyWhereUniqueInput
+  }
+
+  /**
+   * SetupKey updateMany
+   */
+  export type SetupKeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SetupKeys.
+     */
+    data: XOR<SetupKeyUpdateManyMutationInput, SetupKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which SetupKeys to update
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * Limit how many SetupKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SetupKey updateManyAndReturn
+   */
+  export type SetupKeyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * The data used to update SetupKeys.
+     */
+    data: XOR<SetupKeyUpdateManyMutationInput, SetupKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which SetupKeys to update
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * Limit how many SetupKeys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SetupKey upsert
+   */
+  export type SetupKeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SetupKey to update in case it exists.
+     */
+    where: SetupKeyWhereUniqueInput
+    /**
+     * In case the SetupKey found by the `where` argument doesn't exist, create a new SetupKey with this data.
+     */
+    create: XOR<SetupKeyCreateInput, SetupKeyUncheckedCreateInput>
+    /**
+     * In case the SetupKey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SetupKeyUpdateInput, SetupKeyUncheckedUpdateInput>
+  }
+
+  /**
+   * SetupKey delete
+   */
+  export type SetupKeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
+    /**
+     * Filter which SetupKey to delete.
+     */
+    where: SetupKeyWhereUniqueInput
+  }
+
+  /**
+   * SetupKey deleteMany
+   */
+  export type SetupKeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SetupKeys to delete
+     */
+    where?: SetupKeyWhereInput
+    /**
+     * Limit how many SetupKeys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SetupKey without action
+   */
+  export type SetupKeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SetupKey
+     */
+    select?: SetupKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SetupKey
+     */
+    omit?: SetupKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SetupKeyInclude<ExtArgs> | null
   }
 
 
@@ -12113,12 +13334,26 @@ export namespace Prisma {
     email: 'email',
     emailVerified: 'emailVerified',
     image: 'image',
-    setupKey: 'setupKey',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const SetupKeyScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    key: 'key',
+    netbirdId: 'netbirdId',
+    name: 'name',
+    autoGroups: 'autoGroups',
+    expiresAt: 'expiresAt',
+    createdAt: 'createdAt',
+    revokedAt: 'revokedAt'
+  };
+
+  export type SetupKeyScalarFieldEnum = (typeof SetupKeyScalarFieldEnum)[keyof typeof SetupKeyScalarFieldEnum]
 
 
   export const GroupScalarFieldEnum: {
@@ -12528,13 +13763,13 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
-    setupKey?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     groups?: GroupListRelationFilter
     tunnels?: TunnelListRelationFilter
+    setupKeys?: SetupKeyListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12543,19 +13778,18 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
-    setupKey?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     groups?: GroupOrderByRelationAggregateInput
     tunnels?: TunnelOrderByRelationAggregateInput
+    setupKeys?: SetupKeyOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
-    setupKey?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -12568,7 +13802,8 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     groups?: GroupListRelationFilter
     tunnels?: TunnelListRelationFilter
-  }, "id" | "email" | "setupKey">
+    setupKeys?: SetupKeyListRelationFilter
+  }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -12576,7 +13811,6 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
-    setupKey?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -12593,9 +13827,83 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
-    setupKey?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type SetupKeyWhereInput = {
+    AND?: SetupKeyWhereInput | SetupKeyWhereInput[]
+    OR?: SetupKeyWhereInput[]
+    NOT?: SetupKeyWhereInput | SetupKeyWhereInput[]
+    id?: StringFilter<"SetupKey"> | string
+    userId?: StringFilter<"SetupKey"> | string
+    key?: StringFilter<"SetupKey"> | string
+    netbirdId?: StringFilter<"SetupKey"> | string
+    name?: StringFilter<"SetupKey"> | string
+    autoGroups?: StringNullableListFilter<"SetupKey">
+    expiresAt?: DateTimeFilter<"SetupKey"> | Date | string
+    createdAt?: DateTimeFilter<"SetupKey"> | Date | string
+    revokedAt?: DateTimeNullableFilter<"SetupKey"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SetupKeyOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    key?: SortOrder
+    netbirdId?: SortOrder
+    name?: SortOrder
+    autoGroups?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SetupKeyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    key?: string
+    AND?: SetupKeyWhereInput | SetupKeyWhereInput[]
+    OR?: SetupKeyWhereInput[]
+    NOT?: SetupKeyWhereInput | SetupKeyWhereInput[]
+    userId?: StringFilter<"SetupKey"> | string
+    netbirdId?: StringFilter<"SetupKey"> | string
+    name?: StringFilter<"SetupKey"> | string
+    autoGroups?: StringNullableListFilter<"SetupKey">
+    expiresAt?: DateTimeFilter<"SetupKey"> | Date | string
+    createdAt?: DateTimeFilter<"SetupKey"> | Date | string
+    revokedAt?: DateTimeNullableFilter<"SetupKey"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "key">
+
+  export type SetupKeyOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    key?: SortOrder
+    netbirdId?: SortOrder
+    name?: SortOrder
+    autoGroups?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    _count?: SetupKeyCountOrderByAggregateInput
+    _max?: SetupKeyMaxOrderByAggregateInput
+    _min?: SetupKeyMinOrderByAggregateInput
+  }
+
+  export type SetupKeyScalarWhereWithAggregatesInput = {
+    AND?: SetupKeyScalarWhereWithAggregatesInput | SetupKeyScalarWhereWithAggregatesInput[]
+    OR?: SetupKeyScalarWhereWithAggregatesInput[]
+    NOT?: SetupKeyScalarWhereWithAggregatesInput | SetupKeyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SetupKey"> | string
+    userId?: StringWithAggregatesFilter<"SetupKey"> | string
+    key?: StringWithAggregatesFilter<"SetupKey"> | string
+    netbirdId?: StringWithAggregatesFilter<"SetupKey"> | string
+    name?: StringWithAggregatesFilter<"SetupKey"> | string
+    autoGroups?: StringNullableListFilter<"SetupKey">
+    expiresAt?: DateTimeWithAggregatesFilter<"SetupKey"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"SetupKey"> | Date | string
+    revokedAt?: DateTimeNullableWithAggregatesFilter<"SetupKey"> | Date | string | null
   }
 
   export type GroupWhereInput = {
@@ -13255,13 +14563,13 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     groups?: GroupCreateNestedManyWithoutUserInput
     tunnels?: TunnelCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13270,13 +14578,13 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     groups?: GroupUncheckedCreateNestedManyWithoutUserInput
     tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13285,13 +14593,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     groups?: GroupUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13300,13 +14608,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13315,7 +14623,6 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13326,7 +14633,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13337,9 +14643,91 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SetupKeyCreateInput = {
+    id?: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups?: SetupKeyCreateautoGroupsInput | string[]
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutSetupKeysInput
+  }
+
+  export type SetupKeyUncheckedCreateInput = {
+    id?: string
+    userId: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups?: SetupKeyCreateautoGroupsInput | string[]
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+  }
+
+  export type SetupKeyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutSetupKeysNestedInput
+  }
+
+  export type SetupKeyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SetupKeyCreateManyInput = {
+    id?: string
+    userId: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups?: SetupKeyCreateautoGroupsInput | string[]
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+  }
+
+  export type SetupKeyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SetupKeyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type GroupCreateInput = {
@@ -14117,6 +15505,12 @@ export namespace Prisma {
     none?: TunnelWhereInput
   }
 
+  export type SetupKeyListRelationFilter = {
+    every?: SetupKeyWhereInput
+    some?: SetupKeyWhereInput
+    none?: SetupKeyWhereInput
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -14133,13 +15527,16 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type SetupKeyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
-    setupKey?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14150,7 +15547,6 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
-    setupKey?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14161,7 +15557,6 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
-    setupKey?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14178,6 +15573,48 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type SetupKeyCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    key?: SortOrder
+    netbirdId?: SortOrder
+    name?: SortOrder
+    autoGroups?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrder
+  }
+
+  export type SetupKeyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    key?: SortOrder
+    netbirdId?: SortOrder
+    name?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrder
+  }
+
+  export type SetupKeyMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    key?: SortOrder
+    netbirdId?: SortOrder
+    name?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrder
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -14311,14 +15748,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -14625,6 +16054,13 @@ export namespace Prisma {
     connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
   }
 
+  export type SetupKeyCreateNestedManyWithoutUserInput = {
+    create?: XOR<SetupKeyCreateWithoutUserInput, SetupKeyUncheckedCreateWithoutUserInput> | SetupKeyCreateWithoutUserInput[] | SetupKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SetupKeyCreateOrConnectWithoutUserInput | SetupKeyCreateOrConnectWithoutUserInput[]
+    createMany?: SetupKeyCreateManyUserInputEnvelope
+    connect?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -14651,6 +16087,13 @@ export namespace Prisma {
     connectOrCreate?: TunnelCreateOrConnectWithoutUserInput | TunnelCreateOrConnectWithoutUserInput[]
     createMany?: TunnelCreateManyUserInputEnvelope
     connect?: TunnelWhereUniqueInput | TunnelWhereUniqueInput[]
+  }
+
+  export type SetupKeyUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SetupKeyCreateWithoutUserInput, SetupKeyUncheckedCreateWithoutUserInput> | SetupKeyCreateWithoutUserInput[] | SetupKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SetupKeyCreateOrConnectWithoutUserInput | SetupKeyCreateOrConnectWithoutUserInput[]
+    createMany?: SetupKeyCreateManyUserInputEnvelope
+    connect?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -14713,6 +16156,20 @@ export namespace Prisma {
     deleteMany?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
   }
 
+  export type SetupKeyUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SetupKeyCreateWithoutUserInput, SetupKeyUncheckedCreateWithoutUserInput> | SetupKeyCreateWithoutUserInput[] | SetupKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SetupKeyCreateOrConnectWithoutUserInput | SetupKeyCreateOrConnectWithoutUserInput[]
+    upsert?: SetupKeyUpsertWithWhereUniqueWithoutUserInput | SetupKeyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SetupKeyCreateManyUserInputEnvelope
+    set?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    disconnect?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    delete?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    connect?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    update?: SetupKeyUpdateWithWhereUniqueWithoutUserInput | SetupKeyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SetupKeyUpdateManyWithWhereWithoutUserInput | SetupKeyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SetupKeyScalarWhereInput | SetupKeyScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -14767,6 +16224,43 @@ export namespace Prisma {
     update?: TunnelUpdateWithWhereUniqueWithoutUserInput | TunnelUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: TunnelUpdateManyWithWhereWithoutUserInput | TunnelUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: TunnelScalarWhereInput | TunnelScalarWhereInput[]
+  }
+
+  export type SetupKeyUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SetupKeyCreateWithoutUserInput, SetupKeyUncheckedCreateWithoutUserInput> | SetupKeyCreateWithoutUserInput[] | SetupKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SetupKeyCreateOrConnectWithoutUserInput | SetupKeyCreateOrConnectWithoutUserInput[]
+    upsert?: SetupKeyUpsertWithWhereUniqueWithoutUserInput | SetupKeyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SetupKeyCreateManyUserInputEnvelope
+    set?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    disconnect?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    delete?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    connect?: SetupKeyWhereUniqueInput | SetupKeyWhereUniqueInput[]
+    update?: SetupKeyUpdateWithWhereUniqueWithoutUserInput | SetupKeyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SetupKeyUpdateManyWithWhereWithoutUserInput | SetupKeyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SetupKeyScalarWhereInput | SetupKeyScalarWhereInput[]
+  }
+
+  export type SetupKeyCreateautoGroupsInput = {
+    set: string[]
+  }
+
+  export type UserCreateNestedOneWithoutSetupKeysInput = {
+    create?: XOR<UserCreateWithoutSetupKeysInput, UserUncheckedCreateWithoutSetupKeysInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSetupKeysInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SetupKeyUpdateautoGroupsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type UserUpdateOneRequiredWithoutSetupKeysNestedInput = {
+    create?: XOR<UserCreateWithoutSetupKeysInput, UserUncheckedCreateWithoutSetupKeysInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSetupKeysInput
+    upsert?: UserUpsertWithoutSetupKeysInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSetupKeysInput, UserUpdateWithoutSetupKeysInput>, UserUncheckedUpdateWithoutSetupKeysInput>
   }
 
   export type UserCreateNestedOneWithoutGroupsInput = {
@@ -15328,12 +16822,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     groups?: GroupCreateNestedManyWithoutUserInput
     tunnels?: TunnelCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -15342,12 +16836,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     groups?: GroupUncheckedCreateNestedManyWithoutUserInput
     tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -15372,12 +16866,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     groups?: GroupUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -15386,12 +16880,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -15400,12 +16894,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     groups?: GroupCreateNestedManyWithoutUserInput
     tunnels?: TunnelCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -15414,12 +16908,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     groups?: GroupUncheckedCreateNestedManyWithoutUserInput
     tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -15444,12 +16938,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     groups?: GroupUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -15458,12 +16952,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -15598,6 +17092,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SetupKeyCreateWithoutUserInput = {
+    id?: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups?: SetupKeyCreateautoGroupsInput | string[]
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+  }
+
+  export type SetupKeyUncheckedCreateWithoutUserInput = {
+    id?: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups?: SetupKeyCreateautoGroupsInput | string[]
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+  }
+
+  export type SetupKeyCreateOrConnectWithoutUserInput = {
+    where: SetupKeyWhereUniqueInput
+    create: XOR<SetupKeyCreateWithoutUserInput, SetupKeyUncheckedCreateWithoutUserInput>
+  }
+
+  export type SetupKeyCreateManyUserInputEnvelope = {
+    data: SetupKeyCreateManyUserInput | SetupKeyCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -15722,18 +17248,121 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Tunnel"> | Date | string
   }
 
+  export type SetupKeyUpsertWithWhereUniqueWithoutUserInput = {
+    where: SetupKeyWhereUniqueInput
+    update: XOR<SetupKeyUpdateWithoutUserInput, SetupKeyUncheckedUpdateWithoutUserInput>
+    create: XOR<SetupKeyCreateWithoutUserInput, SetupKeyUncheckedCreateWithoutUserInput>
+  }
+
+  export type SetupKeyUpdateWithWhereUniqueWithoutUserInput = {
+    where: SetupKeyWhereUniqueInput
+    data: XOR<SetupKeyUpdateWithoutUserInput, SetupKeyUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SetupKeyUpdateManyWithWhereWithoutUserInput = {
+    where: SetupKeyScalarWhereInput
+    data: XOR<SetupKeyUpdateManyMutationInput, SetupKeyUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SetupKeyScalarWhereInput = {
+    AND?: SetupKeyScalarWhereInput | SetupKeyScalarWhereInput[]
+    OR?: SetupKeyScalarWhereInput[]
+    NOT?: SetupKeyScalarWhereInput | SetupKeyScalarWhereInput[]
+    id?: StringFilter<"SetupKey"> | string
+    userId?: StringFilter<"SetupKey"> | string
+    key?: StringFilter<"SetupKey"> | string
+    netbirdId?: StringFilter<"SetupKey"> | string
+    name?: StringFilter<"SetupKey"> | string
+    autoGroups?: StringNullableListFilter<"SetupKey">
+    expiresAt?: DateTimeFilter<"SetupKey"> | Date | string
+    createdAt?: DateTimeFilter<"SetupKey"> | Date | string
+    revokedAt?: DateTimeNullableFilter<"SetupKey"> | Date | string | null
+  }
+
+  export type UserCreateWithoutSetupKeysInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    groups?: GroupCreateNestedManyWithoutUserInput
+    tunnels?: TunnelCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSetupKeysInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    groups?: GroupUncheckedCreateNestedManyWithoutUserInput
+    tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSetupKeysInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSetupKeysInput, UserUncheckedCreateWithoutSetupKeysInput>
+  }
+
+  export type UserUpsertWithoutSetupKeysInput = {
+    update: XOR<UserUpdateWithoutSetupKeysInput, UserUncheckedUpdateWithoutSetupKeysInput>
+    create: XOR<UserCreateWithoutSetupKeysInput, UserUncheckedCreateWithoutSetupKeysInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSetupKeysInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSetupKeysInput, UserUncheckedUpdateWithoutSetupKeysInput>
+  }
+
+  export type UserUpdateWithoutSetupKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    groups?: GroupUpdateManyWithoutUserNestedInput
+    tunnels?: TunnelUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSetupKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
+    tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutGroupsInput = {
     id?: string
     name?: string | null
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tunnels?: TunnelCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGroupsInput = {
@@ -15742,12 +17371,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tunnels?: TunnelUncheckedCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGroupsInput = {
@@ -15794,12 +17423,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGroupsInput = {
@@ -15808,12 +17437,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tunnels?: TunnelUncheckedUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GroupPeerUpsertWithWhereUniqueWithoutGroupInput = {
@@ -16202,12 +17831,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     groups?: GroupCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTunnelsInput = {
@@ -16216,12 +17845,12 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
-    setupKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     groups?: GroupUncheckedCreateNestedManyWithoutUserInput
+    setupKeys?: SetupKeyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTunnelsInput = {
@@ -16339,12 +17968,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     groups?: GroupUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTunnelsInput = {
@@ -16353,12 +17982,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    setupKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     groups?: GroupUncheckedUpdateManyWithoutUserNestedInput
+    setupKeys?: SetupKeyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PeerUpsertWithoutTunnelsAsExitNodeInput = {
@@ -16714,6 +18343,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type SetupKeyCreateManyUserInput = {
+    id?: string
+    key: string
+    netbirdId: string
+    name: string
+    autoGroups?: SetupKeyCreateautoGroupsInput | string[]
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+  }
+
   export type AccountUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
@@ -16848,6 +18488,39 @@ export namespace Prisma {
     netbirdPolicyId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SetupKeyUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SetupKeyUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SetupKeyUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    netbirdId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    autoGroups?: SetupKeyUpdateautoGroupsInput | string[]
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type GroupPeerCreateManyGroupInput = {

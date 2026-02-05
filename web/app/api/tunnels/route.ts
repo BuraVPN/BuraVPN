@@ -1,19 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/app/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
 import { provisionTunnel, deprovisionTunnel } from "@/lib/netbird";
 import { invalidateCache } from "@/lib/tunnel-cache";
-
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
-const prisma = globalForPrisma.prisma || new PrismaClient();
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+import { requireAuth } from "@/lib/api-auth";
 
 const MAX_TRAVEL_ROUTERS = 3;
 
 export async function GET(req: NextRequest) {
-  const userId = req.nextUrl.searchParams.get("userId");
-  if (!userId) {
-    return NextResponse.json({ error: "userId required" }, { status: 400 });
-  }
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  const userId = session.user.id;
 
   const tunnels = await prisma.tunnel.findMany({
     where: { userId },
@@ -52,15 +49,18 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  const userId = session.user.id;
+
   try {
     const body = await req.json();
-    const { userId, exitNodeId, travelRouterIds, name } = body;
+    const { exitNodeId, travelRouterIds, name } = body;
 
-    if (!userId || !exitNodeId || !travelRouterIds?.length) {
+    if (!exitNodeId || !travelRouterIds?.length) {
       return NextResponse.json(
-        {
-          error: "userId, exitNodeId, and at least one travelRouterId required",
-        },
+        { error: "exitNodeId and at least one travelRouterId required" },
         { status: 400 }
       );
     }
@@ -176,6 +176,11 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  const userId = session.user.id;
+
   const id = req.nextUrl.searchParams.get("id");
   if (!id) {
     return NextResponse.json({ error: "id required" }, { status: 400 });
@@ -186,8 +191,14 @@ export async function DELETE(req: NextRequest) {
       where: { id },
       include: { travelRouters: { select: { peerId: true } } },
     });
+
     if (!tunnel) {
       return NextResponse.json({ error: "Tunnel not found" }, { status: 404 });
+    }
+
+    // Provjeri da tunnel pripada korisniku
+    if (tunnel.userId !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const affectedPeerIds = [

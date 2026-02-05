@@ -155,9 +155,20 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  setupKey: 'setupKey',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SetupKeyScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  key: 'key',
+  netbirdId: 'netbirdId',
+  name: 'name',
+  autoGroups: 'autoGroups',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  revokedAt: 'revokedAt'
 };
 
 exports.Prisma.GroupScalarFieldEnum = {
@@ -263,6 +274,7 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   User: 'User',
+  SetupKey: 'SetupKey',
   Group: 'Group',
   Peer: 'Peer',
   GroupPeer: 'GroupPeer',
