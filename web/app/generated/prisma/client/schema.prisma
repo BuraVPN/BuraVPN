@@ -12,14 +12,64 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ===== AUTH.JS MODELS =====
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
 // ===== USER MODEL =====
 model User {
-  id    String  @id @default(uuid())
-  name  String
-  email String? @unique // Za NextAuth kasnije
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
 
+  // Auth.js relacije
+  accounts Account[]
+  sessions Session[]
+
+  // App relacije
   groups  Group[]
   tunnels Tunnel[]
+
+  // NetBird
+  setupKey String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -30,23 +80,18 @@ model User {
 // ===== GROUP MODEL =====
 model Group {
   id             String @id @default(uuid())
-  netbirdGroupId String @unique // "ch8i4ug6lnn4g9hqv7m0"
-  name           String // "devs"
+  netbirdGroupId String @unique
+  name           String
 
-  // Relacija sa User
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Metadata iz NetBird
-  peersCount     Int     @default(0) // peers_count
-  resourcesCount Int     @default(0) // resources_count
-  issued         String? // "api"
+  peersCount     Int     @default(0)
+  resourcesCount Int     @default(0)
+  issued         String?
 
-  // Relacija sa Peer (many-to-many kroz GroupPeer)
   groupPeers GroupPeer[]
-
-  // Resources (JSON array jer su jednostavni objekti)
-  resources Json? // [{ id: "...", type: "host" }]
+  resources  Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,47 +104,38 @@ model Group {
 // ===== PEER MODEL =====
 model Peer {
   id            String @id @default(uuid())
-  netbirdPeerId String @unique // "chacbco6lnnbn6cg5s90"
-  name          String // "stage-host-1"
+  netbirdPeerId String @unique
+  name          String
 
-  // Relacija sa Group (many-to-many kroz GroupPeer)
-  groupPeers GroupPeer[]
-
-  // Tunnel relacije
+  groupPeers            GroupPeer[]
   tunnelsAsExitNode     Tunnel[]             @relation("TunnelExitNode")
   tunnelsAsTravelRouter TunnelTravelRouter[] @relation("TunnelTravelRouter")
 
-  // Network info
-  ip             String? // "10.64.0.1"
-  connectionIp   String? // "35.64.0.1"
-  dnsLabel       String? // "stage-host-1.netbird.cloud"
-  extraDnsLabels String[] // ["stage-host-1"]
+  ip             String?
+  connectionIp   String?
+  dnsLabel       String?
+  extraDnsLabels String[]
 
-  // Status
   connected Boolean   @default(false)
   lastSeen  DateTime?
   lastLogin DateTime?
 
-  // System info
-  os            String? // "Darwin 13.2.1"
-  kernelVersion String? // "23.2.0"
-  version       String? // "0.14.0"
-  uiVersion     String? // "0.14.0"
-  hostname      String? // "stage-host-1"
-  serialNumber  String? // "C02XJ0J0JGH7"
+  os            String?
+  kernelVersion String?
+  version       String?
+  uiVersion     String?
+  hostname      String?
+  serialNumber  String?
 
-  // Location
   geonameId   Int?
-  countryCode String? // "DE"
-  cityName    String? // "Berlin"
+  countryCode String?
+  cityName    String?
 
-  // User & Access
-  userId           String? // "google-oauth2|277474792786460067937"
+  userId           String?
   sshEnabled       Boolean @default(false)
   approvalRequired Boolean @default(false)
   ephemeral        Boolean @default(false)
 
-  // Login expiration
   loginExpirationEnabled      Boolean @default(false)
   loginExpired                Boolean @default(false)
   inactivityExpirationEnabled Boolean @default(false)
@@ -135,21 +171,17 @@ model GroupPeer {
 model Tunnel {
   id String @id @default(uuid())
 
-  // tunnel owner
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Exit node 
   exitNodeId String
   exitNode   Peer   @relation("TunnelExitNode", fields: [exitNodeId], references: [id], onDelete: Cascade)
 
-  // Travel routers - 1 do 3 
   travelRouters TunnelTravelRouter[]
 
-  name    String? // "Office <-> Berlin"
+  name    String?
   enabled Boolean @default(true)
 
-  // NetBird resource IDs 
   netbirdGroupId  String?
   netbirdRouteId  String?
   netbirdPolicyId String?
