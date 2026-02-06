@@ -4,7 +4,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center mb-8">
+        <h1 className="text-2xl font-bold text-center text-gray-700 mb-8">
           Sign in to BuraVPN
         </h1>
 
@@ -17,7 +17,7 @@ export default function LoginPage() {
           >
             <button
               type="submit"
-              className="w-full p-3 bg-white border border-gray-300 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50"
+              className="w-full p-3 bg-white border border-gray-300 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 text-gray-500"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -88,7 +88,7 @@ export default function LoginPage() {
               />
               <button
                 type="submit"
-                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Send magic link
               </button>

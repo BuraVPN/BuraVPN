@@ -4,6 +4,7 @@ import GitHub from "next-auth/providers/github";
 import Resend from "next-auth/providers/resend";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
+import { checkAndRegenerateIfExpiring } from "./setup-key";
 
 const NETBIRD_API_URL = process.env.NETBIRD_API_URL;
 const NETBIRD_API_KEY = process.env.NETBIRD_API_KEY;
@@ -35,7 +36,7 @@ async function createNetBirdSetupKey(groupId: string, name: string) {
     body: JSON.stringify({
       name: `${name} Setup Key`,
       type: "reusable",
-      expires_in: 31536000, // 1 godina (max)
+      expires_in: 31536000,
       auto_groups: [groupId],
       usage_limit: 0,
       ephemeral: false,
@@ -116,6 +117,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         );
       } catch (error) {
         console.error("Failed to provision NetBird resources:", error);
+      }
+    },
+    async signIn({ user }) {
+      if (user.id) {
+        try {
+          await checkAndRegenerateIfExpiring(user.id);
+        } catch (error) {
+          console.error("Failed to check/regenerate setup key:", error);
+        }
       }
     },
   },
