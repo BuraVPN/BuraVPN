@@ -1,0 +1,9 @@
+{
+  "crons": [
+    {
+      "_comment": "Reserved for future use if cron-based key regeneration is implemented",
+      "path": "/api/cron/regenerate-expiring-keys",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
