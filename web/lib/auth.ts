@@ -56,10 +56,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
     Resend({
       from: "info@buravpn.com",
@@ -69,6 +71,54 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session({ session, user }) {
       session.user.id = user.id;
       return session;
+    },
+
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "resend") return true;
+
+      const email = user.email;
+      if (!email) return true;
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+        include: { accounts: true },
+      });
+
+      if (existingUser) {
+        const alreadyLinked = existingUser.accounts.some(
+          (acc) => acc.provider === account?.provider
+        );
+
+        if (!alreadyLinked && account) {
+          await prisma.account.create({
+            data: {
+              userId: existingUser.id,
+              type: account.type,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+              access_token: account.access_token,
+              refresh_token: account.refresh_token,
+              expires_at: account.expires_at,
+              token_type: account.token_type,
+              scope: account.scope,
+              id_token: account.id_token,
+              session_state: account.session_state
+                ? String(account.session_state)
+                : null,
+            },
+          });
+
+          console.log(
+            `Linked ${account.provider} to existing user ${existingUser.id}`
+          );
+        }
+
+        user.id = existingUser.id;
+        user.name = existingUser.name ?? user.name;
+        user.image = existingUser.image ?? user.image;
+      }
+
+      return true;
     },
   },
   events: {
