@@ -16,14 +16,15 @@ import (
 )
 
 const (
-	configFile       = "/etc/heartbeat/config.json"
+	configFile       = "/etc/buravpn/config.conf"
+	tokenFile        = "/etc/buravpn/token"
 	netbirdStateFile = "/tmp/lib/netbird/state.json"
 	interval         = 5 * time.Second
 )
 
 type Config struct {
-	PeerID    string `json:"peerId"`
-	ServerURL string `json:"serverUrl"`
+	PeerID    string
+	ServerURL string
 }
 
 var config Config
@@ -64,6 +65,46 @@ var (
 	mu            sync.Mutex
 )
 
+func readConfig() error {
+	data, err := os.ReadFile(configFile)
+	if err != nil {
+		return fmt.Errorf("failed to read config: %w", err)
+	}
+
+	for _, line := range strings.Split(strings.TrimSpace(string(data)), "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		key := strings.TrimSpace(parts[0])
+		value := strings.TrimSpace(parts[1])
+
+		switch key {
+		case "PEER_ID":
+			config.PeerID = value
+		case "SERVER_URL":
+			config.ServerURL = value
+		}
+	}
+
+	if config.PeerID == "" || config.ServerURL == "" {
+		return fmt.Errorf("missing PEER_ID or SERVER_URL in %s", configFile)
+	}
+
+	return nil
+}
+
+func readToken() (string, error) {
+	data, err := os.ReadFile(tokenFile)
+	if err != nil {
+		return "", fmt.Errorf("failed to read token: %w", err)
+	}
+	return strings.TrimSpace(string(data)), nil
+}
 
 func getWANBindAddr() (string, error) {
 	out, err := exec.Command("ip", "route", "show", "default").Output()
@@ -131,17 +172,9 @@ func makeDirectClient() *http.Client {
 	}
 }
 
-
 func main() {
-	data, err := os.ReadFile(configFile)
-	if err != nil {
-		log.Fatalf("Failed to read config: %v", err)
-	}
-	if err := json.Unmarshal(data, &config); err != nil {
-		log.Fatalf("Failed to parse config: %v", err)
-	}
-	if config.PeerID == "" || config.ServerURL == "" {
-		log.Fatalf("Config missing required fields: peerId and serverUrl")
+	if err := readConfig(); err != nil {
+		log.Fatalf("Config error: %v", err)
 	}
 
 	log.Printf("Starting heartbeat: peerId=%s", config.PeerID)
@@ -162,7 +195,6 @@ func main() {
 		time.Sleep(interval)
 	}
 }
-
 
 func send(client *http.Client) {
 	hb := Heartbeat{
@@ -205,9 +237,24 @@ func send(client *http.Client) {
 		hb.LatencyMs = totalLatency / float64(pingCount)
 	}
 
+	token, err := readToken()
+	if err != nil {
+		log.Printf("⚠ Could not read token: %v", err)
+		return
+	}
+
 	start := time.Now()
 	data, _ := json.Marshal(hb)
-	resp, err := client.Post(config.ServerURL, "application/json", bytes.NewBuffer(data))
+
+	req, err := http.NewRequest("POST", config.ServerURL, bytes.NewBuffer(data))
+	if err != nil {
+		log.Printf("⚠ Failed to create request: %v", err)
+		return
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := client.Do(req)
 	latency := float64(time.Since(start).Milliseconds())
 
 	if err != nil {
@@ -236,7 +283,6 @@ func send(client *http.Client) {
 	log.Printf("%s | ip=%s tunnels=%d up=%v loss=%.0f%% latency=%.0fms",
 		status, hb.NetbirdIP, len(tunnels), anyTunnelUp, hb.PacketLoss, latency)
 }
-
 
 func applyTunnelConfig(newTunnels []TunnelConfig) {
 	mu.Lock()
@@ -299,7 +345,6 @@ func tunnelsMatch(a, b []TunnelConfig) bool {
 	return true
 }
 
-
 func getNetbirdIP() string {
 	data, err := os.ReadFile(netbirdStateFile)
 	if err != nil {
@@ -321,7 +366,6 @@ func getNetbirdIP() string {
 	}
 	return state.IptablesState.InterfaceState.WgAddress.IP
 }
-
 
 func pingViaTunnel(ip string) (up bool, loss, latency float64) {
 	loss = 100.0
