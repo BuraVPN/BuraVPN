@@ -7,50 +7,113 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+
+// ===== AUTH.JS MODELS =====
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 // ===== USER MODEL =====
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String?  @unique  // Za NextAuth kasnije
-  
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String? 
+
+  // Auth.js relacije
+  accounts Account[]
+  sessions Session[]
+
+  // App relacije
   groups    Group[]
   tunnels   Tunnel[]
-  
+  setupKeys SetupKey[]  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@map("users")
+}
+
+model SetupKey {
+  id        String   @id @default(uuid())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  key       String   @unique 
+  netbirdId String             
+  name      String
+  
+  autoGroups String[]          
+  
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revokedAt DateTime?          
+  
+  @@index([userId])
+  @@map("setup_keys")
 }
 
 // ===== GROUP MODEL =====
 model Group {
-  id              String   @id @default(uuid())
-  netbirdGroupId  String   @unique  // "ch8i4ug6lnn4g9hqv7m0"
-  name            String               // "devs"
-  
-  // Relacija sa User
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  // Metadata iz NetBird
-  peersCount      Int      @default(0)  // peers_count
-  resourcesCount  Int      @default(0)  // resources_count
-  issued          String?              // "api"
-  
-  // Relacija sa Peer (many-to-many kroz GroupPeer)
-  groupPeers      GroupPeer[]
-  
-  // Resources (JSON array jer su jednostavni objekti)
-  resources       Json?    // [{ id: "...", type: "host" }]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id             String @id @default(uuid())
+  netbirdGroupId String @unique
+  name           String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  peersCount     Int     @default(0)
+  resourcesCount Int     @default(0)
+  issued         String?
+
+  groupPeers GroupPeer[]
+  resources  Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([userId])
   @@index([netbirdGroupId])
   @@map("groups")
@@ -58,55 +121,46 @@ model Group {
 
 // ===== PEER MODEL =====
 model Peer {
-  id                          String    @id @default(uuid())
-  netbirdPeerId               String    @unique  // "chacbco6lnnbn6cg5s90"
-  name                        String               // "stage-host-1"
-  
-  // Relacija sa Group (many-to-many kroz GroupPeer)
-  groupPeers                  GroupPeer[]
-  
-  // Tunnel relacije
-  tunnelsAsExitNode           Tunnel[]              @relation("TunnelExitNode")
-  tunnelsAsTravelRouter       TunnelTravelRouter[]  @relation("TunnelTravelRouter")
-  
-  // Network info
-  ip                          String?              // "10.64.0.1"
-  connectionIp                String?              // "35.64.0.1"
-  dnsLabel                    String?              // "stage-host-1.netbird.cloud"
-  extraDnsLabels              String[]             // ["stage-host-1"]
-  
-  // Status
-  connected                   Boolean   @default(false)
-  lastSeen                    DateTime?
-  lastLogin                   DateTime?
-  
-  // System info
-  os                          String?              // "Darwin 13.2.1"
-  kernelVersion               String?              // "23.2.0"
-  version                     String?              // "0.14.0"
-  uiVersion                   String?              // "0.14.0"
-  hostname                    String?              // "stage-host-1"
-  serialNumber                String?              // "C02XJ0J0JGH7"
-  
-  // Location
-  geonameId                   Int?
-  countryCode                 String?              // "DE"
-  cityName                    String?              // "Berlin"
-  
-  // User & Access
-  userId                      String?              // "google-oauth2|277474792786460067937"
-  sshEnabled                  Boolean   @default(false)
-  approvalRequired            Boolean   @default(false)
-  ephemeral                   Boolean   @default(false)
-  
-  // Login expiration
-  loginExpirationEnabled      Boolean   @default(false)
-  loginExpired                Boolean   @default(false)
-  inactivityExpirationEnabled Boolean   @default(false)
-  
-  createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @updatedAt
-  
+  id            String @id @default(uuid())
+  netbirdPeerId String @unique
+  name          String
+
+  groupPeers            GroupPeer[]
+  tunnelsAsExitNode     Tunnel[]             @relation("TunnelExitNode")
+  tunnelsAsTravelRouter TunnelTravelRouter[] @relation("TunnelTravelRouter")
+
+  ip             String?
+  connectionIp   String?
+  dnsLabel       String?
+  extraDnsLabels String[]
+
+  connected Boolean   @default(false)
+  lastSeen  DateTime?
+  lastLogin DateTime?
+
+  os            String?
+  kernelVersion String?
+  version       String?
+  uiVersion     String?
+  hostname      String?
+  serialNumber  String?
+
+  geonameId   Int?
+  countryCode String?
+  cityName    String?
+
+  userId           String?
+  sshEnabled       Boolean @default(false)
+  approvalRequired Boolean @default(false)
+  ephemeral        Boolean @default(false)
+
+  loginExpirationEnabled      Boolean @default(false)
+  loginExpired                Boolean @default(false)
+  inactivityExpirationEnabled Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([netbirdPeerId])
   @@index([connected])
   @@index([hostname])
@@ -115,16 +169,16 @@ model Peer {
 
 // ===== MANY-TO-MANY: Group <-> Peer =====
 model GroupPeer {
-  id        String   @id @default(uuid())
-  
-  groupId   String
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  
-  peerId    String
-  peer      Peer     @relation(fields: [peerId], references: [id], onDelete: Cascade)
-  
-  addedAt   DateTime @default(now())
-  
+  id String @id @default(uuid())
+
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  peerId String
+  peer   Peer   @relation(fields: [peerId], references: [id], onDelete: Cascade)
+
+  addedAt DateTime @default(now())
+
   @@unique([groupId, peerId])
   @@index([groupId])
   @@index([peerId])
@@ -133,23 +187,19 @@ model GroupPeer {
 
 // ===== TUNNEL MODEL =====
 model Tunnel {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  // tunnel owner
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Exit node 
   exitNodeId String
-  exitNode   Peer    @relation("TunnelExitNode", fields: [exitNodeId], references: [id], onDelete: Cascade)
+  exitNode   Peer   @relation("TunnelExitNode", fields: [exitNodeId], references: [id], onDelete: Cascade)
 
-  // Travel routers - 1 do 3 
   travelRouters TunnelTravelRouter[]
 
-  name      String?  // "Office <-> Berlin"
-  enabled   Boolean  @default(true)
+  name    String?
+  enabled Boolean @default(true)
 
-  // NetBird resource IDs 
   netbirdGroupId  String?
   netbirdRouteId  String?
   netbirdPolicyId String?
@@ -163,15 +213,15 @@ model Tunnel {
 
 // ===== MANY-TO-MANY: Tunnel <-> Peer =====
 model TunnelTravelRouter {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  tunnelId  String
-  tunnel    Tunnel   @relation(fields: [tunnelId], references: [id], onDelete: Cascade)
+  tunnelId String
+  tunnel   Tunnel @relation(fields: [tunnelId], references: [id], onDelete: Cascade)
 
-  peerId    String
-  peer      Peer     @relation("TunnelTravelRouter", fields: [peerId], references: [id], onDelete: Cascade)
+  peerId String
+  peer   Peer   @relation("TunnelTravelRouter", fields: [peerId], references: [id], onDelete: Cascade)
 
-  addedAt   DateTime @default(now())
+  addedAt DateTime @default(now())
 
   @@unique([tunnelId, peerId])
   @@index([tunnelId])

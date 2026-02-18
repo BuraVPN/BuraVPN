@@ -1,39 +1,11 @@
-import { PrismaClient } from "@/app/generated/prisma/client";
 import { NextResponse } from "next/server";
 import { getCountryName } from "@/lib/country";
-
-const prisma = new PrismaClient();
+import { requireAuth } from "@/lib/api-auth";
+import { prisma } from "@/lib/prisma";
+import { NetBirdPeer } from "@/types/netbird";
 
 const NETBIRD_API_URL = process.env.NETBIRD_API_URL;
 const NETBIRD_API_TOKEN = process.env.NETBIRD_API_KEY;
-
-interface NetBirdPeer {
-  id: string;
-  name: string;
-  ip?: string;
-  connection_ip?: string;
-  connected: boolean;
-  last_seen?: string;
-  last_login?: string;
-  os?: string;
-  kernel_version?: string;
-  version?: string;
-  ui_version?: string;
-  hostname?: string;
-  dns_label?: string;
-  extra_dns_labels?: string[];
-  geoname_id?: number;
-  country_code?: string;
-  city_name?: string;
-  user_id?: string;
-  serial_number?: string;
-  ssh_enabled?: boolean;
-  approval_required?: boolean;
-  ephemeral?: boolean;
-  login_expiration_enabled?: boolean;
-  login_expired?: boolean;
-  inactivity_expiration_enabled?: boolean;
-}
 
 async function netbirdRequest<T>(endpoint: string): Promise<T> {
   if (!NETBIRD_API_TOKEN || !NETBIRD_API_URL) {
@@ -62,10 +34,13 @@ export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  const userId = session.user.id;
+
   try {
     const { id: peerId } = await context.params;
-
-    console.log(`Fetching peer from database: ${peerId}`);
 
     const peer = await prisma.peer.findUnique({
       where: { id: peerId },
@@ -84,15 +59,21 @@ export async function GET(
 
     if (!peer) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Peer not found in database",
-        },
+        { success: false, error: "Peer not found in database" },
         { status: 404 }
       );
     }
 
-    console.log(`Syncing with NetBird: ${peer.netbirdPeerId}`);
+    const belongsToUser = peer.groupPeers.some(
+      (gp) => gp.group.userId === userId
+    );
+
+    if (!belongsToUser) {
+      return NextResponse.json(
+        { success: false, error: "Forbidden" },
+        { status: 403 }
+      );
+    }
 
     let netbirdPeer: NetBirdPeer;
     try {
@@ -104,7 +85,6 @@ export async function GET(
         netbirdError instanceof Error &&
         netbirdError.message.includes("404")
       ) {
-        console.log(`⚠️  Peer not found on NetBird`);
         return NextResponse.json(
           {
             success: true,
@@ -131,8 +111,6 @@ export async function GET(
     let updatedPeer = peer;
 
     if (needsUpdate) {
-      console.log(`Updating peer: ${peer.name}`);
-
       updatedPeer = await prisma.peer.update({
         where: { id: peer.id },
         data: {
@@ -178,10 +156,6 @@ export async function GET(
           },
         },
       });
-
-      console.log(`Peer updated`);
-    } else {
-      console.log(`Peer up-to-date`);
     }
 
     const countryName = updatedPeer.countryCode

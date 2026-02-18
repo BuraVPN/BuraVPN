@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { getGroup } from "@/lib/netbird";
-
-const userId = "4c9ab938-757c-4ed4-99e7-7fd3dc1a6e84";
+import { requireAuth } from "@/lib/api-auth";
 
 export async function GET(request: Request) {
-  // const groupId = "d49ofsrsujac739u7qkg";
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
+  const userId = session.user?.id;
+
   try {
-    // const { searchParams } = new URL(request.url);
-    // const groupId = searchParams.get("id");
     const group = await getGroup(userId);
     return NextResponse.json({
       success: true,
