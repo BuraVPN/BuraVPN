@@ -60,11 +60,9 @@ model User {
   emailVerified DateTime?
   image         String? 
 
-  // Auth.js relacije
   accounts Account[]
   sessions Session[]
 
-  // App relacije
   groups    Group[]
   tunnels   Tunnel[]
   setupKeys SetupKey[]
