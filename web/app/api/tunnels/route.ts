@@ -196,7 +196,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Tunnel not found" }, { status: 404 });
     }
 
-    // Provjeri da tunnel pripada korisniku
+    
     if (tunnel.userId !== userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
