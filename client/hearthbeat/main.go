@@ -37,6 +37,7 @@ type Heartbeat struct {
 	PacketLoss   float64      `json:"packetLoss"`
 	LatencyMs    float64      `json:"latencyMs,omitempty"`
 	TunnelStatus []TunnelPing `json:"tunnelStatus,omitempty"`
+
 }
 
 type TunnelPing struct {
@@ -51,6 +52,8 @@ type HeartbeatResponse struct {
 	OK        bool           `json:"ok"`
 	PeerFound bool           `json:"peerFound"`
 	Tunnels   []TunnelConfig `json:"tunnels"`
+	Token     string         `json:"token,omitempty"` 
+
 }
 
 type TunnelConfig struct {
@@ -243,9 +246,7 @@ func send(client *http.Client) {
 		return
 	}
 
-	start := time.Now()
 	data, _ := json.Marshal(hb)
-
 	req, err := http.NewRequest("POST", config.ServerURL, bytes.NewBuffer(data))
 	if err != nil {
 		log.Printf("⚠ Failed to create request: %v", err)
@@ -254,6 +255,7 @@ func send(client *http.Client) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+token)
 
+	start := time.Now()
 	resp, err := client.Do(req)
 	latency := float64(time.Since(start).Milliseconds())
 
@@ -268,10 +270,28 @@ func send(client *http.Client) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode == http.StatusUnauthorized {
+		log.Printf("⚠ Token expired, re-registering...")
+		if err := reRegister(); err != nil {
+			log.Printf("✗ Re-registration failed: %v", err)
+		} else {
+			log.Printf("✓ Re-registration successful")
+		}
+		return
+	}
+
 	var hbResp HeartbeatResponse
 	if err := json.NewDecoder(resp.Body).Decode(&hbResp); err != nil {
 		log.Printf("⚠ Failed to parse response: %v", err)
 		return
+	}
+
+	if hbResp.Token != "" {
+		if err := saveToken(hbResp.Token); err != nil {
+			log.Printf("⚠ Failed to save refreshed token: %v", err)
+		} else {
+			log.Printf("✓ Token refreshed")
+		}
 	}
 
 	applyTunnelConfig(hbResp.Tunnels)
@@ -283,6 +303,11 @@ func send(client *http.Client) {
 	log.Printf("%s | ip=%s tunnels=%d up=%v loss=%.0f%% latency=%.0fms",
 		status, hb.NetbirdIP, len(tunnels), anyTunnelUp, hb.PacketLoss, latency)
 }
+
+func saveToken(token string) error {
+	return os.WriteFile(tokenFile, []byte(token), 0600)
+}
+
 
 func applyTunnelConfig(newTunnels []TunnelConfig) {
 	mu.Lock()
@@ -396,6 +421,60 @@ func pingViaTunnel(ip string) (up bool, loss, latency float64) {
 		}
 	}
 	return loss < 100, loss, latency
+}
+
+func reRegister() error {
+	data, err := os.ReadFile(configFile)
+	if err != nil {
+		return fmt.Errorf("failed to read device file: %w", err)
+	}
+
+	var deviceID, password string
+	for _, line := range strings.Split(strings.TrimSpace(string(data)), "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		switch strings.TrimSpace(parts[0]) {
+		case "DEVICE_ID":
+			deviceID = strings.TrimSpace(parts[1])
+		case "PASSWORD":
+			password = strings.TrimSpace(parts[1])
+		}
+	}
+
+	registerURL := strings.Replace(config.ServerURL, "/heartbeat", "/register", 1)
+
+	payload, _ := json.Marshal(map[string]string{
+		"deviceId": deviceID,
+		"password": password,
+	})
+
+	resp, err := http.Post(registerURL, "application/json", bytes.NewBuffer(payload))
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("server returned %d", resp.StatusCode)
+	}
+
+	var result struct {
+		Token string `json:"token"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return err
+	}
+	if result.Token == "" {
+		return fmt.Errorf("empty token received")
+	}
+
+	return saveToken(result.Token)
 }
 
 func parseFloat(s string, f *float64) (int, error) {

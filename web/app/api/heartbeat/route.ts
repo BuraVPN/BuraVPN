@@ -4,12 +4,21 @@ import {
   getCachedTunnelConfigs,
   setCachedTunnelConfigs,
 } from "@/lib/tunnel-cache";
+import jwt from "jsonwebtoken";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const STALE_MS = 60_000;
+const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_EXPIRES_IN = "30d";
+const TOKEN_REFRESH_AFTER_MS = 20 * 24 * 60 * 60 * 1000;
+
+interface DeviceJwtPayload {
+  deviceId: string;
+  id: string;
+}
 
 interface Heartbeat {
   routerId: string;
@@ -26,9 +35,44 @@ interface TunnelConfig {
   tunnelPeerIps: string[];
 }
 
+function verifyDeviceToken(req: NextRequest): DeviceJwtPayload | null {
+  const auth = req.headers.get("authorization");
+  if (!auth?.startsWith("Bearer ")) return null;
+  const token = auth.slice(7);
+  try {
+    return jwt.verify(token, JWT_SECRET) as DeviceJwtPayload;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(req: NextRequest) {
+  const payload = verifyDeviceToken(req);
+  if (!payload) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
     const hb: Heartbeat = await req.json();
+
+    const device = await prisma.device.findUnique({
+      where: { id: payload.id },
+    });
+
+    if (!device) {
+      return NextResponse.json(
+        { ok: false, error: "Device not found" },
+        { status: 401 }
+      );
+    }
+
+    await prisma.device.update({
+      where: { id: device.id },
+      data: { lastSeenAt: new Date() },
+    });
 
     const peer = await prisma.peer.findUnique({
       where: { id: hb.routerId },
@@ -58,6 +102,23 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    let newToken: string | undefined;
+    const tokenAge = device.jwtIssuedAt
+      ? Date.now() - device.jwtIssuedAt.getTime()
+      : Infinity;
+
+    if (tokenAge > TOKEN_REFRESH_AFTER_MS) {
+      newToken = jwt.sign(
+        { deviceId: device.deviceId, id: device.id },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+      );
+      await prisma.device.update({
+        where: { id: device.id },
+        data: { jwtIssuedAt: new Date() },
+      });
+    }
+
     const status = hb.tunnelUp ? "✓" : "⚠ tunnel down";
     const dbStatus = peer ? "db:✓" : "db:?";
     console.log(
@@ -68,6 +129,7 @@ export async function POST(req: NextRequest) {
       ok: true,
       peerFound: !!peer,
       tunnels: tunnelConfigs,
+      ...(newToken && { token: newToken }),
     });
   } catch (e) {
     console.error("Heartbeat error:", e);
@@ -121,21 +183,14 @@ async function getTunnelConfigs(peerId: string): Promise<TunnelConfig[]> {
     const ips = t.travelRouters
       .map((tr) => tr.peer.ip)
       .filter((ip): ip is string => ip !== null);
-
-    configs.push({
-      tunnelId: t.id,
-      role: "exit-node",
-      tunnelPeerIps: ips,
-    });
+    configs.push({ tunnelId: t.id, role: "exit-node", tunnelPeerIps: ips });
   }
 
   const asTravelRouter = await prisma.tunnelTravelRouter.findMany({
     where: { peerId, tunnel: { enabled: true } },
     include: {
       tunnel: {
-        include: {
-          exitNode: { select: { ip: true } },
-        },
+        include: { exitNode: { select: { ip: true } } },
       },
     },
   });
@@ -154,7 +209,6 @@ async function getTunnelConfigs(peerId: string): Promise<TunnelConfig[]> {
 
 async function markStalePeersOffline() {
   const cutoff = new Date(Date.now() - STALE_MS);
-
   await prisma.peer.updateMany({
     where: {
       connected: true,
@@ -163,5 +217,3 @@ async function markStalePeersOffline() {
     data: { connected: false },
   });
 }
-
-//
