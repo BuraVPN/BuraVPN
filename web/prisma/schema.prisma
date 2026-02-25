@@ -121,9 +121,11 @@ model Group {
 
 // ===== PEER MODEL =====
 model Peer {
-  id            String @id @default(uuid())
-  netbirdPeerId String @unique
+  id            String  @id @default(uuid())
+  netbirdPeerId String  @unique
   name          String
+
+  device Device? // <- dodano
 
   groupPeers            GroupPeer[]
   tunnelsAsExitNode     Tunnel[]             @relation("TunnelExitNode")
@@ -232,18 +234,22 @@ model TunnelTravelRouter {
 // ===== DEVICE MODEL =====
 model Device {
   id           String  @id @default(uuid())
-  deviceId     String  @unique 
-  passwordHash String          
+  deviceId     String  @unique
+  passwordHash String
 
   userId String?
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  name         String?
-  registeredAt DateTime? 
-  lastSeenAt   DateTime?
+  peerId String? @unique
+  peer   Peer?   @relation(fields: [peerId], references: [id], onDelete: SetNull)
 
-  jwtIssuedAt  DateTime? 
-  
+  name         String?
+  registeredAt DateTime?
+  lastSeenAt   DateTime?
+  jwtIssuedAt  DateTime?
+
+  setupKeySent Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -14,6 +14,7 @@ const STALE_MS = 60_000;
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRES_IN = "30d";
 const TOKEN_REFRESH_AFTER_MS = 20 * 24 * 60 * 60 * 1000;
+
 interface DeviceJwtPayload {
   deviceId: string;
   id: string;
@@ -23,6 +24,8 @@ interface Heartbeat {
   routerId: string;
   timestamp: string;
   netbirdIp?: string;
+  netbirdPubKey?: string;
+  netbirdUp: boolean;
   tunnelUp: boolean;
   packetLoss: number;
   latencyMs?: number;
@@ -73,6 +76,21 @@ export async function POST(req: NextRequest) {
       data: { lastSeenAt: new Date() },
     });
 
+    if (hb.netbirdIp && !device.peerId) {
+      const peer = await prisma.peer.findFirst({
+        where: { ip: hb.netbirdIp },
+      });
+      if (peer) {
+        await prisma.device.update({
+          where: { id: device.id },
+          data: { peerId: peer.id },
+        });
+        console.log(
+          `Device ${device.deviceId} linked to peer ${peer.id} via IP ${hb.netbirdIp}`
+        );
+      }
+    }
+
     const peer = await prisma.peer.findUnique({
       where: { id: hb.routerId },
     });
@@ -90,6 +108,7 @@ export async function POST(req: NextRequest) {
 
     await markStalePeersOffline();
 
+    // --- Tunnel configs ---
     let tunnelConfigs: TunnelConfig[] = [];
     if (peer) {
       const cached = getCachedTunnelConfigs(peer.id);
@@ -101,6 +120,24 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // --- Setup key --- pošalji ako je device claiman ali NetBird još nije up
+    let setupKey: string | undefined;
+    if (device.userId && !device.setupKeySent) {
+      const sk = await prisma.setupKey.findFirst({
+        where: { userId: device.userId, revokedAt: null },
+        orderBy: { createdAt: "desc" },
+      });
+      if (sk) {
+        setupKey = sk.key;
+        await prisma.device.update({
+          where: { id: device.id },
+          data: { setupKeySent: true },
+        });
+        console.log(`Setup key sent to device ${device.deviceId}`);
+      }
+    }
+
+    // --- Sliding window token refresh ---
     let newToken: string | undefined;
     const tokenAge = device.jwtIssuedAt
       ? Date.now() - device.jwtIssuedAt.getTime()
@@ -129,6 +166,7 @@ export async function POST(req: NextRequest) {
       peerFound: !!peer,
       tunnels: tunnelConfigs,
       ...(newToken && { token: newToken }),
+      ...(setupKey && { setupKey }),
     });
   } catch (e) {
     console.error("Heartbeat error:", e);

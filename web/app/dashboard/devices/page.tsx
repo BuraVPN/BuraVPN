@@ -1,128 +1,90 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import DeviceMetada from "@/components/dashboard/ui/DeviceMetadata";
-import { Plus } from "lucide-react";
+import { Plus, X, Loader2 } from "lucide-react";
+import DeviceMetadata from "@/components/dashboard/ui/DeviceMetadata";
 
-type Peer = {
+type Device = {
   id: string;
-  netbirdId: string;
-  name: string;
-  connectionIp: string;
-  connected: boolean;
-  hostname?: string;
-  os?: string;
-  lastSeen?: string;
-  countryCode: string;
-  cityName: string;
-  ip: string;
-};
-
-type GroupPeer = {
-  id: string;
-  peer: Peer;
-  addedAt: string;
-};
-
-type Group = {
-  id: string;
-  netbirdId: string;
-  name: string;
-  peersCount: number;
-  resourcesCount: number;
-  issued?: string;
-  groupPeers: GroupPeer[];
-  createdAt: string;
-};
-
-type User = {
-  id: string;
-  name: string;
-  email?: string;
-  groups: Group[];
-  createdAt: string;
-};
-
-type ApiResponse = {
-  success: boolean;
-  data: User;
-  error?: string;
-  message?: string;
+  deviceId: string;
+  name?: string;
+  lastSeenAt?: string;
+  registeredAt?: string;
 };
 
 export default function UserDashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  console.log(user);
+  const [devices, setDevices] = useState<Device[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = "4c9ab938-757c-4ed4-99e7-7fd3dc1a6e84";
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deviceId, setDeviceId] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const fetchUser = async () => {
+  const fetchDevices = async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const response = await fetch(`/api/users?userId=${userId}`);
-      const data: ApiResponse = await response.json();
-
-      if (data.success) {
-        setUser(data.data);
-        console.log(`Loaded user: ${data.data.name}`);
-      } else {
-        throw new Error(data.message || "Failed to fetch user");
-      }
+      const res = await fetch("/api/devices");
+      const data = await res.json();
+      if (!data.success)
+        throw new Error(data.message || "Failed to fetch devices");
+      setDevices(data.data);
     } catch (err) {
-      console.error("Fetch user error:", err);
-      const message = err instanceof Error ? err.message : "Unknown error";
-      setError(message);
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUser();
+    fetchDevices();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="p-8">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
+  const openModal = () => {
+    setDeviceId("");
+    setPassword("");
+    setSubmitError(null);
+    setModalOpen(true);
+  };
 
-  if (error) {
-    return (
-      <div className="p-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h2 className="text-red-800 font-semibold mb-2">Error</h2>
-          <p className="text-red-600">{error}</p>
-          <button
-            onClick={fetchUser}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const closeModal = () => {
+    setModalOpen(false);
+    setSubmitError(null);
+  };
 
-  if (!user) {
-    return (
-      <div className="p-8">
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500 text-lg">User not found</p>
-        </div>
-      </div>
-    );
-  }
+  const handleAddDevice = async () => {
+    if (!deviceId.trim() || !password.trim()) {
+      setSubmitError("Device ID and password are required.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setSubmitError(null);
+
+      const res = await fetch("/api/devices/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deviceId, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to add device");
+      }
+
+      closeModal();
+      await fetchDevices();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Unknown error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -130,34 +92,118 @@ export default function UserDashboard() {
         <div className="flex flex-col w-full">
           <div className="flex flex-row items-center justify-between mx-5">
             <h1 className="h1-titles">DEVICES</h1>
-            <button className="my-5 px-4 py-2 border-none bg-white text-color-black rounded-xl">
+            <button
+              onClick={openModal}
+              className="my-5 px-4 py-2 border-none bg-white text-color-black rounded-xl"
+            >
               <Plus color="black" />
             </button>
           </div>
           <hr className="w-full h-[1px] border-none bg-gray-700" />
         </div>
 
-        <section className="w-full mt-5 flex flex-col items-center text-black">
-          {user.groups
-            .flatMap((g) => g.groupPeers)
-            .map((element) => (
-              <DeviceMetada
-                key={element.peer.id}
-                name={element.peer.name}
-                vpnIP={element.peer.ip}
-                isConnected={element.peer.connected}
-                lastSeen={element.peer.lastSeen}
-                id={element.peer.id}
+        <section className="w-full mt-5 flex flex-col items-center px-5">
+          {loading && (
+            <div className="animate-pulse space-y-4 w-full">
+              <div className="h-16 bg-gray-200 rounded" />
+              <div className="h-16 bg-gray-200 rounded" />
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 w-full">
+              <p className="text-red-600">{error}</p>
+              <button
+                onClick={fetchDevices}
+                className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && devices.length === 0 && (
+            <div className="text-center py-12 bg-gray-50 rounded-lg w-full">
+              <p className="text-gray-500">No devices registered yet.</p>
+              <button
+                onClick={openModal}
+                className="mt-4 px-4 py-2 bg-black text-white rounded-xl"
+              >
+                Add your first device
+              </button>
+            </div>
+          )}
+
+          {!loading &&
+            devices.map((device) => (
+              <DeviceMetadata
+                key={device.id}
+                id={device.id}
+                name={device.name || device.deviceId}
+                isConnected={
+                  !!device.lastSeenAt &&
+                  Date.now() - new Date(device.lastSeenAt).getTime() < 60_000
+                }
+                lastSeen={device.lastSeenAt}
               />
             ))}
         </section>
-        <button
-          onClick={fetchUser}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
-          Refresh
-        </button>
       </div>
+
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold">Add Device</h2>
+              <button onClick={closeModal}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Device ID
+                </label>
+                <input
+                  type="text"
+                  value={deviceId}
+                  onChange={(e) => setDeviceId(e.target.value)}
+                  placeholder="BURA-XXXXXXXX"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Device password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                  onKeyDown={(e) => e.key === "Enter" && handleAddDevice()}
+                />
+              </div>
+
+              {submitError && (
+                <p className="text-sm text-red-600">{submitError}</p>
+              )}
+
+              <button
+                onClick={handleAddDevice}
+                disabled={submitting}
+                className="w-full py-2 bg-black text-white rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {submitting && <Loader2 size={16} className="animate-spin" />}
+                {submitting ? "Adding..." : "Add Device"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
