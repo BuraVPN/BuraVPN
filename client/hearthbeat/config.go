@@ -29,11 +29,13 @@ func readConfig() error {
 			config.PeerID = value
 		case "SERVER_URL":
 			config.ServerURL = value
+		case "REGISTER_URL":
+			config.RegisterURL = value
 		}
 	}
 
-	if config.PeerID == "" || config.ServerURL == "" {
-		return fmt.Errorf("missing PEER_ID or SERVER_URL in %s", configFile)
+	if config.PeerID == "" || config.ServerURL == "" || config.RegisterURL == "" {
+		return fmt.Errorf("missing PEER_ID, SERVER_URL or REGISTER_URL in %s", configFile)
 	}
 
 	return nil

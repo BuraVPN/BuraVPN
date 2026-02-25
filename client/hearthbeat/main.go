@@ -13,8 +13,9 @@ const (
 )
 
 type Config struct {
-	PeerID    string
-	ServerURL string
+	PeerID      string
+	ServerURL   string
+	RegisterURL string
 }
 
 var config Config

@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const deviceFile = "/etc/buravpn/device.conf"
+
 func readToken() (string, error) {
 	data, err := os.ReadFile(tokenFile)
 	if err != nil {
@@ -22,9 +24,9 @@ func saveToken(token string) error {
 }
 
 func reRegister() error {
-	data, err := os.ReadFile(configFile)
+	data, err := os.ReadFile(deviceFile) 
 	if err != nil {
-		return fmt.Errorf("failed to read config file: %w", err)
+		return fmt.Errorf("failed to read device file: %w", err)
 	}
 
 	var deviceID, password string
@@ -46,10 +48,10 @@ func reRegister() error {
 	}
 
 	if deviceID == "" || password == "" {
-		return fmt.Errorf("missing DEVICE_ID or PASSWORD in %s", configFile)
+		return fmt.Errorf("missing DEVICE_ID or PASSWORD in %s", deviceFile)
 	}
 
-	registerURL := strings.Replace(config.ServerURL, "/heartbeat", "/register", 1)
+	registerURL := config.RegisterURL
 
 	payload, _ := json.Marshal(map[string]string{
 		"deviceId": deviceID,
