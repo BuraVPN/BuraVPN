@@ -13,8 +13,7 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 const STALE_MS = 60_000;
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRES_IN = "30d";
-const TOKEN_REFRESH_AFTER_MS = 4 * 60 * 1000;
-
+const TOKEN_REFRESH_AFTER_MS = 20 * 24 * 60 * 60 * 1000;
 interface DeviceJwtPayload {
   deviceId: string;
   id: string;
