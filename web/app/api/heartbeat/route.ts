@@ -108,7 +108,6 @@ export async function POST(req: NextRequest) {
 
     await markStalePeersOffline();
 
-    // --- Tunnel configs ---
     let tunnelConfigs: TunnelConfig[] = [];
     if (peer) {
       const cached = getCachedTunnelConfigs(peer.id);
@@ -120,13 +119,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // --- Setup key --- pošalji ako je device claiman ali NetBird još nije up
     let setupKey: string | undefined;
     if (device.userId && !device.setupKeySent) {
+      console.log(
+        `Setup key lookup: deviceId=${device.deviceId} userId=${device.userId}`
+      );
       const sk = await prisma.setupKey.findFirst({
         where: { userId: device.userId, revokedAt: null },
         orderBy: { createdAt: "desc" },
       });
+      console.log(
+        `Setup key found: ${!!sk} key=${sk?.key?.slice(0, 8) ?? "none"}...`
+      );
       if (sk) {
         setupKey = sk.key;
         await prisma.device.update({
@@ -134,10 +138,15 @@ export async function POST(req: NextRequest) {
           data: { setupKeySent: true },
         });
         console.log(`Setup key sent to device ${device.deviceId}`);
+      } else {
+        console.log(`No active setup key found for user ${device.userId}`);
       }
+    } else {
+      console.log(
+        `Skipping setup key: userId=${device.userId} setupKeySent=${device.setupKeySent}`
+      );
     }
 
-    // --- Sliding window token refresh ---
     let newToken: string | undefined;
     const tokenAge = device.jwtIssuedAt
       ? Date.now() - device.jwtIssuedAt.getTime()
