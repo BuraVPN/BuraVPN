@@ -20,6 +20,15 @@ interface DeviceJwtPayload {
   id: string;
 }
 
+interface DeviceInfo {
+  os: string;
+  arch: string;
+  kernelVersion: string;
+  publicIp: string;
+  netbirdIp: string;
+  netbirdId: string;
+}
+
 interface Heartbeat {
   routerId: string;
   timestamp: string;
@@ -29,6 +38,7 @@ interface Heartbeat {
   tunnelUp: boolean;
   packetLoss: number;
   latencyMs?: number;
+  deviceInfo?: DeviceInfo;
 }
 
 interface TunnelConfig {
@@ -76,28 +86,56 @@ export async function POST(req: NextRequest) {
       data: { lastSeenAt: new Date() },
     });
 
-    if (hb.netbirdIp && !device.peerId) {
-      const peer = await prisma.peer.findFirst({
+    if (hb.netbirdUp && hb.netbirdIp && hb.deviceInfo && !device.peerId) {
+      const existingPeer = await prisma.peer.findFirst({
         where: { ip: hb.netbirdIp },
       });
-      if (peer) {
+
+      if (existingPeer) {
         await prisma.device.update({
           where: { id: device.id },
-          data: { peerId: peer.id },
+          data: { peerId: existingPeer.id },
         });
         console.log(
-          `Device ${device.deviceId} linked to peer ${peer.id} via IP ${hb.netbirdIp}`
+          `Device ${device.deviceId} linked to existing peer ${existingPeer.id}`
+        );
+      } else {
+        const newPeer = await prisma.peer.create({
+          data: {
+            name: device.name ?? device.deviceId,
+            ip: hb.netbirdIp,
+            os: hb.deviceInfo.os,
+            arch: hb.deviceInfo.arch,
+            kernelVersion: hb.deviceInfo.kernelVersion,
+            connectionIp: hb.deviceInfo.publicIp,
+            connected: true,
+            lastSeen: new Date(hb.timestamp),
+            userId: device.userId ?? undefined,
+          },
+        });
+
+        await prisma.device.update({
+          where: { id: device.id },
+          data: { peerId: newPeer.id },
+        });
+
+        console.log(
+          `Created new peer ${newPeer.id} for device ${device.deviceId}`
         );
       }
     }
 
-    const peer = await prisma.peer.findUnique({
-      where: { id: hb.routerId },
+    const updatedDevice = await prisma.device.findUnique({
+      where: { id: device.id },
     });
+
+    const peer = updatedDevice?.peerId
+      ? await prisma.peer.findUnique({ where: { id: updatedDevice.peerId } })
+      : null;
 
     if (peer) {
       await prisma.peer.update({
-        where: { id: hb.routerId },
+        where: { id: peer.id },
         data: {
           connected: true,
           lastSeen: new Date(hb.timestamp),
