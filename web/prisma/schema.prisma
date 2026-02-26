@@ -122,7 +122,7 @@ model Group {
 // ===== PEER MODEL =====
 model Peer {
   id            String  @id @default(uuid())
-  netbirdPeerId String  @unique
+  netbirdPeerId String? @unique 
   name          String
 
   device Device? // <- dodano
@@ -140,6 +140,8 @@ model Peer {
   lastSeen  DateTime?
   lastLogin DateTime?
 
+  arch          String?   
+  publicIp      String?   
   os            String?
   kernelVersion String?
   version       String?

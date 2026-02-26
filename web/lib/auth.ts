@@ -129,7 +129,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       try {
         const userName = user.name || user.email || "User";
-        const groupName = `${userName}'s Group`;
+        const groupName = `${userName}'s Group22`;
 
         const netbirdGroup = await createNetBirdGroup(groupName);
         console.log(`NetBird group created: ${netbirdGroup.id}`);
