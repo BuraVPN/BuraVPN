@@ -11,6 +11,14 @@ export async function GET() {
   const devices = await prisma.device.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      deviceId: true,
+      name: true,
+      lastSeenAt: true,
+      registeredAt: true,
+      peerId: true,
+    },
   });
 
   return NextResponse.json({ success: true, data: devices });

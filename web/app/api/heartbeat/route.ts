@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
+import { getPeerByIp } from "@/lib/netbird";
+
 import {
   getCachedTunnelConfigs,
   setCachedTunnelConfigs,
@@ -20,15 +22,6 @@ interface DeviceJwtPayload {
   id: string;
 }
 
-interface DeviceInfo {
-  os: string;
-  arch: string;
-  kernelVersion: string;
-  publicIp: string;
-  netbirdIp: string;
-  netbirdId: string;
-}
-
 interface Heartbeat {
   routerId: string;
   timestamp: string;
@@ -38,7 +31,6 @@ interface Heartbeat {
   tunnelUp: boolean;
   packetLoss: number;
   latencyMs?: number;
-  deviceInfo?: DeviceInfo;
 }
 
 interface TunnelConfig {
@@ -86,42 +78,62 @@ export async function POST(req: NextRequest) {
       data: { lastSeenAt: new Date() },
     });
 
-    if (hb.netbirdUp && hb.netbirdIp && hb.deviceInfo && !device.peerId) {
-      const existingPeer = await prisma.peer.findFirst({
-        where: { ip: hb.netbirdIp },
-      });
-
-      if (existingPeer) {
-        await prisma.device.update({
-          where: { id: device.id },
-          data: { peerId: existingPeer.id },
+    if (hb.netbirdUp && hb.netbirdIp && !device.peerId) {
+      const nbPeer = await getPeerByIp(hb.netbirdIp);
+      if (nbPeer) {
+        const existingPeer = await prisma.peer.findFirst({
+          where: { netbirdPeerId: nbPeer.id },
         });
-        console.log(
-          `Device ${device.deviceId} linked to existing peer ${existingPeer.id}`
-        );
+
+        if (existingPeer) {
+          await prisma.device.update({
+            where: { id: device.id },
+            data: { peerId: existingPeer.id },
+          });
+          console.log(
+            `Device ${device.deviceId} linked to existing peer ${existingPeer.id}`
+          );
+        } else {
+          const newPeer = await prisma.peer.create({
+            data: {
+              netbirdPeerId: nbPeer.id,
+              name: nbPeer.name,
+              ip: nbPeer.ip,
+              connectionIp: nbPeer.connection_ip ?? null,
+              connected: nbPeer.connected,
+              hostname: nbPeer.hostname ?? null,
+              os: nbPeer.os ?? null,
+              kernelVersion: nbPeer.kernel_version ?? null,
+              version: nbPeer.version ?? null,
+              dnsLabel: nbPeer.dns_label ?? null,
+              extraDnsLabels: nbPeer.extra_dns_labels ?? [],
+              countryCode: nbPeer.country_code ?? null,
+              cityName: nbPeer.city_name ?? null,
+              geonameId: nbPeer.geoname_id ?? null,
+              lastSeen: nbPeer.last_seen ? new Date(nbPeer.last_seen) : null,
+              lastLogin: nbPeer.last_login ? new Date(nbPeer.last_login) : null,
+              sshEnabled: nbPeer.ssh_enabled ?? false,
+              approvalRequired: nbPeer.approval_required ?? false,
+              ephemeral: nbPeer.ephemeral ?? false,
+              loginExpirationEnabled: nbPeer.login_expiration_enabled ?? false,
+              loginExpired: nbPeer.login_expired ?? false,
+              inactivityExpirationEnabled:
+                nbPeer.inactivity_expiration_enabled ?? false,
+              userId: device.userId ?? null,
+            },
+          });
+
+          await prisma.device.update({
+            where: { id: device.id },
+            data: { peerId: newPeer.id },
+          });
+
+          console.log(
+            `Created new peer ${newPeer.id} (${nbPeer.id}) for device ${device.deviceId}`
+          );
+        }
       } else {
-        const newPeer = await prisma.peer.create({
-          data: {
-            name: device.name ?? device.deviceId,
-            ip: hb.netbirdIp,
-            os: hb.deviceInfo.os,
-            arch: hb.deviceInfo.arch,
-            kernelVersion: hb.deviceInfo.kernelVersion,
-            connectionIp: hb.deviceInfo.publicIp,
-            connected: true,
-            lastSeen: new Date(hb.timestamp),
-            userId: device.userId ?? undefined,
-          },
-        });
-
-        await prisma.device.update({
-          where: { id: device.id },
-          data: { peerId: newPeer.id },
-        });
-
-        console.log(
-          `Created new peer ${newPeer.id} for device ${device.deviceId}`
-        );
+        console.log(`NetBird peer not found for IP ${hb.netbirdIp}`);
       }
     }
 

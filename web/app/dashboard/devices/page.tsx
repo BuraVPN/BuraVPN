@@ -6,6 +6,7 @@ import DeviceMetadata from "@/components/dashboard/ui/DeviceMetadata";
 
 type Device = {
   id: string;
+  peerId: string;
   deviceId: string;
   name?: string;
   lastSeenAt?: string;
@@ -138,7 +139,7 @@ export default function UserDashboard() {
             devices.map((device) => (
               <DeviceMetadata
                 key={device.id}
-                id={device.id}
+                id={device.peerId ?? device.id}
                 name={device.name || device.deviceId}
                 isConnected={
                   !!device.lastSeenAt &&

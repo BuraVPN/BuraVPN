@@ -35,9 +35,11 @@ export interface NetBirdPeer {
   id: string;
   name: string;
   ip: string;
+  connection_ip: string;
   connected: boolean;
   last_seen: string;
   os: string;
+  kernel_version: string;
   version: string;
   groups: NetBirdPeerGroup[];
   ssh_enabled: boolean;
@@ -45,12 +47,16 @@ export interface NetBirdPeer {
   user_id: string;
   ui_version: string;
   dns_label: string;
+  extra_dns_labels: string[];
   login_expiration_enabled: boolean;
   login_expired: boolean;
   last_login: string;
   approval_required: boolean;
+  inactivity_expiration_enabled: boolean;
+  ephemeral: boolean;
   country_code: string;
   city_name: string;
+  geoname_id: number;
   serial_number: string;
 }
 
@@ -367,5 +373,12 @@ export async function deprovisionTunnel(
   await deleteGroup(netbirdGroupId).catch((e) =>
     console.error("Delete group failed:", e)
   );
+}
+
+export async function getPeerByIp(ip: string): Promise<NetBirdPeer | null> {
+  const peers = await netbirdRequest<NetBirdPeer[]>(`/api/peers?ip=${ip}`, {
+    method: "GET",
+  });
+  return peers.find((p) => p.ip === ip) ?? null;
 }
 export { netbirdRequest };
