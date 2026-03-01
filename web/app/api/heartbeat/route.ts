@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { getPeerByIp } from "@/lib/netbird";
-
 import {
   getCachedTunnelConfigs,
   setCachedTunnelConfigs,
@@ -26,7 +25,6 @@ interface Heartbeat {
   routerId: string;
   timestamp: string;
   netbirdIp?: string;
-  netbirdPubKey?: string;
   netbirdUp: boolean;
   tunnelUp: boolean;
   packetLoss: number;
@@ -214,6 +212,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const shouldNetbirdDown = !device.userId && !device.setupKeySent;
+
     const status = hb.tunnelUp ? "✓" : "⚠ tunnel down";
     const dbStatus = peer ? "db:✓" : "db:?";
     console.log(
@@ -226,6 +226,7 @@ export async function POST(req: NextRequest) {
       tunnels: tunnelConfigs,
       ...(newToken && { token: newToken }),
       ...(setupKey && { setupKey }),
+      ...(shouldNetbirdDown && { action: "netbird-down" }),
     });
   } catch (e) {
     console.error("Heartbeat error:", e);

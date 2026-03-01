@@ -381,4 +381,9 @@ export async function getPeerByIp(ip: string): Promise<NetBirdPeer | null> {
   });
   return peers.find((p) => p.ip === ip) ?? null;
 }
+
+export async function deletePeer(peerId: string): Promise<void> {
+  return netbirdRequest<void>(`/api/peers/${peerId}`, { method: "DELETE" });
+}
+
 export { netbirdRequest };
