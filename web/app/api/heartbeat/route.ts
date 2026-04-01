@@ -1,20 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
+import { getPeerByIp } from "@/lib/netbird";
 import {
   getCachedTunnelConfigs,
   setCachedTunnelConfigs,
 } from "@/lib/tunnel-cache";
+import jwt from "jsonwebtoken";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const STALE_MS = 60_000;
+const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_EXPIRES_IN = "30d";
+const TOKEN_REFRESH_AFTER_MS = 20 * 24 * 60 * 60 * 1000;
+
+interface DeviceJwtPayload {
+  deviceId: string;
+  id: string;
+}
 
 interface Heartbeat {
   routerId: string;
   timestamp: string;
   netbirdIp?: string;
+  netbirdUp: boolean;
   tunnelUp: boolean;
   packetLoss: number;
   latencyMs?: number;
@@ -26,17 +37,115 @@ interface TunnelConfig {
   tunnelPeerIps: string[];
 }
 
+function verifyDeviceToken(req: NextRequest): DeviceJwtPayload | null {
+  const auth = req.headers.get("authorization");
+  if (!auth?.startsWith("Bearer ")) return null;
+  const token = auth.slice(7);
+  try {
+    return jwt.verify(token, JWT_SECRET) as DeviceJwtPayload;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(req: NextRequest) {
+  const payload = verifyDeviceToken(req);
+  if (!payload) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
     const hb: Heartbeat = await req.json();
 
-    const peer = await prisma.peer.findUnique({
-      where: { id: hb.routerId },
+    const device = await prisma.device.findUnique({
+      where: { id: payload.id },
     });
+
+    if (!device) {
+      return NextResponse.json(
+        { ok: false, error: "Device not found" },
+        { status: 401 }
+      );
+    }
+
+    await prisma.device.update({
+      where: { id: device.id },
+      data: { lastSeenAt: new Date() },
+    });
+
+    if (hb.netbirdUp && hb.netbirdIp && !device.peerId) {
+      const nbPeer = await getPeerByIp(hb.netbirdIp);
+      if (nbPeer) {
+        const existingPeer = await prisma.peer.findFirst({
+          where: { netbirdPeerId: nbPeer.id },
+        });
+
+        if (existingPeer) {
+          await prisma.device.update({
+            where: { id: device.id },
+            data: { peerId: existingPeer.id },
+          });
+          console.log(
+            `Device ${device.deviceId} linked to existing peer ${existingPeer.id}`
+          );
+        } else {
+          const newPeer = await prisma.peer.create({
+            data: {
+              netbirdPeerId: nbPeer.id,
+              name: nbPeer.name,
+              ip: nbPeer.ip,
+              connectionIp: nbPeer.connection_ip ?? null,
+              connected: nbPeer.connected,
+              hostname: nbPeer.hostname ?? null,
+              os: nbPeer.os ?? null,
+              kernelVersion: nbPeer.kernel_version ?? null,
+              version: nbPeer.version ?? null,
+              dnsLabel: nbPeer.dns_label ?? null,
+              extraDnsLabels: nbPeer.extra_dns_labels ?? [],
+              countryCode: nbPeer.country_code ?? null,
+              cityName: nbPeer.city_name ?? null,
+              geonameId: nbPeer.geoname_id ?? null,
+              lastSeen: nbPeer.last_seen ? new Date(nbPeer.last_seen) : null,
+              lastLogin: nbPeer.last_login ? new Date(nbPeer.last_login) : null,
+              sshEnabled: nbPeer.ssh_enabled ?? false,
+              approvalRequired: nbPeer.approval_required ?? false,
+              ephemeral: nbPeer.ephemeral ?? false,
+              loginExpirationEnabled: nbPeer.login_expiration_enabled ?? false,
+              loginExpired: nbPeer.login_expired ?? false,
+              inactivityExpirationEnabled:
+                nbPeer.inactivity_expiration_enabled ?? false,
+              userId: device.userId ?? null,
+            },
+          });
+
+          await prisma.device.update({
+            where: { id: device.id },
+            data: { peerId: newPeer.id },
+          });
+
+          console.log(
+            `Created new peer ${newPeer.id} (${nbPeer.id}) for device ${device.deviceId}`
+          );
+        }
+      } else {
+        console.log(`NetBird peer not found for IP ${hb.netbirdIp}`);
+      }
+    }
+
+    const updatedDevice = await prisma.device.findUnique({
+      where: { id: device.id },
+    });
+
+    const peer = updatedDevice?.peerId
+      ? await prisma.peer.findUnique({ where: { id: updatedDevice.peerId } })
+      : null;
 
     if (peer) {
       await prisma.peer.update({
-        where: { id: hb.routerId },
+        where: { id: peer.id },
         data: {
           connected: true,
           lastSeen: new Date(hb.timestamp),
@@ -58,6 +167,53 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    let setupKey: string | undefined;
+    if (device.userId && !device.setupKeySent) {
+      console.log(
+        `Setup key lookup: deviceId=${device.deviceId} userId=${device.userId}`
+      );
+      const sk = await prisma.setupKey.findFirst({
+        where: { userId: device.userId, revokedAt: null },
+        orderBy: { createdAt: "desc" },
+      });
+      console.log(
+        `Setup key found: ${!!sk} key=${sk?.key?.slice(0, 8) ?? "none"}...`
+      );
+      if (sk) {
+        setupKey = sk.key;
+        await prisma.device.update({
+          where: { id: device.id },
+          data: { setupKeySent: true },
+        });
+        console.log(`Setup key sent to device ${device.deviceId}`);
+      } else {
+        console.log(`No active setup key found for user ${device.userId}`);
+      }
+    } else {
+      console.log(
+        `Skipping setup key: userId=${device.userId} setupKeySent=${device.setupKeySent}`
+      );
+    }
+
+    let newToken: string | undefined;
+    const tokenAge = device.jwtIssuedAt
+      ? Date.now() - device.jwtIssuedAt.getTime()
+      : Infinity;
+
+    if (tokenAge > TOKEN_REFRESH_AFTER_MS) {
+      newToken = jwt.sign(
+        { deviceId: device.deviceId, id: device.id },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+      );
+      await prisma.device.update({
+        where: { id: device.id },
+        data: { jwtIssuedAt: new Date() },
+      });
+    }
+
+    const shouldNetbirdDown = !device.userId && !device.setupKeySent;
+
     const status = hb.tunnelUp ? "✓" : "⚠ tunnel down";
     const dbStatus = peer ? "db:✓" : "db:?";
     console.log(
@@ -68,6 +224,9 @@ export async function POST(req: NextRequest) {
       ok: true,
       peerFound: !!peer,
       tunnels: tunnelConfigs,
+      ...(newToken && { token: newToken }),
+      ...(setupKey && { setupKey }),
+      ...(shouldNetbirdDown && { action: "netbird-down" }),
     });
   } catch (e) {
     console.error("Heartbeat error:", e);
@@ -121,21 +280,14 @@ async function getTunnelConfigs(peerId: string): Promise<TunnelConfig[]> {
     const ips = t.travelRouters
       .map((tr) => tr.peer.ip)
       .filter((ip): ip is string => ip !== null);
-
-    configs.push({
-      tunnelId: t.id,
-      role: "exit-node",
-      tunnelPeerIps: ips,
-    });
+    configs.push({ tunnelId: t.id, role: "exit-node", tunnelPeerIps: ips });
   }
 
   const asTravelRouter = await prisma.tunnelTravelRouter.findMany({
     where: { peerId, tunnel: { enabled: true } },
     include: {
       tunnel: {
-        include: {
-          exitNode: { select: { ip: true } },
-        },
+        include: { exitNode: { select: { ip: true } } },
       },
     },
   });
@@ -154,7 +306,6 @@ async function getTunnelConfigs(peerId: string): Promise<TunnelConfig[]> {
 
 async function markStalePeersOffline() {
   const cutoff = new Date(Date.now() - STALE_MS);
-
   await prisma.peer.updateMany({
     where: {
       connected: true,
@@ -163,5 +314,3 @@ async function markStalePeersOffline() {
     data: { connected: false },
   });
 }
-
-//

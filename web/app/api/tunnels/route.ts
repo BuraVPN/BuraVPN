@@ -114,8 +114,10 @@ export async function POST(req: NextRequest) {
       const nbResult = await provisionTunnel({
         tunnelId: tunnel.id,
         tunnelName: name || `${exitNode.name} tunnel`,
-        exitNodeNetbirdPeerId: exitNode.netbirdPeerId,
-        travelRouterNetbirdPeerIds: travelRouters.map((p) => p.netbirdPeerId),
+        exitNodeNetbirdPeerId: exitNode.netbirdPeerId ?? "",
+        travelRouterNetbirdPeerIds: travelRouters.map(
+          (p) => p.netbirdPeerId ?? ""
+        ),
       });
 
       await prisma.tunnel.update({
@@ -196,7 +198,6 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Tunnel not found" }, { status: 404 });
     }
 
-    
     if (tunnel.userId !== userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

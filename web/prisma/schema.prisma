@@ -60,14 +60,14 @@ model User {
   emailVerified DateTime?
   image         String? 
 
-  // Auth.js relacije
   accounts Account[]
   sessions Session[]
 
-  // App relacije
   groups    Group[]
   tunnels   Tunnel[]
-  setupKeys SetupKey[]  
+  setupKeys SetupKey[]
+  devices   Device[]
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -121,9 +121,11 @@ model Group {
 
 // ===== PEER MODEL =====
 model Peer {
-  id            String @id @default(uuid())
-  netbirdPeerId String @unique
+  id            String  @id @default(uuid())
+  netbirdPeerId String? @unique 
   name          String
+
+  device Device? // <- dodano
 
   groupPeers            GroupPeer[]
   tunnelsAsExitNode     Tunnel[]             @relation("TunnelExitNode")
@@ -138,6 +140,8 @@ model Peer {
   lastSeen  DateTime?
   lastLogin DateTime?
 
+  arch          String?   
+  publicIp      String?   
   os            String?
   kernelVersion String?
   version       String?
@@ -227,4 +231,30 @@ model TunnelTravelRouter {
   @@index([tunnelId])
   @@index([peerId])
   @@map("tunnel_travel_routers")
+}
+
+// ===== DEVICE MODEL =====
+model Device {
+  id           String  @id @default(uuid())
+  deviceId     String  @unique
+  passwordHash String
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  peerId String? @unique
+  peer   Peer?   @relation(fields: [peerId], references: [id], onDelete: SetNull)
+
+  name         String?
+  registeredAt DateTime?
+  lastSeenAt   DateTime?
+  jwtIssuedAt  DateTime?
+
+  setupKeySent Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("devices")
 }

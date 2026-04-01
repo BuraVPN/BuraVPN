@@ -17,7 +17,9 @@ export async function DELETE() {
       include: {
         groups: true,
         setupKeys: true,
-        tunnels: true,
+        devices: {
+          include: { peer: true },
+        },
       },
     });
 
@@ -25,29 +27,66 @@ export async function DELETE() {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    for (const group of user.groups) {
-      try {
-        await fetch(`${NETBIRD_API_URL}/api/groups/${group.netbirdGroupId}`, {
-          method: "DELETE",
-          headers: { Authorization: `Token ${NETBIRD_API_KEY}` },
-        });
-      } catch (e) {
-        console.error(
-          `Failed to delete NetBird group ${group.netbirdGroupId}:`,
-          e
-        );
+    for (const device of user.devices) {
+      if (device.peer?.netbirdPeerId) {
+        try {
+          const res = await fetch(
+            `${NETBIRD_API_URL}/api/peers/${device.peer.netbirdPeerId}`,
+            {
+              method: "DELETE",
+              headers: { Authorization: `Token ${NETBIRD_API_KEY}` },
+            }
+          );
+          if (!res.ok)
+            console.error(
+              `Failed to delete NetBird peer ${device.peer.netbirdPeerId}: ${res.status}`
+            );
+        } catch (e) {
+          console.error(
+            `Failed to delete NetBird peer ${device.peer.netbirdPeerId}:`,
+            e
+          );
+        }
       }
     }
 
     for (const setupKey of user.setupKeys) {
       try {
-        await fetch(`${NETBIRD_API_URL}/api/setup-keys/${setupKey.netbirdId}`, {
-          method: "DELETE",
-          headers: { Authorization: `Token ${NETBIRD_API_KEY}` },
-        });
+        const res = await fetch(
+          `${NETBIRD_API_URL}/api/setup-keys/${setupKey.netbirdId}`,
+          {
+            method: "DELETE",
+            headers: { Authorization: `Token ${NETBIRD_API_KEY}` },
+          }
+        );
+        if (!res.ok)
+          console.error(
+            `Failed to delete NetBird setup key ${setupKey.netbirdId}: ${res.status}`
+          );
       } catch (e) {
         console.error(
           `Failed to delete NetBird setup key ${setupKey.netbirdId}:`,
+          e
+        );
+      }
+    }
+
+    for (const group of user.groups) {
+      try {
+        const res = await fetch(
+          `${NETBIRD_API_URL}/api/groups/${group.netbirdGroupId}`,
+          {
+            method: "DELETE",
+            headers: { Authorization: `Token ${NETBIRD_API_KEY}` },
+          }
+        );
+        if (!res.ok)
+          console.error(
+            `Failed to delete NetBird group ${group.netbirdGroupId}: ${res.status}`
+          );
+      } catch (e) {
+        console.error(
+          `Failed to delete NetBird group ${group.netbirdGroupId}:`,
           e
         );
       }

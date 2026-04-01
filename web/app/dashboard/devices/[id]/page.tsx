@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Network,
   Globe,
@@ -10,6 +11,8 @@ import {
   Clock,
   LucideIcon,
   Calendar,
+  Trash2,
+  X,
 } from "lucide-react";
 
 type Peer = {
@@ -32,10 +35,8 @@ type Peer = {
 type ApiResponse = {
   success: boolean;
   data: Peer;
-  synced?: boolean;
-  updated?: boolean;
-  message?: string;
   error?: string;
+  message?: string;
 };
 
 type DetailField = {
@@ -44,6 +45,8 @@ type DetailField = {
   value: (peer: Peer) => string;
   className?: string;
 };
+
+const CONFIRM_STRING = "DELETE_PEER";
 
 const detailFields: DetailField[] = [
   {
@@ -90,7 +93,7 @@ const detailFields: DetailField[] = [
   },
   {
     icon: Calendar,
-    label: "Regstration Date",
+    label: "Registration Date",
     value: (peer) =>
       peer.createdAt ? new Date(peer.createdAt).toLocaleString() : "N/A",
   },
@@ -108,7 +111,7 @@ function DetailRow({
   className?: string;
 }) {
   return (
-    <div className="flex items-center gap-3 p-4 border-[1px] border-b border-gray-800  last:border-b-0">
+    <div className="flex items-center gap-3 p-4 border-[1px] border-b border-gray-800 last:border-b-0">
       <Icon className="w-5 h-5 text-gray-400 flex-shrink-0" />
       <div className="w-full flex flex-row justify-between items-center">
         <p className="text-sm text-gray-200">{label}</p>
@@ -123,58 +126,61 @@ export default function DeviceDetails({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const router = useRouter();
   const [peerDetails, setPeerDetails] = useState<Peer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [syncing, setSyncing] = useState(false);
   const [peerId, setPeerId] = useState<string | null>(null);
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [confirmInput, setConfirmInput] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
   useEffect(() => {
-    params.then(({ id }) => {
-      setPeerId(id);
-    });
+    params.then(({ id }) => setPeerId(id));
   }, [params]);
 
   const fetchPeer = async () => {
     if (!peerId) return;
-
     try {
       setLoading(true);
       setError(null);
-
       const response = await fetch(`/api/peers/${peerId}`);
       const data: ApiResponse = await response.json();
-
       if (data.success) {
         setPeerDetails(data.data);
-        console.log(`Loaded peer: ${data.data.name}`);
-
-        if (data.updated) {
-          console.log(`Peer was updated from NetBird`);
-        }
       } else {
         throw new Error(data.message || data.error || "Failed to fetch peer");
       }
     } catch (err) {
-      console.error("Fetch peer error:", err);
-      const message = err instanceof Error ? err.message : "Unknown error";
-      setError(message);
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
-      setSyncing(false);
     }
-  };
-
-  const handleSync = () => {
-    setSyncing(true);
-    fetchPeer();
   };
 
   useEffect(() => {
-    if (peerId) {
-      fetchPeer();
-    }
+    if (peerId) fetchPeer();
   }, [peerId]);
+
+  const handleDelete = async () => {
+    if (!peerId || confirmInput !== CONFIRM_STRING) return;
+    try {
+      setDeleting(true);
+      setDeleteError(null);
+      const res = await fetch(`/api/peers/${peerId}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to delete peer");
+      }
+      router.push("/dashboard/devices");
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Unknown error");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -217,14 +223,18 @@ export default function DeviceDetails({
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mx-3 my-6 ">
+      <div className="flex justify-between items-center mx-3 my-6">
         <h1 className="text-3xl font-bold">{peerDetails.name}</h1>
         <button
-          onClick={handleSync}
-          disabled={syncing}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 transition"
+          onClick={() => {
+            setConfirmInput("");
+            setDeleteError(null);
+            setDeleteModalOpen(true);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition flex items-center gap-2"
         >
-          {syncing ? "Syncing..." : "Sync"}
+          <Trash2 size={16} />
+          Delete
         </button>
       </div>
 
@@ -252,6 +262,50 @@ export default function DeviceDetails({
           className={field.className}
         />
       ))}
+
+      {deleteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md mx-4 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white">Delete Peer</h2>
+              <button onClick={() => setDeleteModalOpen(false)}>
+                <X size={20} className="text-gray-400 hover:text-white" />
+              </button>
+            </div>
+
+            <p className="text-gray-400 text-sm mb-2">
+              Ova akcija će obrisati peer iz baze i s NetBirda, te resetirati
+              device. Uređaj će se isključiti s mreže.
+            </p>
+            <p className="text-gray-300 text-sm mb-4">
+              Upiši{" "}
+              <span className="font-mono text-red-400">{CONFIRM_STRING}</span>{" "}
+              za potvrdu:
+            </p>
+
+            <input
+              type="text"
+              value={confirmInput}
+              onChange={(e) => setConfirmInput(e.target.value)}
+              placeholder={CONFIRM_STRING}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono mb-4"
+            />
+
+            {deleteError && (
+              <p className="text-red-400 text-sm mb-4">{deleteError}</p>
+            )}
+
+            <button
+              onClick={handleDelete}
+              disabled={confirmInput !== CONFIRM_STRING || deleting}
+              className="w-full py-2 bg-red-600 text-white rounded-xl flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-red-700 transition"
+            >
+              <Trash2 size={16} />
+              {deleting ? "Deleting..." : "Delete Peer"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
